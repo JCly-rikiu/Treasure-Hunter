@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -188,7 +188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chunkCountX: 4
   chunkCountZ: 3
-  cellPrefab: {fileID: 114669896854028954, guid: 73976ccfc5c34674ab80abd280d214fd,
+  cellPrefab: {fileID: 114105337513542874, guid: 73976ccfc5c34674ab80abd280d214fd,
     type: 3}
   chunkPrefab: {fileID: 6280117767264281259, guid: c4196715efbabfe4a85e1c51e4715fb8,
     type: 3}
@@ -494,7 +494,7 @@ MonoBehaviour:
   swivelMaxZoom: 30
   moveSpeedMinZoom: 10
   moveSpeedMaxZoom: 5
-  rotationSpeed: 180
+  rotationSpeed: 100
 --- !u!1 &1356926811
 GameObject:
   m_ObjectHideFlags: 0
