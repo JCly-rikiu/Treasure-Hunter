@@ -55,7 +55,6 @@ public class HexGrid : MonoBehaviour
 
         HexCell cell = cells[i] = Instantiate<HexCell>(cellPrefab);
         cell.transform.localPosition = position;
-        cell.transform.localScale = new Vector3(10, 1, 10);
         cell.coordinates = HexCoordinates.FromOffsetCorrdinates(x, z);
 
         if (x > 0)
