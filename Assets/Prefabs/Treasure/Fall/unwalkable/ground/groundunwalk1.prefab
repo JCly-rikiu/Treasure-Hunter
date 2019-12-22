@@ -903,7 +903,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1593548060707754169}
-  - component: {fileID: 114094272399540064}
   m_Layer: 0
   m_Name: groundunwalk1
   m_TagString: Untagged
@@ -932,29 +931,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114094272399540064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3601757195042126002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7137282fb804a7d4d8a77e58f20a917b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chunk: {fileID: 0}
-  coordinates:
-    x: 0
-    z: 0
-  neighbors:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!1 &3773966613570535433
 GameObject:
   m_ObjectHideFlags: 0

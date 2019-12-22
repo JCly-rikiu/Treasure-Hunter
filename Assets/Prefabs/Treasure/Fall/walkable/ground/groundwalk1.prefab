@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4049219446669035277}
-  - component: {fileID: 114669896854028954}
+  - component: {fileID: 114642198725608392}
   m_Layer: 0
   m_Name: groundwalk1
   m_TagString: Untagged
@@ -37,7 +37,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114669896854028954
+--- !u!114 &114642198725608392
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -213,7 +213,7 @@ Animator:
   m_GameObject: {fileID: 3938332247830341037}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 8532ba68505bcb5429ea6a93df4fe2f0, type: 3}
-  m_Controller: {fileID: 9100000, guid: ba5c8428a8efd4b49a054502ec6abca4, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -313,7 +313,7 @@ Animator:
   m_GameObject: {fileID: 3970983852441778296}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 8532ba68505bcb5429ea6a93df4fe2f0, type: 3}
-  m_Controller: {fileID: 9100000, guid: ba5c8428a8efd4b49a054502ec6abca4, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -413,7 +413,7 @@ Animator:
   m_GameObject: {fileID: 4279818803605115530}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 8532ba68505bcb5429ea6a93df4fe2f0, type: 3}
-  m_Controller: {fileID: 9100000, guid: ba5c8428a8efd4b49a054502ec6abca4, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -606,7 +606,7 @@ Animator:
   m_GameObject: {fileID: 5816121988805886938}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 8532ba68505bcb5429ea6a93df4fe2f0, type: 3}
-  m_Controller: {fileID: 9100000, guid: ba5c8428a8efd4b49a054502ec6abca4, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -783,7 +783,7 @@ Animator:
   m_GameObject: {fileID: 7922282958338718726}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 8532ba68505bcb5429ea6a93df4fe2f0, type: 3}
-  m_Controller: {fileID: 9100000, guid: ba5c8428a8efd4b49a054502ec6abca4, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
