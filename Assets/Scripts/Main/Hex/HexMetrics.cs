@@ -2,8 +2,10 @@ using UnityEngine;
 
 public static class HexMetrics
 {
-    public const float outerRadius = 1f;
-    public const float innerRadius = outerRadius * 0.866025404f;
+    public const float outerRadius = 10f;
+    public const float innerRadius = outerRadius * outerToInner;
+    public const float outerToInner = 0.866025404f;
+    public const float innerToOuter = 1f / outerToInner;
 
     public const int chunkSizeX = 5, chunkSizeZ = 5;
 
@@ -16,14 +18,4 @@ public static class HexMetrics
         new Vector3(-innerRadius, 0f, 0.5f * outerRadius),
         new Vector3(0f, 0f, outerRadius)
     };
-
-    public static Vector3 GetFirstCorner(HexDirection direction)
-    {
-        return corners[(int)direction];
-    }
-
-    public static Vector3 GetSecondCorner(HexDirection direction)
-    {
-        return corners[(int)direction + 1];
-    }
 }
