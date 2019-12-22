@@ -2,25 +2,72 @@
 
 public class HexGrid : MonoBehaviour
 {
-    public int chunkCountX = 4, chunkCountZ = 3;
-    int cellCountX, cellCountZ;
+    public int cellCountX = 20, cellCountZ = 15;
+    int chunkCountX, chunkCountZ;
 
     public HexCell cellPrefab;
     public HexGridChunk chunkPrefab;
 
-    HexGridChunk[] chunks;
     HexCell[] cells;
+    HexGridChunk[] chunks;
+
+    public Texture2D noiseSource;
+
+    public int seed;
 
     void Awake()
     {
-        cellCountX = chunkCountX * HexMetrics.chunkSizeX;
-        cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
+        HexMetrics.noiseSource = noiseSource;
+        HexMetrics.InitializeHashGrid(seed);
+        // HexUnit.unitPrefab = unitPrefab;
 
-        CreateChunks();
-        CreateCells();
+        // cellShaderData = gameObject.AddComponent<HexCellShaderData>();
+        // cellShaderData.Grid = this;
+        // CreateMap(cellCountX, cellCountZ);
     }
 
-     void CreateChunks()
+    void onEnable()
+    {
+        if (!HexMetrics.noiseSource)
+        {
+            HexMetrics.noiseSource = noiseSource;
+            HexMetrics.InitializeHashGrid(seed);
+            // HexUnit.unitPrefab = unitPrefab;
+            // ResetVisibility();
+        }
+    }
+
+    public bool CreateMap(int x, int z)
+    {
+        if (x <= 0 || x % HexMetrics.chunkSizeX != 0 || z <= 0 || z % HexMetrics.chunkSizeZ != 0)
+        {
+            Debug.LogError("Unsupported map size.");
+            return false;
+        }
+
+        // ClearPath();
+        // ClearUnits();
+        if (chunks != null)
+        {
+            for (int i = 0; i < chunks.Length; i++)
+            {
+                Destroy(chunks[i].gameObject);
+            }
+        }
+
+        cellCountX = x;
+        cellCountZ = z;
+        chunkCountX = cellCountX / HexMetrics.chunkSizeX;
+        chunkCountZ = cellCountZ / HexMetrics.chunkSizeZ;
+
+        // cellShaderData.Initialize(cellCountX, cellCountZ);
+        CreateChunks();
+        CreateCells();
+
+        return true;
+    }
+
+    void CreateChunks()
     {
         chunks = new HexGridChunk[chunkCountX * chunkCountZ];
 
@@ -56,6 +103,10 @@ public class HexGrid : MonoBehaviour
         HexCell cell = cells[i] = Instantiate<HexCell>(cellPrefab);
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCorrdinates(x, z);
+        cell.Index = i;
+        // cell.ShaderData = cellShaderData;
+
+        // cell.Explorable = x > 0 && z > 0 && x < cellCountX - 1 && z < cellCountZ - 1;
 
         if (x > 0)
         {
@@ -81,6 +132,8 @@ public class HexGrid : MonoBehaviour
                 }
             }
         }
+
+        cell.Elevation = 0;
 
         AddCellToChunk(x, z, cell);
     }
@@ -113,5 +166,15 @@ public class HexGrid : MonoBehaviour
             return null;
         }
         return cells[x + z * cellCountX];
+    }
+
+    public HexCell GetCell(int xOffset, int zOffset)
+    {
+        return cells[xOffset + zOffset * cellCountX];
+    }
+
+    public HexCell GetCell(int cellIndex)
+    {
+        return cells[cellIndex];
     }
 }
