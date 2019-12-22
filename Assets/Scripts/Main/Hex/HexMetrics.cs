@@ -7,7 +7,7 @@ public static class HexMetrics
     public const float outerToInner = 0.866025404f;
     public const float innerToOuter = 1f / outerToInner;
 
-    public const float elevationStep = 3f;
+    public const float elevationStep = 5f;
 
     public const int chunkSizeX = 5, chunkSizeZ = 5;
 
@@ -36,5 +36,21 @@ public static class HexMetrics
             hashGrid[i] = HexHash.Create();
         }
         Random.state = currentState;
+    }
+
+    public static HexEdgeType GetEdgeType(int elevation1, int elevation2)
+    {
+        if (elevation1 == elevation2)
+        {
+            return HexEdgeType.Flat;
+        }
+
+        int delta = elevation2 - elevation1;
+        if (delta == 1 || delta == -1)
+        {
+            return HexEdgeType.Slope;
+        }
+
+        return HexEdgeType.Cliff;
     }
 }

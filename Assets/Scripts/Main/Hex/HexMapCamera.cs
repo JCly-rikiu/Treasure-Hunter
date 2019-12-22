@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class HexMapCamera : MonoBehaviour
 {
+    static HexMapCamera instance;
+
     public HexGrid grid;
 
     Transform swivel, stick;
@@ -20,6 +22,7 @@ public class HexMapCamera : MonoBehaviour
 
     void Awake()
     {
+        instance = this;
         swivel = transform.GetChild(0);
         stick = swivel.GetChild(0);
     }
@@ -91,5 +94,10 @@ public class HexMapCamera : MonoBehaviour
         position.z = Mathf.Clamp(position.z, 0f, zMax);
 
         return position;
+    }
+
+    public static void ValidatePosition()
+    {
+        instance.AdjustPosition(0f, 0f);
     }
 }

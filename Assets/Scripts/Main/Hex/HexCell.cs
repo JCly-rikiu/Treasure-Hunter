@@ -9,23 +9,11 @@ public class HexCell : MonoBehaviour
     [SerializeField]
     HexCell[] neighbors = new HexCell[6];
 
-    public int TerrainTypeIndex
-    {
-        get
-        {
-            return terrainTypeIndex;
-        }
-        set
-        {
-            if (terrainTypeIndex != value)
-            {
-                terrainTypeIndex = value;
-                // ShaderData.RefreshTerrain(this);
-            }
-        }
-    }
-    int terrainTypeIndex;
-    public GameObject[] terrains;
+    public HexUnit Unit { get; set; }
+
+    public HexCellShaderData ShaderData { get; set; }
+
+    public Transform terrain;
 
     public Vector3 Position
     {
@@ -52,11 +40,9 @@ public class HexCell : MonoBehaviour
             elevation = value;
             if (ViewElevation != originalViewElevation)
             {
-                // ShaderData.ViewElevationChanged();
+                ShaderData.ViewElevationChanged();
             }
             RefreshPosition();
-
-            // Refresh();
         }
     }
     int elevation = int.MinValue;
@@ -78,10 +64,8 @@ public class HexCell : MonoBehaviour
             waterLevel = value;
             if (ViewElevation != originalViewElevation)
             {
-                // ShaderData.ViewElevationChanged();
+                ShaderData.ViewElevationChanged();
             }
-
-            // Refresh();
         }
     }
     int waterLevel;
@@ -101,21 +85,44 @@ public class HexCell : MonoBehaviour
         }
     }
 
-    public int PlantLevel
+    public bool HasIncomingRiver
     {
         get
         {
-            return plantLevel;
-        }
-        set
-        {
-            if (plantLevel != value)
-            {
-                plantLevel = value;
-            }
+            return hasIncomingRiver;
         }
     }
-    int plantLevel;
+    public bool HasOutgoingRiver
+    {
+        get
+        {
+            return hasOutgoingRiver;
+        }
+    }
+    bool hasIncomingRiver, hasOutgoingRiver;
+
+    public HexDirection IncomingRiver
+    {
+        get
+        {
+            return incomingRiver;
+        }
+    }
+    public HexDirection OutgoingRiver
+    {
+        get
+        {
+            return outgoingRiver;
+        }
+    }
+    HexDirection incomingRiver, outgoingRiver;
+    public bool HasRiver
+    {
+        get
+        {
+            return hasIncomingRiver || hasOutgoingRiver;
+        }
+    }
 
     public int Distance
     {
@@ -141,6 +148,49 @@ public class HexCell : MonoBehaviour
     public HexCell NextWithSamePriority { get; set; }
     public int SearchPhase { get; set; }
 
+    public bool IsVisible
+    {
+        get
+        {
+            return visibility > 0 && Explorable;
+        }
+    }
+    int visibility;
+    public void IncreaseVisibility()
+    {
+        visibility += 1;
+        if (visibility == 1)
+        {
+            IsExplored = true;
+            ShaderData.RefreshVisibility(this);
+        }
+    }
+    public void DecreaseVisibility()
+    {
+        visibility -= 1;
+        if (visibility == 0)
+        {
+            ShaderData.RefreshVisibility(this);
+        }
+    }
+
+    public bool IsExplored
+    {
+        get
+        {
+            return explored && Explorable;
+        }
+        private set
+        {
+            explored = value;
+        }
+    }
+    bool explored;
+
+    public bool Explorable { get; set; }
+
+    public bool IsWalkable { get; set; }
+
     public HexCell GetNeighbor(HexDirection direction)
     {
         return neighbors[(int)direction];
@@ -160,19 +210,91 @@ public class HexCell : MonoBehaviour
         transform.localPosition = position;
     }
 
+    public HexEdgeType GetEdgeType(HexDirection direction)
+    {
+        return HexMetrics.GetEdgeType(elevation, neighbors[(int)direction].elevation);
+    }
+
+    public HexEdgeType GetEdgeType(HexCell otherCell)
+    {
+        return HexMetrics.GetEdgeType(elevation, otherCell.elevation);
+    }
+
+    public void RemoveOutgoingRiver()
+    {
+        if (!hasOutgoingRiver)
+        {
+            return;
+        }
+        hasOutgoingRiver = false;
+
+        HexCell neighbor = GetNeighbor(outgoingRiver);
+        neighbor.hasIncomingRiver = false;
+    }
+
+    public void RemoveIncomingRiver()
+    {
+        if (!hasIncomingRiver)
+        {
+            return;
+        }
+        hasIncomingRiver = false;
+
+        HexCell neighbor = GetNeighbor(incomingRiver);
+        neighbor.hasOutgoingRiver = false;
+    }
+
+    public void RemoveRiver()
+    {
+        RemoveOutgoingRiver();
+        RemoveIncomingRiver();
+    }
+
+    public void SetOutgoingRiver(HexDirection direction)
+    {
+        if (hasOutgoingRiver && outgoingRiver == direction)
+        {
+            return;
+        }
+
+        HexCell neighbor = GetNeighbor(direction);
+        if (!IsValidRiverDestination(neighbor))
+        {
+            return;
+        }
+
+        RemoveOutgoingRiver();
+        if (hasIncomingRiver && incomingRiver == direction)
+        {
+            RemoveIncomingRiver();
+        }
+
+        hasOutgoingRiver = true;
+        outgoingRiver = direction;
+
+        neighbor.RemoveIncomingRiver();
+        neighbor.hasIncomingRiver = true;
+        neighbor.incomingRiver = direction.Opposite();
+    }
+
+    bool IsValidRiverDestination(HexCell neighbor)
+    {
+        return neighbor && (elevation >= neighbor.elevation || waterLevel == neighbor.elevation);
+    }
+
+    public void ResetVisibility()
+    {
+        if (visibility > 0)
+        {
+            visibility = 0;
+            ShaderData.RefreshVisibility(this);
+        }
+    }
+
     public void InstantiateTerrain()
     {
-        GameObject terrain;
-        if (IsUnderwater)
-        {
-            terrain = Instantiate<GameObject>(terrains[1]);
-        }
-        else
-        {
-            terrain = Instantiate<GameObject>(terrains[2]);
-        }
-        terrain.transform.SetParent(transform, false);
-
-        Debug.Log("e");
+        Transform t = Instantiate<Transform>(terrain);
+        t.localRotation = Quaternion.Euler(0f, Random.Range(0, 6) * 60, 0f);
+        t.SetParent(transform, false);
     }
 }
