@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 7839001288257183295}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 9.75, y: 9.75, z: 9.75}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -54,7 +54,4 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  terrains:
-  - {fileID: 3601757195042126002, guid: 9b5a5bdcaa0670541995cd0e31597fba, type: 3}
-  - {fileID: 6144668941392049386, guid: bc6b154182e23fd43bdd266393bf8619, type: 3}
-  - {fileID: 888471939945367980, guid: 73976ccfc5c34674ab80abd280d214fd, type: 3}
+  terrain: {fileID: 0}

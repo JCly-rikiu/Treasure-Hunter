@@ -121,6 +121,13 @@ public class HexMapGenerator : MonoBehaviour
     void Start()
     {
         HexMapCamera.ValidatePosition();
+
+        HexCell cell;
+        do {
+            cell =  GetRandomCell(regions[0]);
+        } while (cell.IsUnderwater);
+
+        grid.AddUnit(Instantiate<HexUnit>(HexUnit.unitPrefab), cell, Random.Range(0f, 360f));
     }
 
     public void GenerateMap(int x, int z)
@@ -160,6 +167,8 @@ public class HexMapGenerator : MonoBehaviour
         }
 
         Random.state = originalRandomState;
+
+        grid.CreateMeshColliders();
     }
 
     void CreateRegions()
