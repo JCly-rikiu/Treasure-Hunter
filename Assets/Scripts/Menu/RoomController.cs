@@ -12,10 +12,13 @@ public class RoomController : MonoBehaviourPunCallbacks
     public GameObject Open;
     public GameObject Close;
     public GameObject Check;
+    public Text seed;
 
     private PhotonView PV;
 
-    public Button go;
+    public GameObject lightgo;
+    public GameObject darkgo;
+
 
     public override void OnEnable()
     {
@@ -50,18 +53,23 @@ public class RoomController : MonoBehaviourPunCallbacks
 
     public void StartGame() //Function for loading into the multiplayer scene.
     {   
+        StaticClass.CrossSceneInformation = seed.text;
+        PV.RPC("SendSeed",RpcTarget.AllBuffered,seed.text);
         PhotonNetwork.LoadLevel(multiplayerSceneIndex);
     }
     public void Update(){
         if(PhotonNetwork.CurrentRoom != null){
             if(PhotonNetwork.CurrentRoom.PlayerCount == 2){
                 if(ready == 1){
-                    go.interactable = true;
+                	lightgo.SetActive(true);
+                	darkgo.SetActive(false);
                 }else if (ready == 0){
-                    go.interactable = false;
+                	lightgo.SetActive(false);
+                	darkgo.SetActive(true);   
                 }
             }else{
-                go.interactable = false;
+                lightgo.SetActive(false);
+                darkgo.SetActive(true);
                 ready = 0;
             }
         }
@@ -71,6 +79,10 @@ public class RoomController : MonoBehaviourPunCallbacks
     void ReadyCount(int intoready){
         ready = intoready;
         Debug.Log("ready told");
+    }
+    [PunRPC]
+    void SendSeed(string seedtext){
+    	StaticClass.CrossSceneInformation = seedtext;	
     }
 
 }
