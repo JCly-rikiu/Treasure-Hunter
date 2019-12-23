@@ -53,10 +53,10 @@ public class HexMapCamera : MonoBehaviour
     {
         zoom = Mathf.Clamp01(zoom + delta);
 
-        float distance = Mathf.Lerp(stickMinZoom, stickMaxZoom, zoom);
+        float distance = Mathf.SmoothStep(stickMinZoom, stickMaxZoom, zoom);
         stick.localPosition = new Vector3(0f, 0f, distance);
 
-        float angle = Mathf.Lerp(swivelMinZoom, swivelMaxZoom, zoom);
+        float angle = Mathf.SmoothStep(swivelMinZoom, swivelMaxZoom, zoom);
         swivel.localRotation = Quaternion.Euler(angle, 0f, 0f);
     }
 
@@ -99,5 +99,17 @@ public class HexMapCamera : MonoBehaviour
     public static void ValidatePosition()
     {
         instance.AdjustPosition(0f, 0f);
+    }
+
+    public static void SetPosition(HexCell cell)
+    {
+        instance.transform.localPosition = cell.Position;
+
+        ValidatePosition();
+    }
+
+    public static float GetRotationAngle()
+    {
+        return instance.rotationAngle;
     }
 }

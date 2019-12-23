@@ -5,8 +5,12 @@ public class HexGridChunk : MonoBehaviour
 {
     HexCell[] cells;
 
+    Canvas gridCanvas;
+
     void Awake()
     {
+        gridCanvas = GetComponentInChildren<Canvas>();
+
         cells = new HexCell[HexMetrics.chunkSizeX * HexMetrics.chunkSizeZ];
     }
 
@@ -15,5 +19,6 @@ public class HexGridChunk : MonoBehaviour
         cells[index] = cell;
         cell.chunk = this;
         cell.transform.SetParent(transform, false);
+        cell.uiRect.SetParent(gridCanvas.transform, false);
     }
 }

@@ -57,17 +57,20 @@
 
             float4 cellData = GetCellData(cellDataCoordinates);
             data.visibility.x = cellData.x;
-            data.visibility.x = lerp(0.2, 1, data.visibility.x);
-            data.visibility.y = cellData.y;
-            data.visibility.y = lerp(0.1, 1, data.visibility.y);
+            data.visibility.x = lerp(0.2, 1, data.visibility.x); // fog of war
+            data.visibility.y = cellData.y; // explored
+            data.visibility.z = lerp(0.1, 1, data.visibility.y); // unexplored shadow
         }
 
         void surf (Input IN, inout SurfaceOutputStandardSpecular o)
         {
             fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
+
+            float fog = IN.visibility.x;
             float explored = IN.visibility.y;
-            o.Albedo = c.rgb * (IN.visibility.x * explored);
-            o.Specular = _Specular * explored;
+
+            o.Albedo = c.rgb * (fog * IN.visibility.z);
+            o.Specular = _Specular * 0.5 * fog * explored;
             o.Smoothness = _Glossiness;
             o.Occlusion = explored;
             o.Emission = 0;//_BackgroundColor * (1 - explored);

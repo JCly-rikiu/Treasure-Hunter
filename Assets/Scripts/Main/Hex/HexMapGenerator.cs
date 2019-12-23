@@ -101,7 +101,7 @@ public class HexMapGenerator : MonoBehaviour
     [Range(0, 20)]
     public int riverPercentage = 10;
     [Range(0f, 1f)]
-    public float extraLakeProbability = 0.25f;
+    public float extraLakeProbability = 0.9f;
     [Range(0f, 1f)]
     public float lowTemperature = 0f;
     [Range(0f, 1f)]
@@ -109,7 +109,7 @@ public class HexMapGenerator : MonoBehaviour
     [Range(0f, 1f)]
     public float temperatureJitter = 0.1f;
     [Range(0f, 1f)]
-    public float walkableProbability = 0.8f;
+    public float walkableProbability = 0.85f;
 
     void Awake()
     {
@@ -120,14 +120,17 @@ public class HexMapGenerator : MonoBehaviour
 
     void Start()
     {
-        HexMapCamera.ValidatePosition();
+        grid.CreateMeshColliders();
 
         HexCell cell;
-        do {
-            cell =  GetRandomCell(regions[0]);
+        do
+        {
+            cell = GetRandomCell(regions[0]);
         } while (cell.IsUnderwater);
 
         grid.AddUnit(Instantiate<HexUnit>(HexUnit.unitPrefab), cell, Random.Range(0f, 360f));
+
+        HexMapCamera.SetPosition(cell);
     }
 
     public void GenerateMap(int x, int z)
@@ -167,8 +170,6 @@ public class HexMapGenerator : MonoBehaviour
         }
 
         Random.state = originalRandomState;
-
-        grid.CreateMeshColliders();
     }
 
     void CreateRegions()
@@ -700,15 +701,19 @@ public class HexMapGenerator : MonoBehaviour
                 {
                     case 0:
                         cell.terrain = ground.Pick(isWalkable);
+                        cell.terrainType = HexTerrainType.Ground;
                         break;
                     case 1:
                         cell.terrain = grass.Pick(isWalkable);
+                        cell.terrainType = HexTerrainType.Grass;
                         break;
                     case 2:
                         cell.terrain = mud.Pick(isWalkable);
+                        cell.terrainType = HexTerrainType.Mud;
                         break;
                     case 3:
                         cell.terrain = snow.Pick(isWalkable);
+                        cell.terrainType = HexTerrainType.Snow;
                         break;
                 }
             }

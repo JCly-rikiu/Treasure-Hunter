@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class HexCell : MonoBehaviour
 {
@@ -9,11 +10,14 @@ public class HexCell : MonoBehaviour
     [SerializeField]
     HexCell[] neighbors = new HexCell[6];
 
+    public RectTransform uiRect;
+
     public HexUnit Unit { get; set; }
 
     public HexCellShaderData ShaderData { get; set; }
 
     public Transform terrain;
+    public HexTerrainType terrainType;
 
     public Vector3 Position
     {
@@ -162,6 +166,7 @@ public class HexCell : MonoBehaviour
         if (visibility == 1)
         {
             IsExplored = true;
+            uiRect.GetChild(1).GetComponent<Image>().enabled = false;
             ShaderData.RefreshVisibility(this);
         }
     }
@@ -208,6 +213,17 @@ public class HexCell : MonoBehaviour
         position.y = elevation * HexMetrics.elevationStep;
         position.y += (HexMetrics.SampleNoise(position).y * 2f - 1f) * HexMetrics.elevationPerturbStrength;
         transform.localPosition = position;
+
+        Vector3 uiPosition = uiRect.localPosition;
+        float originUiZ = uiPosition.z;
+        uiPosition.z = -position.y;
+        uiRect.localPosition = uiPosition;
+
+        Transform cloud = uiRect.GetChild(1);
+        Vector3 cloudPosition = cloud.localPosition;
+        cloudPosition.z -= uiPosition.z - originUiZ;
+        cloud.localPosition = cloudPosition;
+        cloud.localRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 6) * 60f);
     }
 
     public HexEdgeType GetEdgeType(HexDirection direction)
@@ -289,6 +305,34 @@ public class HexCell : MonoBehaviour
             visibility = 0;
             ShaderData.RefreshVisibility(this);
         }
+    }
+
+    public void DisableHighlight()
+    {
+        Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+        highlight.enabled = false;
+    }
+
+    public void EnableHighlight(Color color)
+    {
+        Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+        highlight.color = color;
+        highlight.enabled = true;
+    }
+
+    public void SetLabel(string text)
+    {
+        UnityEngine.UI.Text label = uiRect.GetComponent<Text>();
+        label.text = text;
+
+        float angle = HexMapCamera.GetRotationAngle() + 30f;
+        int delta = Mathf.FloorToInt(angle / 60f);
+        if (delta == 6)
+        {
+            delta = 0;
+        }
+
+        uiRect.localRotation = Quaternion.Euler(0f, 0f, -60f * delta);
     }
 
     public void InstantiateTerrain()

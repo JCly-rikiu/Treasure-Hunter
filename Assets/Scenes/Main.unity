@@ -308,6 +308,8 @@ MonoBehaviour:
   cellCountZ: 15
   cellPrefab: {fileID: 114606862481192666, guid: 1b80c45689104b046b3fb6872d06dfc4,
     type: 3}
+  cellLabelPrefab: {fileID: 2755113771423107327, guid: 23cf687deaaa2344d803f373f4e2b7d5,
+    type: 3}
   chunkPrefab: {fileID: 6280117767264281259, guid: c4196715efbabfe4a85e1c51e4715fb8,
     type: 3}
   unitPrefab: {fileID: 9214776795732785151, guid: 4aa9bb090cb088747b36cbc95e321a73,
@@ -781,8 +783,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 603571756}
-  stickMinZoom: -250
-  stickMaxZoom: -45
+  stickMinZoom: -200
+  stickMaxZoom: -60
   swivelMinZoom: 90
   swivelMaxZoom: 45
   moveSpeedMinZoom: 400
@@ -1055,7 +1057,7 @@ GameObject:
   - component: {fileID: 1904875661}
   - component: {fileID: 1904875660}
   m_Layer: 0
-  m_Name: Mesh
+  m_Name: Hex Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

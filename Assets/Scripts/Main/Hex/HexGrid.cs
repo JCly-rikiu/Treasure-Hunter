@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class HexGrid : MonoBehaviour
@@ -7,6 +8,7 @@ public class HexGrid : MonoBehaviour
     int chunkCountX, chunkCountZ;
 
     public HexCell cellPrefab;
+    public Text cellLabelPrefab;
     public HexGridChunk chunkPrefab;
     public HexUnit unitPrefab;
 
@@ -64,7 +66,7 @@ public class HexGrid : MonoBehaviour
             return false;
         }
 
-        // ClearPath();
+        ClearPath();
         ClearUnits();
         if (chunks != null)
         {
@@ -151,6 +153,10 @@ public class HexGrid : MonoBehaviour
                 }
             }
         }
+
+        Text label = Instantiate<Text>(cellLabelPrefab);
+        label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
+        cell.uiRect = label.rectTransform;
 
         cell.Elevation = 0;
 
@@ -320,15 +326,18 @@ public class HexGrid : MonoBehaviour
             HexCell current = currentPathTo;
             while (current != currentPathFrom)
             {
-                int turn = (current.Distance - 1) / speed;
-                // current.SetLabel(turn.ToString());
-                // current.EnableHighlight(Color.white);
+                current.EnableHighlight(Color.white);
                 current = current.PathFrom;
             }
+            currentPathTo.SetLabel(currentPathTo.Distance.ToString());
+            currentPathTo.EnableHighlight(new Color(255, 134, 0));
+        }
+        else
+        {
+            currentPathTo.EnableHighlight(Color.red);
         }
 
-        // currentPathFrom.EnableHighlight(Color.blue);
-        // currentPathTo.EnableHighlight(Color.red);
+        currentPathFrom.EnableHighlight(new Color(0, 40, 70));
     }
 
     public List<HexCell> GetPath()
@@ -356,17 +365,17 @@ public class HexGrid : MonoBehaviour
             HexCell current = currentPathTo;
             while (current != currentPathFrom)
             {
-                // current.SetLabel(null);
-                // current.DisableHighlight();
+                current.SetLabel(null);
+                current.DisableHighlight();
                 current = current.PathFrom;
             }
-            // current.DisableHighlight();
+            current.DisableHighlight();
             currentPathExists = false;
         }
         else if (currentPathFrom)
         {
-            // currentPathFrom.DisableHighlight();
-            // currentPathTo.DisableHighlight();
+            currentPathFrom.DisableHighlight();
+            currentPathTo.DisableHighlight();
         }
 
         currentPathFrom = currentPathTo = null;
@@ -435,7 +444,7 @@ public class HexGrid : MonoBehaviour
 
                 // update distance
                 int distance = current.Distance + 1;
-                if (distance + neighbor.ViewElevation > range || distance > fromCoordinates.DistanceTo(neighbor.coordinates))
+                if ((distance > 3 && distance + neighbor.ViewElevation > range) || distance > fromCoordinates.DistanceTo(neighbor.coordinates))
                 {
                     continue;
                 }
@@ -468,7 +477,6 @@ public class HexGrid : MonoBehaviour
         }
         ListPool<HexCell>.Add(cells);
     }
-
 
     public void DecreaseVisibility(HexCell fromCell, int range)
     {

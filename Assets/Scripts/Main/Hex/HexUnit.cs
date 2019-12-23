@@ -60,7 +60,7 @@ public class HexUnit : MonoBehaviour
     {
         get
         {
-            return 24;
+            return 5;
         }
     }
 
@@ -174,7 +174,7 @@ public class HexUnit : MonoBehaviour
 
     public bool IsValidDestination(HexCell cell)
     {
-        return cell.IsExplored && !cell.IsUnderwater && !cell.Unit;
+        return cell.IsExplored && !cell.IsUnderwater && !cell.Unit && cell.IsWalkable;
     }
 
     public int GetMoveCost(HexCell fromCell, HexCell toCell, HexDirection direction)
@@ -186,7 +186,10 @@ public class HexUnit : MonoBehaviour
         }
 
         int moveCost;
-        moveCost = edgeType == HexEdgeType.Flat ? 5 : 10;
+        moveCost = edgeType == HexEdgeType.Flat ? 1 : 2;
+
+    	moveCost += toCell.terrainType.GetMoveCost();
+
         return moveCost;
     }
 }

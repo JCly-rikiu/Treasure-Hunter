@@ -56,7 +56,7 @@ public static class HexMetrics
         }
 
         int delta = elevation2 - elevation1;
-        if (delta == 1 || delta == -1)
+        if (-2 <= delta && delta <= 2)
         {
             return HexEdgeType.Slope;
         }
