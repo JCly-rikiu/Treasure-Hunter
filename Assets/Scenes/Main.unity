@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.62795115, g: 0.62660116, b: 0.41645247, a: 1}
+  m_IndirectSpecularColor: {r: 0.62577224, g: 0.6269529, b: 0.4163517, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -313,7 +313,7 @@ MonoBehaviour:
     type: 3}
   chunkPrefab: {fileID: 6280117767264281259, guid: c4196715efbabfe4a85e1c51e4715fb8,
     type: 3}
-  unitPrefab: {fileID: 9214776795732785151, guid: 4aa9bb090cb088747b36cbc95e321a73,
+  unitPrefab: {fileID: 114533558966637206, guid: 6513250d9f94f604caf705faaa70ab45,
     type: 3}
   mapCamera: {fileID: 1217588850}
   mesh: {fileID: 1904875660}

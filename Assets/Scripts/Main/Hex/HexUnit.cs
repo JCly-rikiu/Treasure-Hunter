@@ -6,6 +6,7 @@ using System.IO;
 public class HexUnit : MonoBehaviour
 {
     public static HexUnit unitPrefab;
+    public Animator anim;
 
     public HexGrid Grid { get; set; }
 
@@ -65,7 +66,7 @@ public class HexUnit : MonoBehaviour
     }
 
     void OnEnable()
-    {
+    {   
         if (location)
         {
             transform.localPosition = location.Position;
@@ -100,11 +101,15 @@ public class HexUnit : MonoBehaviour
         location.Unit = this;
         pathToTravel = path;
         StopAllCoroutines();
+        
         StartCoroutine(TravelPath());
     }
 
     IEnumerator TravelPath()
-    {
+    {   
+
+        anim.SetBool("Run", true);
+
         Vector3 a, b, c = pathToTravel[0].Position;
         yield return LookAt(pathToTravel[1].Position);
         Grid.DecreaseVisibility(currentTravelLocation ? currentTravelLocation : pathToTravel[0], VisionRange);
@@ -148,10 +153,15 @@ public class HexUnit : MonoBehaviour
 
         ListPool<HexCell>.Add(pathToTravel);
         pathToTravel = null;
+
+        anim.SetBool("Run", false);
     }
 
     IEnumerator LookAt(Vector3 point)
     {
+        anim.Play("Rotate", -1, 0f);
+        anim.SetBool("Rotate", true);
+
         point.y = transform.localPosition.y;
 
         Quaternion fromRotation = transform.localRotation;
@@ -170,6 +180,8 @@ public class HexUnit : MonoBehaviour
 
         transform.LookAt(point);
         orientation = transform.localRotation.eulerAngles.y;
+
+        anim.SetBool("Rotate", false);
     }
 
     public bool IsValidDestination(HexCell cell)
@@ -191,5 +203,10 @@ public class HexUnit : MonoBehaviour
     	moveCost += toCell.terrainType.GetMoveCost();
 
         return moveCost;
+    }
+
+    public void Jump()
+    {
+        anim.Play("Jump", -1, 0f);
     }
 }

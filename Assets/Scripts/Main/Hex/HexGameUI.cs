@@ -28,6 +28,14 @@ public class HexGameUI : MonoBehaviour
                 }
             }
         }
+
+        if (Input.GetKeyDown("space"))
+        {
+            if (selectedUnit)
+            {
+                selectedUnit.Jump();
+            }
+        }
     }
 
     bool UpdateCurrentCell()
