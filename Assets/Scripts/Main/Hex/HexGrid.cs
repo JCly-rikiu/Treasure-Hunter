@@ -16,7 +16,7 @@ public class HexGrid : MonoBehaviour
     HexGridChunk[] chunks;
     List<HexUnit> units = new List<HexUnit>();
 
-    public HexMapCamera camera;
+    public HexMapCamera mapCamera;
 
     HexCellShaderData cellShaderData;
 
@@ -129,7 +129,7 @@ public class HexGrid : MonoBehaviour
         cell.coordinates = HexCoordinates.FromOffsetCorrdinates(x, z);
         cell.Index = i;
         cell.ShaderData = cellShaderData;
-        cell.camera = camera;
+        cell.mapCamera = mapCamera;
 
         cell.Explorable = x > 0 && z > 0 && x < cellCountX - 1 && z < cellCountZ - 1;
 
@@ -404,7 +404,7 @@ public class HexGrid : MonoBehaviour
         unit.Orientation = orientation;
         cellShaderData.ImmediateMode = false;
 
-        camera.SetPosition(unit.Location);
+        mapCamera.SetPosition(unit.Location);
     }
 
     public void RemoveUnit(HexUnit unit)
