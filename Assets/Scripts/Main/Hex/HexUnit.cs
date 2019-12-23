@@ -66,7 +66,7 @@ public class HexUnit : MonoBehaviour
     }
 
     void OnEnable()
-    {   
+    {
         if (location)
         {
             transform.localPosition = location.Position;
@@ -101,13 +101,11 @@ public class HexUnit : MonoBehaviour
         location.Unit = this;
         pathToTravel = path;
         StopAllCoroutines();
-        
         StartCoroutine(TravelPath());
     }
 
     IEnumerator TravelPath()
-    {   
-
+    {
         anim.SetBool("Run", true);
 
         Vector3 a, b, c = pathToTravel[0].Position;
@@ -200,7 +198,7 @@ public class HexUnit : MonoBehaviour
         int moveCost;
         moveCost = edgeType == HexEdgeType.Flat ? 1 : 2;
 
-    	moveCost += toCell.terrainType.GetMoveCost();
+        moveCost += toCell.terrainType.GetMoveCost();
 
         return moveCost;
     }
