@@ -6,6 +6,7 @@ public class HexGrid : MonoBehaviour
 {
     public int cellCountX = 20, cellCountZ = 15;
     int chunkCountX, chunkCountZ;
+    public int border = 7;
 
     public HexCell cellPrefab;
     public Text cellLabelPrefab;
@@ -131,7 +132,7 @@ public class HexGrid : MonoBehaviour
         cell.ShaderData = cellShaderData;
         cell.mapCamera = mapCamera;
 
-        cell.Explorable = x > 0 && z > 0 && x < cellCountX - 1 && z < cellCountZ - 1;
+        cell.Explorable = x > border && z > border && x < cellCountX - border && z < cellCountZ - border;
 
         if (x > 0)
         {

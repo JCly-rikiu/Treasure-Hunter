@@ -217,15 +217,26 @@ public class HexCell : MonoBehaviour
         transform.localPosition = position;
 
         Vector3 uiPosition = uiRect.localPosition;
-        float originUiZ = uiPosition.z;
         uiPosition.z = -position.y;
         uiRect.localPosition = uiPosition;
+    }
+
+    public void SetCloudWater()
+    {
+        Vector3 uiPosition = uiRect.localPosition;
 
         Transform cloud = uiRect.GetChild(1);
         Vector3 cloudPosition = cloud.localPosition;
-        cloudPosition.z -= uiPosition.z - originUiZ;
+        cloudPosition.z = -(11 * HexMetrics.elevationStep) - uiPosition.z;
         cloud.localPosition = cloudPosition;
         cloud.localRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 6) * 60f);
+
+        Transform water = uiRect.GetChild(2);
+        Vector3 waterPosition = water.localPosition;
+        waterPosition.z = -(waterLevel * HexMetrics.elevationStep) - uiPosition.z + 1f;
+        water.localPosition = waterPosition;
+        water.localRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 6) * 60f);
+        water.GetComponent<Image>().enabled = IsUnderwater;
     }
 
     public HexEdgeType GetEdgeType(HexDirection direction)

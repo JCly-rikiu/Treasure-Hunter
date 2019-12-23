@@ -87,11 +87,13 @@ public class HexMapCamera : MonoBehaviour
 
     Vector3 ClampPosition(Vector3 position)
     {
-        float xMax = (grid.cellCountX - 0.5f) * (2f * HexMetrics.innerRadius);
-        position.x = Mathf.Clamp(position.x, 0f, xMax);
+        float xMin = (grid.border - 0.5f) * (2f * HexMetrics.innerRadius);
+        float xMax = (grid.cellCountX - grid.border - 0.5f) * (2f * HexMetrics.innerRadius);
+        position.x = Mathf.Clamp(position.x, xMin, xMax);
 
-        float zMax = (grid.cellCountZ - 1) * (1.5f * HexMetrics.outerRadius);
-        position.z = Mathf.Clamp(position.z, 0f, zMax);
+        float zMin = (grid.border - 1) * (1.5f * HexMetrics.outerRadius);
+        float zMax = (grid.cellCountZ - grid.border - 1) * (1.5f * HexMetrics.outerRadius);
+        position.z = Mathf.Clamp(position.z, zMin, zMax);
 
         return position;
     }

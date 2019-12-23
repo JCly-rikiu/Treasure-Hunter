@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: d6e283af1395c194da6dce4acf9ea6f7, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028377, g: 0.22571409, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.5027304, g: 0.82259697, b: 0.6931575, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -51,8 +51,8 @@ LightmapSettings:
     m_IndirectOutputScale: 1
     m_AlbedoBoost: 1
     m_EnvironmentLightingMode: 0
-    m_EnableBakedLightmaps: 1
-    m_EnableRealtimeLightmaps: 1
+    m_EnableBakedLightmaps: 0
+    m_EnableRealtimeLightmaps: 0
   m_LightmapEditorSettings:
     serializedVersion: 10
     m_Resolution: 2
@@ -306,6 +306,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cellCountX: 20
   cellCountZ: 15
+  border: 7
   cellPrefab: {fileID: 114606862481192666, guid: 1b80c45689104b046b3fb6872d06dfc4,
     type: 3}
   cellLabelPrefab: {fileID: 2755113771423107327, guid: 23cf687deaaa2344d803f373f4e2b7d5,
@@ -314,7 +315,7 @@ MonoBehaviour:
     type: 3}
   unitPrefab: {fileID: 9214776795732785151, guid: 4aa9bb090cb088747b36cbc95e321a73,
     type: 3}
-  camera: {fileID: 1217588850}
+  mapCamera: {fileID: 1217588850}
   mesh: {fileID: 1904875660}
   noiseSource: {fileID: 2800000, guid: 4506dfa11e97c9d49ab49d3a186c7e3e, type: 3}
   seed: 1234
@@ -617,15 +618,15 @@ MonoBehaviour:
   lake: {fileID: 7715789360173915110, guid: afc5bd876c0dfa340825bf9b55e7d568, type: 3}
   jitterProbability: 0.25
   chunkSizeMin: 30
-  chunkSizeMax: 100
-  landPercentage: 50
+  chunkSizeMax: 80
+  landPercentage: 35
   waterLevel: 3
   highRiseProbability: 0.25
   sinkProbability: 0.2
   elevationMinimum: -2
   elevationMaximum: 8
-  mapBorderX: 5
-  mapBorderZ: 5
+  mapBorderX: 12
+  mapBorderZ: 12
   regionBorder: 5
   erosionPercentage: 50
   evaporationFactor: 0.5
@@ -636,11 +637,11 @@ MonoBehaviour:
   windStrength: 4
   startingMoisture: 0.1
   riverPercentage: 10
-  extraLakeProbability: 0.25
+  extraLakeProbability: 0.9
   lowTemperature: 0
   highTemperature: 1
   temperatureJitter: 0.1
-  walkableProbability: 0.8
+  walkableProbability: 0.85
 --- !u!1 &1110184188
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,7 +785,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 603571756}
-  stickMinZoom: -200
+  stickMinZoom: -170
   stickMaxZoom: -60
   swivelMinZoom: 90
   swivelMaxZoom: 45

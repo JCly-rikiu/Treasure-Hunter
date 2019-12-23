@@ -64,9 +64,9 @@ public class HexMapGenerator : MonoBehaviour
     [Range(20, 200)]
     public int chunkSizeMin = 30;
     [Range(20, 200)]
-    public int chunkSizeMax = 100;
+    public int chunkSizeMax = 80;
     [Range(5, 95)]
-    public int landPercentage = 50;
+    public int landPercentage = 35;
     [Range(1, 5)]
     public int waterLevel = 3;
     [Range(0f, 1f)]
@@ -77,10 +77,10 @@ public class HexMapGenerator : MonoBehaviour
     public int elevationMinimum = -2;
     [Range(6, 10)]
     public int elevationMaximum = 8;
-    [Range(0, 10)]
-    public int mapBorderX = 5;
-    [Range(0, 10)]
-    public int mapBorderZ = 5;
+    [Range(0, 30)]
+    public int mapBorderX = 12;
+    [Range(0, 30)]
+    public int mapBorderZ = 12;
     [Range(0, 10)]
     public int regionBorder = 5;
     [Range(0, 100)]
@@ -114,19 +114,18 @@ public class HexMapGenerator : MonoBehaviour
     void Awake()
     {
         // GenerateMap(20, 15);
-
         // GenerateMap(80, 60);
     }
 
     void Start()
     {
-        GenerateMap(40, 30);
+        GenerateMap(70, 60);
 
         HexCell cell;
         do
         {
             cell = GetRandomCell(regions[0]);
-        } while (cell.IsUnderwater || !cell.IsWalkable);
+        } while (cell.IsUnderwater || !cell.IsWalkable || !cell.Explorable);
 
         grid.AddUnit(Instantiate<HexUnit>(HexUnit.unitPrefab), cell, Random.Range(0f, 360f));
     }
@@ -153,7 +152,8 @@ public class HexMapGenerator : MonoBehaviour
 
         for (int i = 0; i < cellCount; i++)
         {
-            grid.GetCell(i).WaterLevel = waterLevel;
+            HexCell cell = grid.GetCell(i);
+            cell.WaterLevel = waterLevel;
         }
 
         CreateRegions();
@@ -731,6 +731,7 @@ public class HexMapGenerator : MonoBehaviour
             }
 
             cell.InstantiateTerrain();
+            cell.SetCloudWater();
         }
     }
 
