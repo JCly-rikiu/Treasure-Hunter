@@ -41,7 +41,9 @@ public class HexGrid : MonoBehaviour
     bool currentPathExists;
 
     void Awake()
-    {
+    {	
+    	Debug.Log(StaticClass.CrossSceneInformation);
+
         HexMetrics.noiseSource = noiseSource;
         HexMetrics.InitializeHashGrid(seed);
         HexUnit.unitPrefab = unitPrefab;
