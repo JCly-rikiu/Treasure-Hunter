@@ -98,17 +98,20 @@ public class HexMapCamera : MonoBehaviour
 
     public static void ValidatePosition()
     {
+        instance.AdjustZoom(0f);
+        instance.AdjustRotation(0f);
         instance.AdjustPosition(0f, 0f);
     }
 
-    public static void SetPosition(HexCell cell)
+    public void SetPosition(HexCell cell)
     {
-        instance.transform.localPosition = cell.Position;
+        transform.localPosition = cell.Position;
+        zoom = 0.7f;
 
         ValidatePosition();
     }
 
-    public static float GetRotationAngle()
+    public float GetRotationAngle()
     {
         return instance.rotationAngle;
     }

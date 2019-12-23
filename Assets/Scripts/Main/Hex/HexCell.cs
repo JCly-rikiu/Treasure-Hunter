@@ -12,6 +12,8 @@ public class HexCell : MonoBehaviour
 
     public RectTransform uiRect;
 
+    public HexMapCamera camera;
+
     public HexUnit Unit { get; set; }
 
     public HexCellShaderData ShaderData { get; set; }
@@ -325,7 +327,7 @@ public class HexCell : MonoBehaviour
         UnityEngine.UI.Text label = uiRect.GetComponent<Text>();
         label.text = text;
 
-        float angle = HexMapCamera.GetRotationAngle() + 30f;
+        float angle = camera.GetRotationAngle() + 30f;
         int delta = Mathf.FloorToInt(angle / 60f);
         if (delta == 6)
         {

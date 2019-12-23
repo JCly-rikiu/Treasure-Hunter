@@ -114,23 +114,21 @@ public class HexMapGenerator : MonoBehaviour
     void Awake()
     {
         // GenerateMap(20, 15);
-        GenerateMap(40, 30);
+
         // GenerateMap(80, 60);
     }
 
     void Start()
     {
-        grid.CreateMeshColliders();
+        GenerateMap(40, 30);
 
         HexCell cell;
         do
         {
             cell = GetRandomCell(regions[0]);
-        } while (cell.IsUnderwater);
+        } while (cell.IsUnderwater || !cell.IsWalkable);
 
         grid.AddUnit(Instantiate<HexUnit>(HexUnit.unitPrefab), cell, Random.Range(0f, 360f));
-
-        HexMapCamera.SetPosition(cell);
     }
 
     public void GenerateMap(int x, int z)
@@ -147,6 +145,7 @@ public class HexMapGenerator : MonoBehaviour
 
         cellCount = x * z;
         grid.CreateMap(x, z);
+
         if (searchFrontier == null)
         {
             searchFrontier = new HexCellPriorityQueue();
@@ -163,6 +162,8 @@ public class HexMapGenerator : MonoBehaviour
         CreateClimate();
         CreateRivers();
         SetTerrainType();
+
+        grid.CreateMeshColliders();
 
         for (int i = 0; i < cellCount; i++)
         {

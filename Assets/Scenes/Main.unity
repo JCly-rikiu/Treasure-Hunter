@@ -314,6 +314,7 @@ MonoBehaviour:
     type: 3}
   unitPrefab: {fileID: 9214776795732785151, guid: 4aa9bb090cb088747b36cbc95e321a73,
     type: 3}
+  camera: {fileID: 1217588850}
   mesh: {fileID: 1904875660}
   noiseSource: {fileID: 2800000, guid: 4506dfa11e97c9d49ab49d3a186c7e3e, type: 3}
   seed: 1234
