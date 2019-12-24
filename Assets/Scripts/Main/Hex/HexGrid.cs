@@ -11,7 +11,8 @@ public class HexGrid : MonoBehaviour
     public HexCell cellPrefab;
     public Text cellLabelPrefab;
     public HexGridChunk chunkPrefab;
-    public HexUnit unitPrefab;
+    public HexUnit serverPrefab;
+    public HexUnit clientPrefab;
 
     HexCell[] cells;
     HexGridChunk[] chunks;
@@ -41,12 +42,10 @@ public class HexGrid : MonoBehaviour
     bool currentPathExists;
 
     void Awake()
-    {	
-    	Debug.Log(StaticClass.CrossSceneInformation);
-
+    {
         HexMetrics.noiseSource = noiseSource;
-        HexMetrics.InitializeHashGrid(seed);
-        HexUnit.unitPrefab = unitPrefab;
+        HexUnit.serverPrefab = serverPrefab;
+        HexUnit.clientPrefab = clientPrefab;
 
         cellShaderData = gameObject.AddComponent<HexCellShaderData>();
         cellShaderData.Grid = this;
@@ -57,8 +56,8 @@ public class HexGrid : MonoBehaviour
         if (!HexMetrics.noiseSource)
         {
             HexMetrics.noiseSource = noiseSource;
-            HexMetrics.InitializeHashGrid(seed);
-            HexUnit.unitPrefab = unitPrefab;
+            HexUnit.serverPrefab = serverPrefab;
+            HexUnit.clientPrefab = clientPrefab;
             ResetVisibility();
         }
     }
@@ -397,17 +396,20 @@ public class HexGrid : MonoBehaviour
         units.Clear();
     }
 
-    public void AddUnit(HexUnit unit, HexCell location, float orientation)
+    public void AddUnit(HexUnit unit, HexCell location)
     {
         cellShaderData.ImmediateMode = true;
         units.Add(unit);
         unit.Grid = this;
         unit.transform.SetParent(transform, false);
         unit.Location = location;
-        unit.Orientation = orientation;
+        unit.Orientation = Random.Range(0f, 360f);
         cellShaderData.ImmediateMode = false;
 
-        mapCamera.SetPosition(unit.Location);
+        if (unit.Owned)
+        {
+            mapCamera.SetPosition(unit.Location);
+        }
     }
 
     public void RemoveUnit(HexUnit unit)
@@ -507,7 +509,10 @@ public class HexGrid : MonoBehaviour
         for (int i = 0; i < units.Count; i++)
         {
             HexUnit unit = units[i];
-            IncreaseVisibility(unit.Location, unit.VisionRange);
+            if (unit.Owned)
+            {
+                IncreaseVisibility(unit.Location, unit.VisionRange);
+            }
         }
     }
 }

@@ -5,8 +5,11 @@ using System.IO;
 
 public class HexUnit : MonoBehaviour
 {
-    public static HexUnit unitPrefab;
+    public static HexUnit serverPrefab;
+    public static HexUnit clientPrefab;
     public Animator anim;
+
+    public bool Owned { get; set; }
 
     public HexGrid Grid { get; set; }
 
@@ -37,7 +40,10 @@ public class HexUnit : MonoBehaviour
             }
             location = value;
             value.Unit = this;
-            Grid.IncreaseVisibility(value, VisionRange);
+            if (Owned)
+            {
+                Grid.IncreaseVisibility(value, VisionRange);
+            }
             transform.localPosition = value.Position;
         }
     }
@@ -70,7 +76,7 @@ public class HexUnit : MonoBehaviour
         if (location)
         {
             transform.localPosition = location.Position;
-            if (currentTravelLocation)
+            if (currentTravelLocation && Owned)
             {
                 Grid.IncreaseVisibility(location, VisionRange);
                 Grid.DecreaseVisibility(currentTravelLocation, VisionRange);
@@ -86,7 +92,7 @@ public class HexUnit : MonoBehaviour
 
     public void Die()
     {
-        if (location)
+        if (location && Owned)
         {
             Grid.DecreaseVisibility(location, VisionRange);
         }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.62577224, g: 0.6269529, b: 0.4163517, a: 1}
+  m_IndirectSpecularColor: {r: 0.62795115, g: 0.62660116, b: 0.41645247, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -290,7 +290,7 @@ Transform:
   m_Children:
   - {fileID: 1904875662}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &603571756
 MonoBehaviour:
@@ -313,7 +313,9 @@ MonoBehaviour:
     type: 3}
   chunkPrefab: {fileID: 6280117767264281259, guid: c4196715efbabfe4a85e1c51e4715fb8,
     type: 3}
-  unitPrefab: {fileID: 114533558966637206, guid: 6513250d9f94f604caf705faaa70ab45,
+  serverPrefab: {fileID: 114054114527703278, guid: 4aa9bb090cb088747b36cbc95e321a73,
+    type: 3}
+  clientPrefab: {fileID: 114533558966637206, guid: 6513250d9f94f604caf705faaa70ab45,
     type: 3}
   mapCamera: {fileID: 1217588850}
   mesh: {fileID: 1904875660}
@@ -538,7 +540,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1041324496
 MonoBehaviour:
@@ -553,8 +555,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 603571756}
-  seed: 0
-  useFixedSeed: 0
+  useFixedSeed: 1
   hemisphere: 0
   ground:
     walkablePrefabs:
@@ -672,7 +673,7 @@ Transform:
   - {fileID: 475111607}
   - {fileID: 1159601055}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1159601052
 GameObject:
@@ -770,7 +771,7 @@ Transform:
   m_Children:
   - {fileID: 185152599}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1217588850
 MonoBehaviour:
@@ -934,6 +935,74 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1545782957}
   m_CullTransparentMesh: 0
+--- !u!1 &1608647600
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1608647602}
+  - component: {fileID: 1608647601}
+  - component: {fileID: 1608647603}
+  m_Layer: 0
+  m_Name: Hex Game Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1608647601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1608647600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bcd17f2427a3d2418d64457f4e60351, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 603571756}
+  mapGenerator: {fileID: 1041324496}
+--- !u!4 &1608647602
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1608647600}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1608647603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1608647600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1727517865
 GameObject:
   m_ObjectHideFlags: 0
@@ -1027,7 +1096,7 @@ RectTransform:
   m_Children:
   - {fileID: 1545782958}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
