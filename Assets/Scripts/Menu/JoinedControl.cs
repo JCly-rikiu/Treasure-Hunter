@@ -15,10 +15,9 @@ public class JoinedControl : MonoBehaviour {
 
 	void TaskOnClick(){
 		if(PhotonNetwork.CurrentRoom != null){
-			Debug.Log("Now in a room");
+			Debug.Log("Join a Room");
 			Open.SetActive(true);
 			Close.SetActive(false);
 		}
-		Debug.Log ("You have clicked the button!");
 	}
 }

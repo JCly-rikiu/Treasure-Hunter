@@ -96,7 +96,6 @@ public class RoomController : MonoBehaviourPunCallbacks
     void ReadyCount(int intoready)
     {
         MenuInfo.Ready = intoready;
-        Debug.Log("ready told");
     }
     [PunRPC]
     void SendSeed(string seedtext)
