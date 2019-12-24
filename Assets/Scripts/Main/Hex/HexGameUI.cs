@@ -15,6 +15,8 @@ public class HexGameUI : MonoBehaviour
     public HexUnit otherUnit;
     bool selected;
 
+    public HexMapCamera mapCamera;
+
     void Awake()
     {
         photonView = PhotonView.Get(this);
@@ -49,6 +51,11 @@ public class HexGameUI : MonoBehaviour
 
                 photonView.RPC("SendJump", RpcTarget.Others, true);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            mapCamera.SetPosition(myUnit.Location);
         }
 
         if (UnitInfo.newPath)

@@ -12,6 +12,7 @@ public class HexGameController : MonoBehaviour
 
     public HexGrid grid;
     public HexGameUI gameUI;
+    public HexMapCamera mapCamera;
     public HexMapGenerator mapGenerator;
     int seed;
 
@@ -31,6 +32,8 @@ public class HexGameController : MonoBehaviour
 
         isServer = PhotonNetwork.IsMasterClient;
 
+        gameUI.mapCamera = mapCamera;
+
         photonView = PhotonView.Get(this);
     }
 
@@ -38,6 +41,8 @@ public class HexGameController : MonoBehaviour
     {
         mapGenerator.GenerateMap(70, 60, seed);
         cellCount = 70 * 60;
+
+        mapCamera.CenterPosition();
 
         if (isServer)
         {

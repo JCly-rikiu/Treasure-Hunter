@@ -992,6 +992,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 603571756}
   gameUI: {fileID: 475111608}
+  mapCamera: {fileID: 1217588850}
   mapGenerator: {fileID: 1041324496}
 --- !u!4 &1608647602
 Transform:

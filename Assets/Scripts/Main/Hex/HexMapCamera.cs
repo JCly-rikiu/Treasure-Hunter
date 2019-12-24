@@ -20,6 +20,14 @@ public class HexMapCamera : MonoBehaviour
 
     public float rotationSpeed;
 
+    bool stillUpdating;
+    Vector3 originalPosition, targetPosition;
+    float update;
+
+    bool stillZooming;
+    float originalZoom, targetZoom;
+    float zoomUpdate;
+
     void Awake()
     {
         instance = this;
@@ -29,23 +37,53 @@ public class HexMapCamera : MonoBehaviour
 
     void Update()
     {
-        float zoomDelta = Input.GetAxis("Mouse ScrollWheel");
-        if (zoomDelta != 0f)
+        if (stillUpdating)
         {
-            AdjustZoom(zoomDelta);
+            update += Time.deltaTime;
+            if (update >= 1)
+            {
+                transform.localPosition = targetPosition;
+                stillUpdating = false;
+            }
+            else
+            {
+                transform.localPosition = Vector3.Slerp(originalPosition, targetPosition, update);
+            }
         }
-
-        float rotationDelta = Input.GetAxis("Rotation");
-        if (rotationDelta != 0f)
+        else if (stillZooming)
         {
-            AdjustRotation(rotationDelta);
+            zoomUpdate += Time.deltaTime;
+            if (zoomUpdate >= 1)
+            {
+                zoom = targetZoom;
+                stillZooming = false;
+            }
+            else
+            {
+                zoom = Mathf.SmoothStep(originalZoom, targetZoom, zoomUpdate);
+                ValidatePosition();
+            }
         }
-
-        float xDelta = Input.GetAxis("Horizontal");
-        float zDelta = Input.GetAxis("Vertical");
-        if (xDelta != 0f || zDelta != 0f)
+        else
         {
-            AdjustPosition(xDelta, zDelta);
+            float zoomDelta = Input.GetAxis("Mouse ScrollWheel");
+            if (zoomDelta != 0f)
+            {
+                AdjustZoom(zoomDelta);
+            }
+
+            float rotationDelta = Input.GetAxis("Rotation");
+            if (rotationDelta != 0f)
+            {
+                AdjustRotation(rotationDelta);
+            }
+
+            float xDelta = Input.GetAxis("Horizontal");
+            float zDelta = Input.GetAxis("Vertical");
+            if (xDelta != 0f || zDelta != 0f)
+            {
+                AdjustPosition(xDelta, zDelta);
+            }
         }
     }
 
@@ -98,6 +136,14 @@ public class HexMapCamera : MonoBehaviour
         return position;
     }
 
+    public void CenterPosition()
+    {
+        transform.localPosition = new Vector3((grid.cellCountX - 0.5f) * (2f * HexMetrics.innerRadius) / 2, 0f, (grid.cellCountZ - 1f) * (1.5f * HexMetrics.outerRadius) / 2);
+        zoom = 0f;
+
+        ValidatePosition();
+    }
+
     public static void ValidatePosition()
     {
         instance.AdjustZoom(0f);
@@ -107,10 +153,17 @@ public class HexMapCamera : MonoBehaviour
 
     public void SetPosition(HexCell cell)
     {
-        transform.localPosition = cell.Position;
-        zoom = 0.7f;
+        stillUpdating = true;
+        update = 0f;
+        originalPosition = transform.localPosition;
+        targetPosition = cell.Position;
 
-        ValidatePosition();
+        stillZooming = true;
+        zoomUpdate = 0f;
+        originalZoom = zoom;
+        targetZoom = 0.7f;
+
+        // ValidatePosition();
     }
 
     public float GetRotationAngle()
