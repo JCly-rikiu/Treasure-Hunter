@@ -10,5 +10,11 @@ public class SoundControl : MonoBehaviour
     public void ClicktoPlay(){
     	Control.PlayOneShot(ClickSound);
     }
+    /*
+    void Update(){
+    	if(Input.GetKeyDown(KeyCode.O)){
+    		Control.PlayOneShot(ClickSound);
+    	}
+    }*/
     
 }

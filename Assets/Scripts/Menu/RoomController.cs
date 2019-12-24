@@ -69,12 +69,14 @@ public class RoomController : MonoBehaviourPunCallbacks
             	Entered.SetActive(true);
             	notEntered.SetActive(false);
                 if (MenuInfo.Ready == 1)
-                {
+                {	
+                	Entered.SetActive(false);
                     lightgo.SetActive(true);
                     darkgo.SetActive(false);
                 }
                 else if (MenuInfo.Ready == 0)
                 {
+                	Entered.SetActive(true);
                     lightgo.SetActive(false);
                     darkgo.SetActive(true);
                 }
