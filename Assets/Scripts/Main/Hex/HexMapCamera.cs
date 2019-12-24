@@ -37,22 +37,9 @@ public class HexMapCamera : MonoBehaviour
 
     void Update()
     {
-        if (stillUpdating)
+        if (stillZooming)
         {
-            update += Time.deltaTime;
-            if (update >= 1)
-            {
-                transform.localPosition = targetPosition;
-                stillUpdating = false;
-            }
-            else
-            {
-                transform.localPosition = Vector3.Slerp(originalPosition, targetPosition, update);
-            }
-        }
-        else if (stillZooming)
-        {
-            zoomUpdate += Time.deltaTime;
+            zoomUpdate += Time.deltaTime * 2 / Mathf.Abs(targetZoom - originalZoom);
             if (zoomUpdate >= 1)
             {
                 zoom = targetZoom;
@@ -62,6 +49,24 @@ public class HexMapCamera : MonoBehaviour
             {
                 zoom = Mathf.SmoothStep(originalZoom, targetZoom, zoomUpdate);
                 ValidatePosition();
+            }
+        }
+        else if (stillUpdating)
+        {
+            update += Time.deltaTime * 230f / (Vector3.Distance(originalPosition, targetPosition));
+            if (update >= 1)
+            {
+                transform.localPosition = targetPosition;
+                stillUpdating = false;
+
+                stillZooming = true;
+                zoomUpdate = 0f;
+                originalZoom = zoom;
+                targetZoom = 0.7f;
+            }
+            else
+            {
+                transform.localPosition = Vector3.Slerp(originalPosition, targetPosition, update);
             }
         }
         else
@@ -77,13 +82,16 @@ public class HexMapCamera : MonoBehaviour
             {
                 AdjustRotation(rotationDelta);
             }
+        }
+    }
 
-            float xDelta = Input.GetAxis("Horizontal");
-            float zDelta = Input.GetAxis("Vertical");
-            if (xDelta != 0f || zDelta != 0f)
-            {
-                AdjustPosition(xDelta, zDelta);
-            }
+    public void Move()
+    {
+        float xDelta = Input.GetAxis("Horizontal");
+        float zDelta = Input.GetAxis("Vertical");
+        if (xDelta != 0f || zDelta != 0f)
+        {
+            AdjustPosition(xDelta, zDelta);
         }
     }
 
@@ -153,17 +161,31 @@ public class HexMapCamera : MonoBehaviour
 
     public void SetPosition(HexCell cell)
     {
-        stillUpdating = true;
-        update = 0f;
-        originalPosition = transform.localPosition;
-        targetPosition = cell.Position;
+        SetPosition(cell.Position, false, true);
+    }
 
-        stillZooming = true;
-        zoomUpdate = 0f;
-        originalZoom = zoom;
-        targetZoom = 0.7f;
+    public void SetPosition(Vector3 position, bool raw = false, bool zoomUp = true)
+    {
+        if (raw)
+        {
+            transform.localPosition = position;
+        }
+        else
+        {
+            stillUpdating = true;
+            update = 0f;
+            originalPosition = transform.localPosition;
+            targetPosition = position;
 
-        // ValidatePosition();
+            if (zoomUp)
+            {
+                stillZooming = true;
+                zoomUpdate = 0f;
+                originalZoom = zoom;
+                targetZoom = 0f;
+            }
+        }
+
     }
 
     public float GetRotationAngle()

@@ -73,6 +73,13 @@ public class HexUnit : MonoBehaviour
         }
     }
 
+    public Renderer unitRenderer;
+
+    void Awake()
+    {
+        unitRenderer = GetComponentInChildren<Renderer>();
+    }
+
     void OnEnable()
     {
         if (location)
@@ -132,10 +139,16 @@ public class HexUnit : MonoBehaviour
             a = c;
             b = pathToTravel[i - 1].Position;
             c = (b + currentTravelLocation.Position) * 0.5f;
+
             if (Owned)
             {
                 Grid.IncreaseVisibility(currentTravelLocation, VisionRange);
             }
+            else
+            {
+                unitRenderer.enabled = currentTravelLocation.IsVisible;
+            }
+
             for (; t < 1f; t += Time.deltaTime * travelSpeed)
             {
                 transform.localPosition = Bezier.GetPoint(a, b, c, t);
@@ -144,10 +157,12 @@ public class HexUnit : MonoBehaviour
                 transform.localRotation = Quaternion.LookRotation(d);
                 yield return null;
             }
+
             if (Owned)
             {
                 Grid.DecreaseVisibility(currentTravelLocation, VisionRange);
             }
+
             t -= 1f;
         }
         currentTravelLocation = null;
@@ -155,10 +170,12 @@ public class HexUnit : MonoBehaviour
         a = c;
         b = location.Position;
         c = b;
+
         if (Owned)
         {
             Grid.IncreaseVisibility(location, VisionRange);
         }
+
         for (; t < 1f; t += Time.deltaTime * travelSpeed)
         {
             transform.localPosition = Bezier.GetPoint(a, b, c, t);
