@@ -6303,7 +6303,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1144604928
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7808,10 +7808,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   multiplayerSceneIndex: 1
-  ready: 0
   Open: {fileID: 573812700}
   Close: {fileID: 1133736024}
   Check: {fileID: 1642717418}
+  notEntered: {fileID: 1007204195}
+  Entered: {fileID: 297549884}
   seed: {fileID: 1169331789}
   lightgo: {fileID: 147620732}
   darkgo: {fileID: 1454529891}
