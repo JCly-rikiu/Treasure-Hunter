@@ -8,6 +8,7 @@ public class HexUnit : MonoBehaviour
     public static HexUnit serverPrefab;
     public static HexUnit clientPrefab;
     public Animator anim;
+    public AudioSource Walk;
 
     public bool Owned { get; set; }
 
@@ -113,6 +114,7 @@ public class HexUnit : MonoBehaviour
     IEnumerator TravelPath()
     {
         anim.SetBool("Run", true);
+        Walk.Play(0);
 
         Vector3 a, b, c = pathToTravel[0].Position;
         yield return LookAt(pathToTravel[1].Position);
@@ -171,6 +173,7 @@ public class HexUnit : MonoBehaviour
         pathToTravel = null;
 
         anim.SetBool("Run", false);
+        Walk.Stop();
     }
 
     IEnumerator LookAt(Vector3 point)
