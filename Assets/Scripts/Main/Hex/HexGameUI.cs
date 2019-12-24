@@ -1,12 +1,24 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
+using Photon.Pun;
+
 
 public class HexGameUI : MonoBehaviour
 {
+    PhotonView photonView;
+
     public HexGrid grid;
 
     HexCell currentCell;
-    HexUnit selectedUnit;
+    public HexUnit myUnit;
+    public HexUnit otherUnit;
+    bool selected;
+
+    void Awake()
+    {
+        photonView = PhotonView.Get(this);
+    }
 
     void Update()
     {
@@ -16,7 +28,7 @@ public class HexGameUI : MonoBehaviour
             {
                 DoSelection();
             }
-            else if (selectedUnit)
+            else if (selected)
             {
                 if (Input.GetMouseButtonDown(1))
                 {
@@ -31,10 +43,24 @@ public class HexGameUI : MonoBehaviour
 
         if (Input.GetKeyDown("space"))
         {
-            if (selectedUnit)
+            if (selected)
             {
-                selectedUnit.Jump();
+                myUnit.Jump();
+
+                photonView.RPC("SendJump", RpcTarget.Others, true);
             }
+        }
+
+        if (UnitInfo.newPath)
+        {
+            DoMove(UnitInfo.Path);
+            UnitInfo.newPath = false;
+        }
+
+        if (UnitInfo.Jump)
+        {
+            otherUnit.Jump();
+            UnitInfo.Jump = false;
         }
     }
 
@@ -55,7 +81,7 @@ public class HexGameUI : MonoBehaviour
         UpdateCurrentCell();
         if (currentCell)
         {
-            selectedUnit = currentCell.Unit;
+            selected = currentCell.Unit && currentCell.Unit.Owned;
         }
     }
 
@@ -63,9 +89,9 @@ public class HexGameUI : MonoBehaviour
     {
         if (UpdateCurrentCell())
         {
-            if (currentCell && selectedUnit.IsValidDestination(currentCell))
+            if (currentCell && myUnit.IsValidDestination(currentCell))
             {
-                grid.FindPath(selectedUnit.Location, currentCell, selectedUnit);
+                grid.FindPath(myUnit.Location, currentCell, myUnit);
             }
             else
             {
@@ -78,8 +104,48 @@ public class HexGameUI : MonoBehaviour
     {
         if (grid.HasPath)
         {
-            selectedUnit.Travel(grid.GetPath());
+            List<HexCell> path = grid.GetPath();
+            SendPath(path);
+            myUnit.Travel(path);
             grid.ClearPath();
         }
+    }
+
+    void DoMove(int[] p)
+    {
+        List<HexCell> path = new List<HexCell>();
+        for (int i = 0; i < p.Length; i++)
+        {
+            path.Add(grid.GetCell(p[i]));
+        }
+
+        otherUnit.Travel(path);
+    }
+
+
+    void SendPath(List<HexCell> p)
+    {
+        int[] path = new int[p.Count];
+
+        for (int i = 0; i < p.Count; i++)
+        {
+            path[i] = p[i].Index;
+        }
+
+        photonView.RPC("SendPath", RpcTarget.Others, true, path);
+    }
+
+
+    [PunRPC]
+    void SendPath(bool synced, int[] path)
+    {
+        UnitInfo.newPath = synced;
+        UnitInfo.Path = path;
+    }
+
+    [PunRPC]
+    void SendJump(bool jump)
+    {
+        UnitInfo.Jump = jump;
     }
 }
