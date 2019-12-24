@@ -27,12 +27,12 @@ public class LobbyController : MonoBehaviourPunCallbacks
     }
     public override void OnJoinRandomFailed(short returnCode, string message) //Callback function for if we fail to join a rooom
     {
-        Debug.Log("Failed to join a room");
+        Debug.LogWarning("Failed to join a room");
     }
 
     public void CreateRoom() //trying to create our own room
     {
-        Debug.Log("Creating room now");
+        Debug.Log("Creating a room");
         int randomRoomNumber = Random.Range(0, 10000); //creating a random name for the room
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)roomSize };
         PhotonNetwork.CreateRoom("Room" + randomRoomNumber, roomOps); //attempting to create a new room
@@ -41,7 +41,7 @@ public class LobbyController : MonoBehaviourPunCallbacks
 
     public override void OnCreateRoomFailed(short returnCode, string message) //callback function for if we fail to create a room. Most likely fail because room name was taken.
     {
-        Debug.Log("Failed to create room... trying again");
+        Debug.LogWarning("Failed to create room... trying again");
         CreateRoom(); //Retrying to create a new room with a different name.
     }
 

@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManage : MonoBehaviour
 {
@@ -17,6 +16,8 @@ public class GameManage : MonoBehaviour
     public void FullScreen(){
     	 Screen.fullScreen = !Screen.fullScreen;
     }
-
+    public void QuitMenu(){
+         SceneManager.LoadScene(0);
+    }
 }
 
