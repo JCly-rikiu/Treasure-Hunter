@@ -3,7 +3,6 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Photon.Pun;
 
-
 public class HexGameUI : MonoBehaviour
 {
     PhotonView photonView;

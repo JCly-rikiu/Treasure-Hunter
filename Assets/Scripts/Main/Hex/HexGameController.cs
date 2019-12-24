@@ -25,6 +25,10 @@ public class HexGameController : MonoBehaviour
     void Awake()
     {
         SHA256 mySHA256 = SHA256.Create();
+        if (MenuInfo.Seed == null)
+        {
+            MenuInfo.Seed = "123";
+        }
         byte[] hashValue = mySHA256.ComputeHash(Encoding.UTF8.GetBytes(MenuInfo.Seed));
 
         HexMetrics.InitializeHashGrid(System.BitConverter.ToInt32(hashValue, 0));
