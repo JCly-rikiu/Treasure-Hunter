@@ -34,5 +34,6 @@ MonoBehaviour:
   - tmp
   - ReadyCount
   - SendSeed
+  - SendStart
   DisableAutoOpenWizard: 1
   ShowSettings: 1

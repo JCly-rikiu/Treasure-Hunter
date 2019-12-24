@@ -5,7 +5,6 @@ public class HexMapGenerator : MonoBehaviour
 {
     public HexGrid grid;
 
-    public int seed;
     public bool useFixedSeed;
 
     int cellCount, landCells;
@@ -111,26 +110,7 @@ public class HexMapGenerator : MonoBehaviour
     [Range(0f, 1f)]
     public float walkableProbability = 0.85f;
 
-    void Awake()
-    {
-        // GenerateMap(20, 15);
-        // GenerateMap(80, 60);
-    }
-
-    void Start()
-    {
-        GenerateMap(70, 60);
-
-        HexCell cell;
-        do
-        {
-            cell = GetRandomCell(regions[0]);
-        } while (cell.IsUnderwater || !cell.IsWalkable || !cell.Explorable);
-
-        grid.AddUnit(Instantiate<HexUnit>(HexUnit.unitPrefab), cell, Random.Range(0f, 360f));
-    }
-
-    public void GenerateMap(int x, int z)
+    public void GenerateMap(int x, int z, int seed)
     {
         Random.State originalRandomState = Random.state;
         if (!useFixedSeed)
