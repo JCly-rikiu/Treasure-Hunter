@@ -19,8 +19,13 @@ public class HexGameController : MonoBehaviour
     List<HexCell> availableCells;
     int cellCount;
 
+    HexCell treasureCell;
+
     HexUnit serverUnit, clientUnit;
     HexCell serverStart, clientStart;
+
+    List<int> itemTypes = new List<int>();
+    List<int> itemIndex = new List<int>();
 
     void Awake()
     {
@@ -34,11 +39,15 @@ public class HexGameController : MonoBehaviour
         HexMetrics.InitializeHashGrid(System.BitConverter.ToInt32(hashValue, 0));
         seed = System.BitConverter.ToInt32(hashValue, 4);
 
-        isServer = PhotonNetwork.IsMasterClient;
-
         gameUI.mapCamera = mapCamera;
 
         photonView = PhotonView.Get(this);
+        isServer = PhotonNetwork.IsMasterClient;
+
+        serverUnit = Instantiate<HexUnit>(HexUnit.serverPrefab);
+        serverUnit.Owned = isServer;
+        clientUnit = Instantiate<HexUnit>(HexUnit.clientPrefab);
+        clientUnit.Owned = !isServer;
     }
 
     void Start()
@@ -51,21 +60,37 @@ public class HexGameController : MonoBehaviour
         if (isServer)
         {
             GetAvailableCells();
-            FindStartCell();
 
-            AddUnits();
+            do
+            {
+                FindTreasureCell();
+            } while (!FindStartCell(40, 20));
+
+            itemTypes.Add((int)HexItemType.Treasure);
+            itemIndex.Add(treasureCell.Index);
+
+            RemoveAvailableCell(serverStart);
+            RemoveAvailableCell(clientStart);
+            RemoveAvailableCell(treasureCell);
+
+            SpreadItems(50);
+
+            SendStart();
         }
     }
 
     void Update()
     {
-        if (StartPointsInfo.Synced)
+        if (StartInfo.Synced)
         {
-            if (!isServer)
-            {
-                AddUnits();
-                StartPointsInfo.Synced = false;
-            }
+            Log.Status(GetType(), "StartInfo synced.");
+
+            AddUnits();
+            AddItems();
+
+            grid.ResetVisibility();
+
+            StartInfo.Synced = false;
         }
     }
 
@@ -81,30 +106,101 @@ public class HexGameController : MonoBehaviour
                 availableCells.Add(cell);
             }
         }
+
+        Log.Status(GetType(), "available cells: " + availableCells.Count.ToString());
     }
 
-    void FindStartCell()
+    void RemoveAvailableCell(HexCell cell)
+    {
+        availableCells.Remove(cell);
+    }
+
+    void RemoveAvailableCell(int index)
+    {
+        availableCells[index] = availableCells[availableCells.Count - 1];
+        availableCells.RemoveAt(availableCells.Count - 1);
+    }
+
+    void FindTreasureCell()
     {
         int index = Random.Range(0, availableCells.Count);
-        serverStart = availableCells[index];
-        availableCells[index] = availableCells[availableCells.Count - 1];
-        availableCells.RemoveAt(availableCells.Count - 1);
+        treasureCell = availableCells[index];
+    }
 
-        index = Random.Range(0, availableCells.Count);
-        clientStart = availableCells[index];
-        availableCells[index] = availableCells[availableCells.Count - 1];
-        availableCells.RemoveAt(availableCells.Count - 1);
+    bool FindStartCell(int treasureGap, int playerGap)
+    {
+        int guard = 0;
 
-        photonView.RPC("SendStart", RpcTarget.Others, true, serverStart.Index, clientStart.Index);
+        bool finding = true;
+        while (finding)
+        {
+            if (guard++ == 10000)
+            {
+                return false;
+            }
+
+            int index = Random.Range(0, availableCells.Count);
+            serverStart = availableCells[index];
+            grid.FindPath(serverStart, treasureCell, serverUnit, false);
+            if (!grid.HasPath || grid.GetPath().Count < treasureGap)
+            {
+                grid.ClearPath();
+                continue;
+            }
+            grid.ClearPath();
+
+            finding = false;
+        }
+
+        finding = true;
+        while (finding)
+        {
+            if (guard++ == 10000)
+            {
+                return false;
+            }
+
+            int index = Random.Range(0, availableCells.Count);
+            clientStart = availableCells[index];
+            grid.FindPath(clientStart, treasureCell, clientUnit, false);
+            if (!grid.HasPath || grid.GetPath().Count < treasureGap)
+            {
+                grid.ClearPath();
+                continue;
+            }
+            grid.ClearPath();
+
+            grid.FindPath(clientStart, serverStart, clientUnit, false);
+            if (!grid.HasPath || grid.GetPath().Count < playerGap)
+            {
+                grid.ClearPath();
+                continue;
+            }
+            grid.ClearPath();
+
+            finding = false;
+        }
+
+        return true;
+    }
+
+    void SpreadItems(int count)
+    {
+        HexItemType[] types = HexItemTypeCollection.GetMapRandom();
+
+        while (count-- > 0 && availableCells.Count >= 0)
+        {
+            int index = Random.Range(0, availableCells.Count);
+
+            itemTypes.Add((int)types[Random.Range(0, types.Length)]);
+            itemIndex.Add(availableCells[index].Index);
+
+            RemoveAvailableCell(index);
+        }
     }
 
     void AddUnits()
     {
-        serverUnit = Instantiate<HexUnit>(HexUnit.serverPrefab);
-        serverUnit.Owned = isServer;
-        clientUnit = Instantiate<HexUnit>(HexUnit.clientPrefab);
-        clientUnit.Owned = !isServer;
-
         if (isServer)
         {
             gameUI.myUnit = serverUnit;
@@ -112,22 +208,59 @@ public class HexGameController : MonoBehaviour
         }
         else
         {
-            serverStart = grid.GetCell(StartPointsInfo.ServerIndex);
-            clientStart = grid.GetCell(StartPointsInfo.ClientIndex);
+            serverStart = grid.GetCell(StartInfo.ServerIndex);
+            clientStart = grid.GetCell(StartInfo.ClientIndex);
 
             gameUI.myUnit = clientUnit;
             gameUI.otherUnit = serverUnit;
         }
 
+        Log.Status(GetType(), "server starts at " + serverStart.coordinates.ToString() + " client starts at " + clientStart.coordinates.ToString());
+
         grid.AddUnit(serverUnit, serverStart);
         grid.AddUnit(clientUnit, clientStart);
     }
 
-    [PunRPC]
-    void SendStart(bool synced, int serverIndex, int clientIndex)
+    void AddItems()
     {
-        StartPointsInfo.Synced = synced;
-        StartPointsInfo.ServerIndex = serverIndex;
-        StartPointsInfo.ClientIndex = clientIndex;
+        if (!isServer)
+        {
+            for (int i = 0; i < StartInfo.ItemTypes.Length; i++)
+            {
+                itemTypes.Add(StartInfo.ItemTypes[i]);
+                itemIndex.Add(StartInfo.ItemIndex[i]);
+            }
+        }
+
+        for (int i = 0; i < itemTypes.Count; i++)
+        {
+            HexItem item = Instantiate<HexItem>(HexItem.itemPrefab);
+            item.itemType = (HexItemType)itemTypes[i];
+            item.Owned = false; //item.itemType == HexItemType.Treasure;
+            grid.AddItem(item, grid.GetCell(itemIndex[i]));
+        }
+    }
+
+    void SendStart()
+    {
+        int[] tempItemTypes = new int[itemTypes.Count];
+        int[] tempItemIndex = new int[itemIndex.Count];
+        for (int i = 0; i < itemTypes.Count; i++)
+        {
+            tempItemTypes[i] = itemTypes[i];
+            tempItemIndex[i] = itemIndex[i];
+        }
+
+        photonView.RPC("SendStart", RpcTarget.All, true, serverStart.Index, clientStart.Index, tempItemTypes, tempItemIndex);
+    }
+
+    [PunRPC]
+    void SendStart(bool synced, int serverIndex, int clientIndex, int[] itemTypes, int[] itemIndex)
+    {
+        StartInfo.Synced = synced;
+        StartInfo.ServerIndex = serverIndex;
+        StartInfo.ClientIndex = clientIndex;
+        StartInfo.ItemTypes = itemTypes;
+        StartInfo.ItemIndex = itemIndex;
     }
 }

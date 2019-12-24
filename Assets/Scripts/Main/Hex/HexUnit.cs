@@ -143,6 +143,11 @@ public class HexUnit : MonoBehaviour
             if (Owned)
             {
                 Grid.IncreaseVisibility(currentTravelLocation, VisionRange);
+                if (currentTravelLocation.Item)
+                {
+                    currentTravelLocation.Item.Effect();
+                    Grid.RemoveItem(currentTravelLocation.Item);
+                }
             }
             else
             {
