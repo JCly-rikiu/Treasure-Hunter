@@ -484,7 +484,12 @@ public class HexGrid : MonoBehaviour
         List<HexCell> cells = GetVisibleCells(fromCell, range);
         for (int i = 0; i < cells.Count; i++)
         {
-            cells[i].IncreaseVisibility();
+            HexCell cell = cells[i];
+            cell.IncreaseVisibility();
+            if (cell.Unit && !cell.Unit.Owned)
+            {
+                cell.Unit.unitRenderer.enabled = cell.IsVisible;
+            }
         }
         ListPool<HexCell>.Add(cells);
     }
@@ -494,7 +499,12 @@ public class HexGrid : MonoBehaviour
         List<HexCell> cells = GetVisibleCells(fromCell, range);
         for (int i = 0; i < cells.Count; i++)
         {
+            HexCell cell = cells[i];
             cells[i].DecreaseVisibility();
+            if (cell.Unit && !cell.Unit.Owned)
+            {
+                cell.Unit.unitRenderer.enabled = cell.IsVisible;
+            }
         }
         ListPool<HexCell>.Add(cells);
     }
