@@ -15,6 +15,13 @@ public class HexGameUI : MonoBehaviour
     bool selected;
 
     public HexMapCamera mapCamera;
+    bool following, switchToFollowing;
+    HexCell followedLastCell;
+
+    public static Color selectedColor = new Color(0, 40, 70);
+    public static Color pathColor = Color.white;
+    public static Color toColor = new Color(255, 180, 0);
+    public static Color unableColor = Color.red;
 
     void Awake()
     {
@@ -25,11 +32,7 @@ public class HexGameUI : MonoBehaviour
     {
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                DoSelection();
-            }
-            else if (selected && !myUnit.isTraveling)
+            if (selected && !myUnit.isTraveling)
             {
                 if (Input.GetMouseButtonDown(1))
                 {
@@ -42,6 +45,11 @@ public class HexGameUI : MonoBehaviour
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            DoSelection();
+        }
+
         if (Input.GetKeyDown("space"))
         {
             if (selected)
@@ -52,11 +60,39 @@ public class HexGameUI : MonoBehaviour
             }
         }
 
+        // center camera to myUnit position
         if (Input.GetKeyDown(KeyCode.C))
         {
             mapCamera.SetPosition(myUnit.Location);
         }
 
+        // toggle camera following
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            following = !following;
+            if (following)
+            {
+                mapCamera.SetPosition(myUnit.Location);
+                switchToFollowing = true;
+            }
+        }
+        if (switchToFollowing)
+        {
+            if (mapCamera.transform.localPosition == myUnit.transform.localPosition)
+            {
+                switchToFollowing = false;
+            }
+        }
+        else if (following)
+        {
+            mapCamera.SetPosition(myUnit.transform.localPosition, true);
+        }
+        else
+        {
+            mapCamera.Move();
+        }
+
+        // networking
         if (UnitInfo.newPath)
         {
             DoMove(UnitInfo.Path);
@@ -84,11 +120,20 @@ public class HexGameUI : MonoBehaviour
     void DoSelection()
     {
         grid.ClearPath();
-        UpdateCurrentCell();
-        if (currentCell)
-        {
-            selected = currentCell.Unit && currentCell.Unit.Owned;
-        }
+        // UpdateCurrentCell();
+        selected = !selected;
+        // if (currentCell)
+        // {
+        //     selected = currentCell.Unit && currentCell.Unit.Owned;
+        //     if (selected)
+        //     {
+        //         currentCell.EnableHighlight(selectedColor);
+        //     }
+        //     else
+        //     {
+        //         currentCell.DisableHighlight();
+        //     }
+        // }
     }
 
     void DoPathfinding()

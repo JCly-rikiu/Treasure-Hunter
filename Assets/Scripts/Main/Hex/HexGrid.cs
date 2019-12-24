@@ -332,18 +332,18 @@ public class HexGrid : MonoBehaviour
             HexCell current = currentPathTo;
             while (current != currentPathFrom)
             {
-                current.EnableHighlight(Color.white);
+                current.EnableHighlight(HexGameUI.pathColor);
                 current = current.PathFrom;
             }
             currentPathTo.SetLabel(currentPathTo.Distance.ToString());
-            currentPathTo.EnableHighlight(new Color(255, 134, 0));
+            currentPathTo.EnableHighlight(HexGameUI.toColor);
         }
         else
         {
-            currentPathTo.EnableHighlight(Color.red);
+            currentPathTo.EnableHighlight(HexGameUI.unableColor);
         }
 
-        currentPathFrom.EnableHighlight(new Color(0, 40, 70));
+        currentPathFrom.EnableHighlight(HexGameUI.selectedColor);
     }
 
     public List<HexCell> GetPath()
