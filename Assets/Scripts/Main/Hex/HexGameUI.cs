@@ -3,7 +3,6 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Photon.Pun;
 
-
 public class HexGameUI : MonoBehaviour
 {
     PhotonView photonView;
@@ -30,7 +29,7 @@ public class HexGameUI : MonoBehaviour
             {
                 DoSelection();
             }
-            else if (selected)
+            else if (selected && !myUnit.isTraveling)
             {
                 if (Input.GetMouseButtonDown(1))
                 {

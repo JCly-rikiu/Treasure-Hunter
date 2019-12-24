@@ -25,6 +25,7 @@ public class HexUnit : MonoBehaviour
     List<HexCell> pathToTravel;
     const float travelSpeed = 4f;
     const float rotationSpeed = 180f;
+    public bool isTraveling;
 
     public HexCell Location
     {
@@ -113,6 +114,7 @@ public class HexUnit : MonoBehaviour
 
     IEnumerator TravelPath()
     {
+        isTraveling = true;
         anim.SetBool("Run", true);
         Walk.Play(0);
 
@@ -172,6 +174,7 @@ public class HexUnit : MonoBehaviour
         ListPool<HexCell>.Add(pathToTravel);
         pathToTravel = null;
 
+        isTraveling = false;
         anim.SetBool("Run", false);
         Walk.Stop();
     }
