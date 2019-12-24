@@ -11,6 +11,8 @@ public class HexGameController : MonoBehaviour
     bool isServer;
 
     public HexGrid grid;
+    public HexGameUI gameUI;
+    public HexMapCamera mapCamera;
     public HexMapGenerator mapGenerator;
     int seed;
 
@@ -29,7 +31,8 @@ public class HexGameController : MonoBehaviour
         seed = System.BitConverter.ToInt32(hashValue, 4);
 
         isServer = PhotonNetwork.IsMasterClient;
-        Debug.Log(isServer);
+
+        gameUI.mapCamera = mapCamera;
 
         photonView = PhotonView.Get(this);
     }
@@ -38,6 +41,8 @@ public class HexGameController : MonoBehaviour
     {
         mapGenerator.GenerateMap(70, 60, seed);
         cellCount = 70 * 60;
+
+        mapCamera.CenterPosition();
 
         if (isServer)
         {
@@ -62,7 +67,7 @@ public class HexGameController : MonoBehaviour
 
     void GetAvailableCells()
     {
-        availableCells = ListPool<HexCell>.Get();
+        availableCells = new List<HexCell>();
 
         for (int i = 0; i < cellCount; i++)
         {
@@ -86,9 +91,7 @@ public class HexGameController : MonoBehaviour
         availableCells[index] = availableCells[availableCells.Count - 1];
         availableCells.RemoveAt(availableCells.Count - 1);
 
-        StartPointsInfo.ServerIndex = serverStart.Index;
-        StartPointsInfo.ClientIndex = clientStart.Index;
-        photonView.RPC("SendStart", RpcTarget.Others, true, StartPointsInfo.ServerIndex, StartPointsInfo.ClientIndex);
+        photonView.RPC("SendStart", RpcTarget.Others, true, serverStart.Index, clientStart.Index);
     }
 
     void AddUnits()
@@ -98,10 +101,18 @@ public class HexGameController : MonoBehaviour
         clientUnit = Instantiate<HexUnit>(HexUnit.clientPrefab);
         clientUnit.Owned = !isServer;
 
-        if (!isServer)
+        if (isServer)
+        {
+            gameUI.myUnit = serverUnit;
+            gameUI.otherUnit = clientUnit;
+        }
+        else
         {
             serverStart = grid.GetCell(StartPointsInfo.ServerIndex);
             clientStart = grid.GetCell(StartPointsInfo.ClientIndex);
+
+            gameUI.myUnit = clientUnit;
+            gameUI.otherUnit = serverUnit;
         }
 
         grid.AddUnit(serverUnit, serverStart);
