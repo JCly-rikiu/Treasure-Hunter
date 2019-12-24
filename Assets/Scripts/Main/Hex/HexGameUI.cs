@@ -93,16 +93,19 @@ public class HexGameUI : MonoBehaviour
         }
 
         // networking
-        if (UnitInfo.newPath)
+        if (otherUnit)
         {
-            DoMove(UnitInfo.Path);
-            UnitInfo.newPath = false;
-        }
+            if (UnitInfo.newPath)
+            {
+                DoMove(UnitInfo.Path);
+                UnitInfo.newPath = false;
+            }
 
-        if (UnitInfo.Jump)
-        {
-            otherUnit.Jump();
-            UnitInfo.Jump = false;
+            if (UnitInfo.Jump)
+            {
+                otherUnit.Jump();
+                UnitInfo.Jump = false;
+            }
         }
     }
 
@@ -140,7 +143,7 @@ public class HexGameUI : MonoBehaviour
     {
         if (UpdateCurrentCell())
         {
-            if (currentCell && myUnit.IsValidDestination(currentCell))
+            if (currentCell)
             {
                 grid.FindPath(myUnit.Location, currentCell, myUnit);
             }

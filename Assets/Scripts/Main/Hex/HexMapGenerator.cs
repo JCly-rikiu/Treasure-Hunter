@@ -112,6 +112,8 @@ public class HexMapGenerator : MonoBehaviour
 
     public void GenerateMap(int x, int z, int seed)
     {
+        Log.Status(GetType(), "generate map with seed: " + seed + " size: " + x + ", " + z);
+
         Random.State originalRandomState = Random.state;
         if (!useFixedSeed)
         {
