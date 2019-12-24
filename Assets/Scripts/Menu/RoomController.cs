@@ -11,6 +11,8 @@ public class RoomController : MonoBehaviourPunCallbacks
     public GameObject Open;
     public GameObject Close;
     public GameObject Check;
+    public GameObject notEntered;
+    public GameObject Entered;
     public Text seed;
 
     private PhotonView PV;
@@ -63,6 +65,9 @@ public class RoomController : MonoBehaviourPunCallbacks
         {
             if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
+
+            	Entered.SetActive(true);
+            	notEntered.SetActive(false);
                 if (MenuInfo.Ready == 1)
                 {
                     lightgo.SetActive(true);
@@ -75,7 +80,9 @@ public class RoomController : MonoBehaviourPunCallbacks
                 }
             }
             else
-            {
+            {	
+            	notEntered.SetActive(true);
+            	Entered.SetActive(false);
                 lightgo.SetActive(false);
                 darkgo.SetActive(true);
                 MenuInfo.Ready = 0;
