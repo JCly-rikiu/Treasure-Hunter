@@ -30,7 +30,7 @@ public class HexGameUI : MonoBehaviour
             {
                 DoSelection();
             }
-            else if (selected)
+            else if (selected && !myUnit.isTraveling)
             {
                 if (Input.GetMouseButtonDown(1))
                 {
