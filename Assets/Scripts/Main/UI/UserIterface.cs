@@ -12,6 +12,13 @@ public class UserIterface : MonoBehaviour
     public Text myscore;
     public Text otherscore;
     public GameObject lightkey;
+    public GameObject winmenu;
+    public GameObject losemenu;
+    public Text winFinalMyScore ;
+    public Text winFinalOtherScore;
+    public Text loseFinalMyScore ;
+    public Text loseFinalOtherScore;
+
     float timewidth = 0f;
     float timeheight = 0f;
     float currentwidth = 0;
@@ -61,5 +68,17 @@ public class UserIterface : MonoBehaviour
     }
     public void GetKey(){
     	lightkey.SetActive(true);
+    }
+    public void isWin(bool win){
+
+        if(win){
+            winmenu.SetActive(true);
+            winFinalOtherScore.text = myscore.text;
+            winFinalOtherScore.text = otherscore.text;
+        }else{
+            losemenu.SetActive(true);
+            loseFinalOtherScore.text = myscore.text;
+            loseFinalOtherScore.text = otherscore.text;
+        }
     }
 }
