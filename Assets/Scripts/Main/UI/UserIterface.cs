@@ -47,7 +47,7 @@ public class UIController : MonoBehaviour
         }
         timebar.sizeDelta = new Vector2(currentwidth,timeheight);
         
-        curtime = curtime * 15;
+        curtime = 15 - curtime * 15;
         int inttime = Mathf.CeilToInt(curtime);
         timetext.text = inttime.ToString();
     }
@@ -55,7 +55,8 @@ public class UIController : MonoBehaviour
         
         energytext.text = curenergy.ToString();
         float floatenergy = curenergy / 30;
-        currentheight = Mathf.Lerp(0, energyheight, 1 - floatenergy );
+
+        currentheight = Mathf.Lerp(0, energyheight,floatenergy );
         
         energybar.sizeDelta = new Vector2(energywidth, currentheight);
         
