@@ -261,6 +261,11 @@ public class HexGrid : MonoBehaviour
 
     bool Search(HexCell fromCell, HexCell toCell, HexUnit unit, bool limitSearch)
     {
+        if (fromCell == toCell)
+        {
+            return false;
+        }
+
         int speed = unit.Speed;
 
         searchFrontierPhase += 2;

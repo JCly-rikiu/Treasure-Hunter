@@ -33,13 +33,10 @@ public class HexGameUI : MonoBehaviour
         {
             if (HexGameController.myTurn && !myUnit.isTraveling)
             {
+                DoPathfinding();
                 if (Input.GetMouseButtonDown(1))
                 {
                     DoMove();
-                }
-                else
-                {
-                    DoPathfinding();
                 }
             }
             else
