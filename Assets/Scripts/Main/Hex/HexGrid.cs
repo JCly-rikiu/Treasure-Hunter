@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using Photon.Pun;
 
 public class HexGrid : MonoBehaviour
 {
+    PhotonView photonView;
+
     public int cellCountX = 20, cellCountZ = 15;
     int chunkCountX, chunkCountZ;
     public int border = 7;
@@ -53,6 +56,8 @@ public class HexGrid : MonoBehaviour
 
         cellShaderData = gameObject.AddComponent<HexCellShaderData>();
         cellShaderData.Grid = this;
+
+        photonView = PhotonView.Get(this);
     }
 
     void onEnable()
@@ -544,6 +549,7 @@ public class HexGrid : MonoBehaviour
 
     public void AddItem(HexItem item, HexCell location)
     {
+        item.Index = items.Count;
         items.Add(item);
         item.Grid = this;
         item.transform.SetParent(transform, false);
@@ -557,9 +563,26 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    public void RemoveItem(HexItem item)
+    public void RemoveItem(int cellIndex)
     {
+
+        HexItem item = cells[cellIndex].Item;
         items.Remove(item);
         item.RemoveFromMap();
+    }
+
+    public void RemoveItem(HexItem item)
+    {
+        photonView.RPC("SendRemoveItem", RpcTarget.Others, true, item.Location.Index);
+
+        items.Remove(item);
+        item.RemoveFromMap();
+    }
+
+    [PunRPC]
+    void SendRemoveItem(bool synced, int cellIndex)
+    {
+        RemoveItemInfo.Synced = synced;
+        RemoveItemInfo.CellIndex = cellIndex;
     }
 }

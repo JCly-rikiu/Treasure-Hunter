@@ -9,6 +9,8 @@ public class HexItem : MonoBehaviour
     public Transform[] itemTPrefabs;
     Transform item, showEffect, effect;
 
+    public int Index { get; set; }
+
     public bool Owned { get; set; }
 
     public HexGrid Grid { get; set; }
@@ -90,7 +92,7 @@ public class HexItem : MonoBehaviour
         switch (itemType)
         {
             case HexItemType.Treasure:
-                unit.Score += 500;
+                unit.Score += 300;
                 unit.hasTreasure = true;
                 break;
             case HexItemType.Key:
@@ -130,6 +132,7 @@ public class HexItem : MonoBehaviour
     {
         location.Item = null;
         location = null;
+        Destroy(gameObject);
     }
 
     public bool isWalkable(HexUnit unit)

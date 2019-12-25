@@ -1308,6 +1308,7 @@ GameObject:
   m_Component:
   - component: {fileID: 603571755}
   - component: {fileID: 603571756}
+  - component: {fileID: 603571757}
   m_Layer: 0
   m_Name: Hex Grid
   m_TagString: Untagged
@@ -1361,6 +1362,28 @@ MonoBehaviour:
   mesh: {fileID: 1904875660}
   noiseSource: {fileID: 2800000, guid: 4506dfa11e97c9d49ab49d3a186c7e3e, type: 3}
   seed: 1234
+--- !u!114 &603571757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 603571754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 3
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &619852012
 GameObject:
   m_ObjectHideFlags: 0

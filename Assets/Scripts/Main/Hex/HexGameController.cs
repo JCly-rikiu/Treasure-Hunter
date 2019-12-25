@@ -148,6 +148,12 @@ public class HexGameController : MonoBehaviour
             SendScore();
         }
 
+        if (RemoveItemInfo.Synced)
+        {
+            grid.RemoveItem(RemoveItemInfo.CellIndex);
+            RemoveItemInfo.Synced = false;
+        }
+
         if (ScoreInfo.Synced)
         {
             if (ScoreInfo.IsServer)
