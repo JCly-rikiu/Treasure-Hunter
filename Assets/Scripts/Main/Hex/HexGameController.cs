@@ -23,7 +23,7 @@ public class HexGameController : MonoBehaviour
 
     HexCell treasureCell;
 
-    HexUnit serverUnit, clientUnit, myUnit;
+    HexUnit serverUnit, clientUnit, myUnit, otherUnit;
     HexCell serverStart, clientStart;
 
     List<int> itemTypes = new List<int>();
@@ -33,8 +33,7 @@ public class HexGameController : MonoBehaviour
     public static bool myTurn = false;
     float second;
 
-    public BarControl timeBar;
-    public BarControl energyBar;
+    public UIController ui;
 
     void Awake()
     {
@@ -125,6 +124,11 @@ public class HexGameController : MonoBehaviour
                 second = 0;
                 myUnit.SetSpeed();
             }
+            else
+            {
+                ui.StartCounting(0f);
+                ui.EnergyCounting(30);
+            }
 
             TurnInfo.Synced = false;
         }
@@ -138,13 +142,32 @@ public class HexGameController : MonoBehaviour
                 myTurn = false;
                 SendTurn();
             }
-            timeBar.StartCounting(second / turnTime);
-            energyBar.StartCounting(1f - myUnit.Speed / 30f);
+            ui.StartCounting(second / turnTime);
+            ui.EnergyCounting(myUnit.Speed);
+
+            SendScore();
         }
-        else
+
+        if (ScoreInfo.Synced)
         {
-            timeBar.StartCounting(0f);
-            energyBar.StartCounting(0f);
+            if (ScoreInfo.IsServer)
+            {
+                serverUnit.Score = ScoreInfo.Score;
+            }
+            else
+            {
+                clientUnit.Score = ScoreInfo.Score;
+            }
+
+            ScoreInfo.Synced = false;
+        }
+
+        ui.MyScore(myUnit.Score);
+        ui.Otherscore(otherUnit.Score);
+
+        if (myUnit.hasKey)
+        {
+            ui.GetKey();
         }
 
         if (myUnit.hasTreasure)
@@ -156,12 +179,17 @@ public class HexGameController : MonoBehaviour
         {
             myTurn = false;
 
+            Log.Status(GetType(), "server/client score: " + serverUnit.Score + " / " + clientUnit.Score);
+            Log.Status(GetType(), "server/client has treasure: " + serverUnit.hasTreasure + " / " + clientUnit.hasTreasure);
+
             if (WinInfo.IsServerWin == isServer)
             {
+                ui.isWin(true);
                 Log.Status(GetType(), "you win");
             }
             else
             {
+                ui.isWin(false);
                 Log.Status(GetType(), "you lose");
             }
 
@@ -292,7 +320,7 @@ public class HexGameController : MonoBehaviour
         if (isServer)
         {
             gameUI.myUnit = myUnit = serverUnit;
-            gameUI.otherUnit = clientUnit;
+            gameUI.otherUnit = otherUnit = clientUnit;
         }
         else
         {
@@ -300,7 +328,7 @@ public class HexGameController : MonoBehaviour
             clientStart = grid.GetCell(StartInfo.ClientIndex);
 
             gameUI.myUnit = myUnit = clientUnit;
-            gameUI.otherUnit = serverUnit;
+            gameUI.otherUnit = otherUnit = serverUnit;
         }
 
         Log.Status(GetType(), "server starts at " + serverStart.coordinates.ToString() + " client starts at " + clientStart.coordinates.ToString());
@@ -348,12 +376,14 @@ public class HexGameController : MonoBehaviour
         photonView.RPC("SendTurn", RpcTarget.All, true, TurnInfo.Turn + 1);
     }
 
+    void SendScore()
+    {
+        photonView.RPC("SendScore", RpcTarget.Others, true, isServer, myUnit.Score);
+    }
+
     void SendWin()
     {
         grid.ClearPath();
-
-        Log.Status(GetType(), "server/client score: " + serverUnit.Score + " / " + clientUnit.Score);
-
         photonView.RPC("SendWin", RpcTarget.All, true, serverUnit.Score > clientUnit.Score || serverUnit.hasTreasure);
     }
 
@@ -372,6 +402,14 @@ public class HexGameController : MonoBehaviour
     {
         TurnInfo.Synced = synced;
         TurnInfo.Turn = turn;
+    }
+
+    [PunRPC]
+    void SendScore(bool synced, bool isServer, int score)
+    {
+        ScoreInfo.Synced = synced;
+        ScoreInfo.IsServer = isServer;
+        ScoreInfo.Score = score;
     }
 
     [PunRPC]
