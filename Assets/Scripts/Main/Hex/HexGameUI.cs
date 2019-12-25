@@ -42,6 +42,10 @@ public class HexGameUI : MonoBehaviour
                     DoPathfinding();
                 }
             }
+            else
+            {
+                currentCell = null;
+            }
         }
 
         if (Input.GetKeyDown("space"))
