@@ -13,10 +13,12 @@ public class HexGrid : MonoBehaviour
     public HexGridChunk chunkPrefab;
     public HexUnit serverPrefab;
     public HexUnit clientPrefab;
+    public HexItem itemPrefab;
 
     HexCell[] cells;
     HexGridChunk[] chunks;
     List<HexUnit> units = new List<HexUnit>();
+    List<HexItem> items = new List<HexItem>();
 
     public HexMapCamera mapCamera;
 
@@ -47,6 +49,8 @@ public class HexGrid : MonoBehaviour
         HexUnit.serverPrefab = serverPrefab;
         HexUnit.clientPrefab = clientPrefab;
 
+        HexItem.itemPrefab = itemPrefab;
+
         cellShaderData = gameObject.AddComponent<HexCellShaderData>();
         cellShaderData.Grid = this;
     }
@@ -58,6 +62,9 @@ public class HexGrid : MonoBehaviour
             HexMetrics.noiseSource = noiseSource;
             HexUnit.serverPrefab = serverPrefab;
             HexUnit.clientPrefab = clientPrefab;
+
+            HexItem.itemPrefab = itemPrefab;
+
             ResetVisibility();
         }
     }
@@ -235,16 +242,24 @@ public class HexGrid : MonoBehaviour
         return cells[cellIndex];
     }
 
-    public void FindPath(HexCell fromCell, HexCell toCell, HexUnit unit)
+    public void FindPath(HexCell fromCell, HexCell toCell)
+    {
+
+    }
+
+    public void FindPath(HexCell fromCell, HexCell toCell, HexUnit unit, bool checkIsExplored = true)
     {
         ClearPath();
         currentPathFrom = fromCell;
         currentPathTo = toCell;
-        currentPathExists = Search(fromCell, toCell, unit);
-        ShowPath(unit.Speed);
+        currentPathExists = Search(fromCell, toCell, unit, checkIsExplored);
+        if (checkIsExplored)
+        {
+            ShowPath(unit.Speed);
+        }
     }
 
-    bool Search(HexCell fromCell, HexCell toCell, HexUnit unit)
+    bool Search(HexCell fromCell, HexCell toCell, HexUnit unit, bool checkIsExplored)
     {
         int speed = unit.Speed;
 
@@ -284,7 +299,7 @@ public class HexGrid : MonoBehaviour
                 }
 
                 // skip unreachable cells
-                if (!unit.IsValidDestination(neighbor))
+                if (!unit.IsValidDestination(neighbor, checkIsExplored))
                 {
                     continue;
                 }
@@ -327,7 +342,7 @@ public class HexGrid : MonoBehaviour
 
     void ShowPath(int speed)
     {
-        if (currentPathExists)
+        if (currentPathExists && currentPathFrom != currentPathTo)
         {
             HexCell current = currentPathTo;
             while (current != currentPathFrom)
@@ -486,10 +501,6 @@ public class HexGrid : MonoBehaviour
         {
             HexCell cell = cells[i];
             cell.IncreaseVisibility();
-            if (cell.Unit && !cell.Unit.Owned)
-            {
-                cell.Unit.unitRenderer.enabled = cell.IsVisible;
-            }
         }
         ListPool<HexCell>.Add(cells);
     }
@@ -501,10 +512,6 @@ public class HexGrid : MonoBehaviour
         {
             HexCell cell = cells[i];
             cells[i].DecreaseVisibility();
-            if (cell.Unit && !cell.Unit.Owned)
-            {
-                cell.Unit.unitRenderer.enabled = cell.IsVisible;
-            }
         }
         ListPool<HexCell>.Add(cells);
     }
@@ -524,5 +531,35 @@ public class HexGrid : MonoBehaviour
                 IncreaseVisibility(unit.Location, unit.VisionRange);
             }
         }
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            HexItem item = items[i];
+            if (item.Owned)
+            {
+                IncreaseVisibility(item.Location, item.VisionRange);
+            }
+        }
+    }
+
+    public void AddItem(HexItem item, HexCell location)
+    {
+        items.Add(item);
+        item.Grid = this;
+        item.transform.SetParent(transform, false);
+        item.Location = location;
+        item.InstantiateItem();
+        // item.Orientation = Random.Range(0f, 360f);
+
+        if (item.itemType == HexItemType.Treasure)
+        {
+            Log.Status(GetType(), "treasure at " + location.coordinates.ToString());
+        }
+    }
+
+    public void RemoveItem(HexItem item)
+    {
+        items.Remove(item);
+        item.RemoveFromMap();
     }
 }

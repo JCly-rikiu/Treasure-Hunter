@@ -1291,6 +1291,8 @@ MonoBehaviour:
     type: 3}
   clientPrefab: {fileID: 114533558966637206, guid: 6513250d9f94f604caf705faaa70ab45,
     type: 3}
+  itemPrefab: {fileID: 7299639442276942594, guid: 482bb8ac7789a114095d1fdbf14bf487,
+    type: 3}
   mapCamera: {fileID: 1217588850}
   mesh: {fileID: 1904875660}
   noiseSource: {fileID: 2800000, guid: 4506dfa11e97c9d49ab49d3a186c7e3e, type: 3}
@@ -1787,7 +1789,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -0.000061035156, y: -0.000015258789}
+  m_AnchoredPosition: {x: 0, y: -0.000015258789}
   m_SizeDelta: {x: 81.32, y: 900}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &745024758
@@ -1853,9 +1855,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.0000292, y: 1.0000292, z: 1.0000292}
-  m_Children:
-  - {fileID: 1542713195}
-  - {fileID: 2119667904}
+  m_Children: [{fileID: 1542713195}, {fileID: 2119667904}]
   m_Father: {fileID: 1289438312}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3272,9 +3272,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.0000181, y: 1.0000181, z: 1.0000181}
-  m_Children:
-  - {fileID: 177658818}
-  - {fileID: 1576460388}
+  m_Children: [{fileID: 177658818}, {fileID: 1576460388}]
   m_Father: {fileID: 1289438312}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4303,7 +4301,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0.0000050395975}
+  m_AnchoredPosition: {x: 0, y: 0.0000050395975}
   m_SizeDelta: {x: 80, y: 900}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1307482953

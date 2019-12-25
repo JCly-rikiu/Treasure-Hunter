@@ -16,6 +16,8 @@ public class HexCell : MonoBehaviour
 
     public HexUnit Unit { get; set; }
 
+    public HexItem Item { get; set; }
+
     public HexCellShaderData ShaderData { get; set; }
 
     public Transform terrain;
@@ -170,6 +172,16 @@ public class HexCell : MonoBehaviour
             IsExplored = true;
             uiRect.GetChild(1).GetComponent<Image>().enabled = false;
             ShaderData.RefreshVisibility(this);
+
+            if (Unit && !Unit.Owned)
+            {
+                Unit.unitRenderer.enabled = IsVisible;
+            }
+
+            if (Item)
+            {
+                Item.ShowEffect(IsVisible);
+            }
         }
     }
     public void DecreaseVisibility()
@@ -178,6 +190,16 @@ public class HexCell : MonoBehaviour
         if (visibility == 0)
         {
             ShaderData.RefreshVisibility(this);
+
+            if (Unit && !Unit.Owned)
+            {
+                Unit.unitRenderer.enabled = IsVisible;
+            }
+
+            if (Item)
+            {
+                Item.ShowEffect(IsVisible);
+            }
         }
     }
 

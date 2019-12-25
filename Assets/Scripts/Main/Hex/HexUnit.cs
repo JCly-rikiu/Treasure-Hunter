@@ -143,6 +143,11 @@ public class HexUnit : MonoBehaviour
             if (Owned)
             {
                 Grid.IncreaseVisibility(currentTravelLocation, VisionRange);
+                if (currentTravelLocation.Item)
+                {
+                    currentTravelLocation.Item.Effect();
+                    Grid.RemoveItem(currentTravelLocation.Item);
+                }
             }
             else
             {
@@ -223,9 +228,16 @@ public class HexUnit : MonoBehaviour
         anim.SetBool("Rotate", false);
     }
 
-    public bool IsValidDestination(HexCell cell)
+    public bool IsValidDestination(HexCell cell, bool checkIsExplored = true)
     {
-        return cell.IsExplored && !cell.IsUnderwater && !cell.Unit && cell.IsWalkable;
+        if (checkIsExplored)
+        {
+            return cell.IsExplored && !cell.IsUnderwater && !cell.Unit && cell.IsWalkable;
+        }
+        else
+        {
+            return !cell.IsUnderwater && !cell.Unit && cell.IsWalkable;
+        }
     }
 
     public int GetMoveCost(HexCell fromCell, HexCell toCell, HexDirection direction)
