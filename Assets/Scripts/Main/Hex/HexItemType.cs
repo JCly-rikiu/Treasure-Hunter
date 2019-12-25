@@ -9,9 +9,6 @@ public static class HexItemTypeExtensions
     {
         switch (type)
         {
-            case HexItemType.Bomb:
-            case HexItemType.Poison:
-            case HexItemType.EnergyPlus:
             case HexItemType.Bonus:
                 return true;
         }

@@ -40,8 +40,7 @@ public class HexItem : MonoBehaviour
 
     public void InstantiateItem()
     {
-        HexItemType type = itemType;
-        // HexItemType type = itemType.isMagicBox() ? HexItemType.MagicBox : itemType;
+        HexItemType type = itemType.isMagicBox() ? HexItemType.MagicBox : itemType;
         Transform itemP = itemPrefabs[(int)type];
         if (itemP)
         {
