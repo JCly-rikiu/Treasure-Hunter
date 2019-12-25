@@ -36,15 +36,6 @@ public class HexItem : MonoBehaviour
     }
     HexCell location;
 
-    public bool IsExpired
-    {
-        get
-        {
-            return turns < 0;
-        }
-    }
-    int turns;
-
     public void InstantiateItem()
     {
         HexItemType type = itemType;
@@ -82,12 +73,47 @@ public class HexItem : MonoBehaviour
         }
     }
 
-    public void Effect()
+    public void Effect(HexUnit unit)
     {
-        item.gameObject.SetActive(false);
+        if (item)
+        {
+            item.gameObject.SetActive(false);
+            Destroy(item.gameObject, 1);
+        }
+
         if (effect)
         {
             effect.gameObject.SetActive(true);
+            Destroy(effect.gameObject, 1);
+        }
+
+        switch (itemType)
+        {
+            case HexItemType.Treasure:
+                break;
+            case HexItemType.Key:
+                unit.hasKey = true;
+                break;
+            case HexItemType.Coin:
+                unit.Score += 50;
+                break;
+            case HexItemType.Bomb:
+                break;
+            case HexItemType.Poison:
+                break;
+            case HexItemType.EnergyPlus:
+                break;
+            case HexItemType.Bonus:
+                unit.Score += 100;
+                break;
+            case HexItemType.Stop:
+                break;
+            case HexItemType.Ward:
+                break;
+            case HexItemType.Shovel:
+                break;
+            case HexItemType.MagicBox:
+                break;
         }
     }
 

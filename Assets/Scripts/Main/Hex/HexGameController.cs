@@ -6,6 +6,8 @@ using Photon.Pun;
 
 public class HexGameController : MonoBehaviour
 {
+    public static float turnTime = 20f;
+
     PhotonView photonView;
 
     bool isServer;
@@ -21,11 +23,18 @@ public class HexGameController : MonoBehaviour
 
     HexCell treasureCell;
 
-    HexUnit serverUnit, clientUnit;
+    HexUnit serverUnit, clientUnit, myUnit;
     HexCell serverStart, clientStart;
 
     List<int> itemTypes = new List<int>();
     List<int> itemIndex = new List<int>();
+
+    bool serverTurn;
+    public static bool myTurn = false;
+    float second;
+
+    public BarControl timeBar;
+    public BarControl energyBar;
 
     void Awake()
     {
@@ -90,7 +99,51 @@ public class HexGameController : MonoBehaviour
 
             grid.ResetVisibility();
 
+            if (!isServer)
+            {
+                SendTurn();
+            }
             StartInfo.Synced = false;
+        }
+
+        if (TurnInfo.Synced)
+        {
+            Log.Status(GetType(), "turn " + TurnInfo.Turn);
+
+            if (isServer)
+            {
+                myTurn = TurnInfo.Turn % 2 == 1;
+            }
+            else
+            {
+                myTurn = TurnInfo.Turn % 2 == 0;
+            }
+
+            if (myTurn)
+            {
+                second = 0;
+                myUnit.SetSpeed();
+            }
+
+            TurnInfo.Synced = false;
+        }
+
+        if (myTurn)
+        {
+            second += Time.deltaTime;
+
+            if (second > turnTime)
+            {
+                myTurn = false;
+                SendTurn();
+            }
+            timeBar.StartCounting(second / turnTime);
+            energyBar.StartCounting(1f - myUnit.Speed / 30f);
+        }
+        else
+        {
+            timeBar.StartCounting(0f);
+            energyBar.StartCounting(0f);
         }
     }
 
@@ -203,7 +256,7 @@ public class HexGameController : MonoBehaviour
     {
         if (isServer)
         {
-            gameUI.myUnit = serverUnit;
+            gameUI.myUnit = myUnit = serverUnit;
             gameUI.otherUnit = clientUnit;
         }
         else
@@ -211,7 +264,7 @@ public class HexGameController : MonoBehaviour
             serverStart = grid.GetCell(StartInfo.ServerIndex);
             clientStart = grid.GetCell(StartInfo.ClientIndex);
 
-            gameUI.myUnit = clientUnit;
+            gameUI.myUnit = myUnit = clientUnit;
             gameUI.otherUnit = serverUnit;
         }
 
@@ -254,6 +307,12 @@ public class HexGameController : MonoBehaviour
         photonView.RPC("SendStart", RpcTarget.All, true, serverStart.Index, clientStart.Index, tempItemTypes, tempItemIndex);
     }
 
+    void SendTurn()
+    {
+        grid.ClearPath();
+        photonView.RPC("SendTurn", RpcTarget.All, true, TurnInfo.Turn + 1);
+    }
+
     [PunRPC]
     void SendStart(bool synced, int serverIndex, int clientIndex, int[] itemTypes, int[] itemIndex)
     {
@@ -262,5 +321,12 @@ public class HexGameController : MonoBehaviour
         StartInfo.ClientIndex = clientIndex;
         StartInfo.ItemTypes = itemTypes;
         StartInfo.ItemIndex = itemIndex;
+    }
+
+    [PunRPC]
+    void SendTurn(bool synced, int turn)
+    {
+        TurnInfo.Synced = synced;
+        TurnInfo.Turn = turn;
     }
 }

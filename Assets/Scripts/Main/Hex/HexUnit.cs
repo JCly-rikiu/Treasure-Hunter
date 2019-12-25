@@ -69,11 +69,17 @@ public class HexUnit : MonoBehaviour
     {
         get
         {
-            return 5;
+            return speed + 20;
         }
     }
+    int speed;
 
     public Renderer unitRenderer;
+
+    public int Score { get; set; }
+    public bool hasKey { get; set; }
+    public List<int> speedPlus = new List<int>();
+    public List<int> speedMinus = new List<int>();
 
     void Awake()
     {
@@ -109,11 +115,15 @@ public class HexUnit : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void Travel(List<HexCell> path)
+    public void Travel(List<HexCell> path, bool costSpeed = false)
     {
         location.Unit = null;
         location = path[path.Count - 1];
         location.Unit = this;
+        if (costSpeed)
+        {
+            speed -= location.Distance;
+        }
         pathToTravel = path;
         StopAllCoroutines();
         StartCoroutine(TravelPath());
@@ -145,7 +155,7 @@ public class HexUnit : MonoBehaviour
                 Grid.IncreaseVisibility(currentTravelLocation, VisionRange);
                 if (currentTravelLocation.Item)
                 {
-                    currentTravelLocation.Item.Effect();
+                    currentTravelLocation.Item.Effect(this);
                     Grid.RemoveItem(currentTravelLocation.Item);
                 }
             }
@@ -259,5 +269,19 @@ public class HexUnit : MonoBehaviour
     public void Jump()
     {
         anim.Play("Jump", -1, 0f);
+    }
+
+    public void SetSpeed()
+    {
+        int delta = 0;
+        if (speedPlus.Count > 0)
+        {
+            delta += speedPlus[0];
+        }
+        if (speedMinus.Count > 0)
+        {
+            delta += speedMinus[0];
+        }
+        speed = delta;
     }
 }

@@ -242,11 +242,6 @@ public class HexGrid : MonoBehaviour
         return cells[cellIndex];
     }
 
-    public void FindPath(HexCell fromCell, HexCell toCell)
-    {
-
-    }
-
     public void FindPath(HexCell fromCell, HexCell toCell, HexUnit unit, bool checkIsExplored = true)
     {
         ClearPath();
@@ -259,7 +254,7 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    bool Search(HexCell fromCell, HexCell toCell, HexUnit unit, bool checkIsExplored)
+    bool Search(HexCell fromCell, HexCell toCell, HexUnit unit, bool limitSearch)
     {
         int speed = unit.Speed;
 
@@ -299,7 +294,7 @@ public class HexGrid : MonoBehaviour
                 }
 
                 // skip unreachable cells
-                if (!unit.IsValidDestination(neighbor, checkIsExplored))
+                if (!unit.IsValidDestination(neighbor, limitSearch))
                 {
                     continue;
                 }
@@ -313,6 +308,11 @@ public class HexGrid : MonoBehaviour
 
                 // update distance
                 int distance = current.Distance + moveCost;
+                if (limitSearch && distance > speed)
+                {
+                    continue;
+                }
+
                 int turn = (distance - 1) / speed;
                 if (turn > currentTurn)
                 {
