@@ -37,6 +37,13 @@ public class UserInterface : MonoBehaviour
         energyheight = energybar.sizeDelta.y;
         currentheight = energyheight;
     }
+    public void Start(){
+    	
+    }
+    public void exitGame()
+    {
+    	Application.Quit();
+    }
     public void StartCounting(float curtime){
         
        	
@@ -81,4 +88,5 @@ public class UserInterface : MonoBehaviour
             loseFinalOtherScore.text = otherscore.text;
         }
     }
+
 }

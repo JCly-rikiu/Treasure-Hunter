@@ -17,7 +17,7 @@ public class GameManage : MonoBehaviour
     	 Screen.fullScreen = !Screen.fullScreen;
     }
     public void QuitMenu(){
-         SceneManager.LoadScene(0);
+         Application.Quit();
     }
 }
 
