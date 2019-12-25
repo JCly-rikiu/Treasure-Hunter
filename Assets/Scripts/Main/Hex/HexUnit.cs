@@ -69,15 +69,17 @@ public class HexUnit : MonoBehaviour
     {
         get
         {
-            return speed + 20;
+            return speed + defaultSpeed;
         }
     }
     int speed;
+    int defaultSpeed = 30;
 
     public Renderer unitRenderer;
 
     public int Score { get; set; }
     public bool hasKey { get; set; }
+    public bool hasTreasure { get; set; }
     public List<int> speedPlus = new List<int>();
     public List<int> speedMinus = new List<int>();
 
@@ -238,10 +240,17 @@ public class HexUnit : MonoBehaviour
         anim.SetBool("Rotate", false);
     }
 
-    public bool IsValidDestination(HexCell cell, bool checkIsExplored = true)
+    public bool IsValidDestination(HexCell cell, bool limitSearch = true)
     {
-        if (checkIsExplored)
+        if (limitSearch)
         {
+            if (cell.Item)
+            {
+                if (!cell.Item.isWalkable(this))
+                {
+                    return false;
+                }
+            }
             return cell.IsExplored && !cell.IsUnderwater && !cell.Unit && cell.IsWalkable;
         }
         else
@@ -277,11 +286,18 @@ public class HexUnit : MonoBehaviour
         if (speedPlus.Count > 0)
         {
             delta += speedPlus[0];
+            speedPlus.RemoveAt(0);
         }
         if (speedMinus.Count > 0)
         {
-            delta += speedMinus[0];
+            delta -= speedMinus[0];
+            speedMinus.RemoveAt(0);
         }
         speed = delta;
+    }
+
+    public void SetZeroSpeed()
+    {
+        speed = -defaultSpeed;
     }
 }

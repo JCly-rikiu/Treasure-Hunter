@@ -6,7 +6,7 @@ using Photon.Pun;
 
 public class HexGameController : MonoBehaviour
 {
-    public static float turnTime = 20f;
+    public static float turnTime = 15f;
 
     PhotonView photonView;
 
@@ -23,7 +23,7 @@ public class HexGameController : MonoBehaviour
 
     HexCell treasureCell;
 
-    HexUnit serverUnit, clientUnit, myUnit;
+    HexUnit serverUnit, clientUnit, myUnit, otherUnit;
     HexCell serverStart, clientStart;
 
     List<int> itemTypes = new List<int>();
@@ -33,8 +33,7 @@ public class HexGameController : MonoBehaviour
     public static bool myTurn = false;
     float second;
 
-    public BarControl timeBar;
-    public BarControl energyBar;
+    public UIController ui;
 
     void Awake()
     {
@@ -82,7 +81,8 @@ public class HexGameController : MonoBehaviour
             RemoveAvailableCell(clientStart);
             RemoveAvailableCell(treasureCell);
 
-            SpreadItems(50);
+            SpreadKeys(10);
+            SpreadItems(70);
 
             SendStart();
         }
@@ -124,6 +124,11 @@ public class HexGameController : MonoBehaviour
                 second = 0;
                 myUnit.SetSpeed();
             }
+            else
+            {
+                ui.StartCounting(0f);
+                ui.EnergyCounting(30);
+            }
 
             TurnInfo.Synced = false;
         }
@@ -137,13 +142,58 @@ public class HexGameController : MonoBehaviour
                 myTurn = false;
                 SendTurn();
             }
-            timeBar.StartCounting(second / turnTime);
-            energyBar.StartCounting(1f - myUnit.Speed / 30f);
+            ui.StartCounting(second / turnTime);
+            ui.EnergyCounting(myUnit.Speed);
+
+            SendScore();
+        }
+
+        if (ScoreInfo.Synced)
+        {
+            if (ScoreInfo.IsServer)
+            {
+                serverUnit.Score = ScoreInfo.Score;
+            }
+            else
+            {
+                clientUnit.Score = ScoreInfo.Score;
+            }
+
+            ScoreInfo.Synced = false;
+        }
+
+        ui.MyScore(myUnit.Score);
+        ui.OtherScore(otherUnit.Score);
+
+        if (myUnit.hasKey)
+        {
+            ui.GetKey();
+        }
+
+        if (WinInfo.Synced)
+        {
+            myTurn = false;
+
+            Log.Status(GetType(), "server/client score: " + serverUnit.Score + " / " + clientUnit.Score);
+            Log.Status(GetType(), "server/client has treasure: " + serverUnit.hasTreasure + " / " + clientUnit.hasTreasure);
+
+            if (WinInfo.IsServerWin == isServer)
+            {
+                ui.isWin(true);
+                Log.Status(GetType(), "you win");
+            }
+            else
+            {
+                ui.isWin(false);
+                Log.Status(GetType(), "you lose");
+            }
         }
         else
         {
-            timeBar.StartCounting(0f);
-            energyBar.StartCounting(0f);
+            if (myUnit.hasTreasure)
+            {
+                SendWin();
+            }
         }
     }
 
@@ -237,6 +287,19 @@ public class HexGameController : MonoBehaviour
         return true;
     }
 
+    void SpreadKeys(int count)
+    {
+        while (count-- > 0 && availableCells.Count >= 0)
+        {
+            int index = Random.Range(0, availableCells.Count);
+
+            itemTypes.Add((int)HexItemType.Key);
+            itemIndex.Add(availableCells[index].Index);
+
+            RemoveAvailableCell(index);
+        }
+    }
+
     void SpreadItems(int count)
     {
         HexItemType[] types = HexItemTypeCollection.GetMapRandom();
@@ -257,7 +320,7 @@ public class HexGameController : MonoBehaviour
         if (isServer)
         {
             gameUI.myUnit = myUnit = serverUnit;
-            gameUI.otherUnit = clientUnit;
+            gameUI.otherUnit = otherUnit = clientUnit;
         }
         else
         {
@@ -265,7 +328,7 @@ public class HexGameController : MonoBehaviour
             clientStart = grid.GetCell(StartInfo.ClientIndex);
 
             gameUI.myUnit = myUnit = clientUnit;
-            gameUI.otherUnit = serverUnit;
+            gameUI.otherUnit = otherUnit = serverUnit;
         }
 
         Log.Status(GetType(), "server starts at " + serverStart.coordinates.ToString() + " client starts at " + clientStart.coordinates.ToString());
@@ -289,7 +352,7 @@ public class HexGameController : MonoBehaviour
         {
             HexItem item = Instantiate<HexItem>(HexItem.itemPrefab);
             item.itemType = (HexItemType)itemTypes[i];
-            item.Owned = false; //item.itemType == HexItemType.Treasure;
+            // item.Owned = item.itemType == HexItemType.Treasure;
             grid.AddItem(item, grid.GetCell(itemIndex[i]));
         }
     }
@@ -313,6 +376,17 @@ public class HexGameController : MonoBehaviour
         photonView.RPC("SendTurn", RpcTarget.All, true, TurnInfo.Turn + 1);
     }
 
+    void SendScore()
+    {
+        photonView.RPC("SendScore", RpcTarget.Others, true, isServer, myUnit.Score);
+    }
+
+    void SendWin()
+    {
+        grid.ClearPath();
+        photonView.RPC("SendWin", RpcTarget.All, true, serverUnit.Score > clientUnit.Score || serverUnit.hasTreasure);
+    }
+
     [PunRPC]
     void SendStart(bool synced, int serverIndex, int clientIndex, int[] itemTypes, int[] itemIndex)
     {
@@ -328,5 +402,20 @@ public class HexGameController : MonoBehaviour
     {
         TurnInfo.Synced = synced;
         TurnInfo.Turn = turn;
+    }
+
+    [PunRPC]
+    void SendScore(bool synced, bool isServer, int score)
+    {
+        ScoreInfo.Synced = synced;
+        ScoreInfo.IsServer = isServer;
+        ScoreInfo.Score = score;
+    }
+
+    [PunRPC]
+    void SendWin(bool synced, bool isServerWin)
+    {
+        WinInfo.Synced = synced;
+        WinInfo.IsServerWin = isServerWin;
     }
 }

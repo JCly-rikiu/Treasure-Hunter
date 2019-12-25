@@ -90,6 +90,8 @@ public class HexItem : MonoBehaviour
         switch (itemType)
         {
             case HexItemType.Treasure:
+                unit.Score += 500;
+                unit.hasTreasure = true;
                 break;
             case HexItemType.Key:
                 unit.hasKey = true;
@@ -98,10 +100,17 @@ public class HexItem : MonoBehaviour
                 unit.Score += 50;
                 break;
             case HexItemType.Bomb:
+                unit.SetZeroSpeed();
                 break;
             case HexItemType.Poison:
+                unit.speedMinus.Add(20);
+                unit.speedMinus.Add(20);
+                unit.speedMinus.Add(20);
                 break;
             case HexItemType.EnergyPlus:
+                unit.speedPlus.Add(20);
+                unit.speedPlus.Add(20);
+                unit.speedPlus.Add(20);
                 break;
             case HexItemType.Bonus:
                 unit.Score += 100;
@@ -121,5 +130,20 @@ public class HexItem : MonoBehaviour
     {
         location.Item = null;
         location = null;
+    }
+
+    public bool isWalkable(HexUnit unit)
+    {
+        if (itemType == HexItemType.Treasure && !unit.hasKey)
+        {
+            return false;
+        }
+
+        if (itemType == HexItemType.Stop)
+        {
+            return false;
+        }
+
+        return true;
     }
 }
