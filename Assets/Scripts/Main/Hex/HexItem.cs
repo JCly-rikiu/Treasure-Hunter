@@ -36,15 +36,6 @@ public class HexItem : MonoBehaviour
     }
     HexCell location;
 
-    public bool IsExpired
-    {
-        get
-        {
-            return turns < 0;
-        }
-    }
-    int turns;
-
     public void InstantiateItem()
     {
         HexItemType type = itemType;

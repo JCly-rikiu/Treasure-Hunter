@@ -12,7 +12,6 @@ public class HexGameUI : MonoBehaviour
     HexCell currentCell;
     public HexUnit myUnit;
     public HexUnit otherUnit;
-    bool selected;
 
     public HexMapCamera mapCamera;
     bool following, switchToFollowing;
@@ -32,7 +31,7 @@ public class HexGameUI : MonoBehaviour
     {
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            if (selected && !myUnit.isTraveling)
+            if (HexGameController.myTurn && !myUnit.isTraveling)
             {
                 if (Input.GetMouseButtonDown(1))
                 {
@@ -45,14 +44,9 @@ public class HexGameUI : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            DoSelection();
-        }
-
         if (Input.GetKeyDown("space"))
         {
-            if (selected)
+            if (HexGameController.myTurn)
             {
                 myUnit.Jump();
 
@@ -120,25 +114,6 @@ public class HexGameUI : MonoBehaviour
         return false;
     }
 
-    void DoSelection()
-    {
-        grid.ClearPath();
-        // UpdateCurrentCell();
-        selected = !selected;
-        // if (currentCell)
-        // {
-        //     selected = currentCell.Unit && currentCell.Unit.Owned;
-        //     if (selected)
-        //     {
-        //         currentCell.EnableHighlight(selectedColor);
-        //     }
-        //     else
-        //     {
-        //         currentCell.DisableHighlight();
-        //     }
-        // }
-    }
-
     void DoPathfinding()
     {
         if (UpdateCurrentCell())
@@ -160,7 +135,7 @@ public class HexGameUI : MonoBehaviour
         {
             List<HexCell> path = grid.GetPath();
             SendPath(path);
-            myUnit.Travel(path);
+            myUnit.Travel(path, true);
             grid.ClearPath();
         }
     }
