@@ -40,5 +40,6 @@ MonoBehaviour:
   - SendTurn
   - SendWin
   - SendScore
+  - SendRemoveItem
   DisableAutoOpenWizard: 1
   ShowSettings: 1
