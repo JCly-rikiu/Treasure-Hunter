@@ -27,6 +27,9 @@ public class HexGameController : MonoBehaviour
     List<int> itemTypes = new List<int>();
     List<int> itemIndex = new List<int>();
 
+    bool myTurn = false;
+    float second;
+
     void Awake()
     {
         SHA256 mySHA256 = SHA256.Create();
@@ -90,7 +93,43 @@ public class HexGameController : MonoBehaviour
 
             grid.ResetVisibility();
 
+            if (!isServer)
+            {
+                StartTurn();
+            }
             StartInfo.Synced = false;
+        }
+
+        if (TurnInfo.Synced)
+        {
+            Log.Status(GetType(), "turn " + TurnInfo.Turn);
+
+            if (isServer)
+            {
+                myTurn = TurnInfo.Turn % 2 == 1;
+            }
+            else
+            {
+                myTurn = TurnInfo.Turn % 2 == 0;
+            }
+
+            if (myTurn)
+            {
+                second = 0;
+            }
+
+            TurnInfo.Synced = false;
+        }
+
+        if (myTurn)
+        {
+            second += Time.deltaTime;
+
+            if (second > 20f)
+            {
+                myTurn = false;
+                SendTurn();
+            }
         }
     }
 
@@ -254,6 +293,16 @@ public class HexGameController : MonoBehaviour
         photonView.RPC("SendStart", RpcTarget.All, true, serverStart.Index, clientStart.Index, tempItemTypes, tempItemIndex);
     }
 
+    void StartTurn()
+    {
+        photonView.RPC("SendTurn", RpcTarget.All, true, 1);
+    }
+
+    void SendTurn()
+    {
+        photonView.RPC("SendTurn", RpcTarget.All, true, TurnInfo.Turn + 1);
+    }
+
     [PunRPC]
     void SendStart(bool synced, int serverIndex, int clientIndex, int[] itemTypes, int[] itemIndex)
     {
@@ -262,5 +311,12 @@ public class HexGameController : MonoBehaviour
         StartInfo.ClientIndex = clientIndex;
         StartInfo.ItemTypes = itemTypes;
         StartInfo.ItemIndex = itemIndex;
+    }
+
+    [PunRPC]
+    void SendTurn(bool synced, int turn)
+    {
+        TurnInfo.Synced = synced;
+        TurnInfo.Turn = turn;
     }
 }

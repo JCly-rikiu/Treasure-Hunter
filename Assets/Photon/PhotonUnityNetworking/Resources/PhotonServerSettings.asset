@@ -37,5 +37,6 @@ MonoBehaviour:
   - SendStart
   - SendPath
   - SendJump
+  - SendTurn
   DisableAutoOpenWizard: 1
   ShowSettings: 1
