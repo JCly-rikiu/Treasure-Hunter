@@ -47,7 +47,7 @@ public class UserIterface : MonoBehaviour
         }
         timebar.sizeDelta = new Vector2(currentwidth,timeheight);
         
-
+        curtime = curtime * 15;
         int inttime = Mathf.CeilToInt(curtime);
         timetext.text = inttime.ToString();
     }
