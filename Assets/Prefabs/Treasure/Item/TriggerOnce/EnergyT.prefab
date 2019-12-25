@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AudioSrc: {fileID: 82188385159684316}
-  AudioVolume: 0.5
+  AudioVolume: 0.8
 --- !u!1001 &63756904025821460
 PrefabInstance:
   m_ObjectHideFlags: 0
