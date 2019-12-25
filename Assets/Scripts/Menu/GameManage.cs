@@ -19,5 +19,9 @@ public class GameManage : MonoBehaviour
     public void QuitMenu(){
          Application.Quit();
     }
+     public void endturn(){
+        HexGameController.endTurn = true;
+
+    }
 }
 

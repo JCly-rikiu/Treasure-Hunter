@@ -18,7 +18,6 @@ public class UserInterface : MonoBehaviour
     public Text winFinalOtherScore;
     public Text loseFinalMyScore ;
     public Text loseFinalOtherScore;
-
     float timewidth = 0f;
     float timeheight = 0f;
     float currentwidth = 0;
@@ -39,6 +38,10 @@ public class UserInterface : MonoBehaviour
     }
     public void Start(){
     	
+    }
+    public void endturn(){
+        HexGameController.endTurn = true;
+
     }
     public void exitGame()
     {
