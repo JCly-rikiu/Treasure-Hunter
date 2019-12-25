@@ -32,6 +32,7 @@ public class HexGameController : MonoBehaviour
     bool serverTurn;
     public static bool myTurn = false;
     float second;
+    public static bool endTurn = false;
 
     public UIController ui;
 
@@ -122,6 +123,7 @@ public class HexGameController : MonoBehaviour
             if (myTurn)
             {
                 second = 0;
+                endTurn = false;
                 myUnit.SetSpeed();
             }
             else
@@ -137,7 +139,7 @@ public class HexGameController : MonoBehaviour
         {
             second += Time.deltaTime;
 
-            if (second > turnTime)
+            if (endTurn || second > turnTime)
             {
                 myTurn = false;
                 SendTurn();
