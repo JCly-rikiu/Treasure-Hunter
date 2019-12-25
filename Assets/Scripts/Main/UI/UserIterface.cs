@@ -54,7 +54,7 @@ public class UIController : MonoBehaviour
     public void EnergyCounting(int curenergy){
         
         energytext.text = curenergy.ToString();
-        float floatenergy = curenergy / 30;
+        float floatenergy = (float)curenergy / 30f;
 
         currentheight = Mathf.Lerp(0, energyheight,floatenergy );
         
@@ -64,7 +64,7 @@ public class UIController : MonoBehaviour
     public void MyScore(int score){
     	myscore.text = score.ToString();
     }
-    public void Otherscore(int score){
+    public void OtherScore(int score){
     	otherscore.text = score.ToString();;
     }
     public void GetKey(){
@@ -74,11 +74,11 @@ public class UIController : MonoBehaviour
 
         if(win){
             winmenu.SetActive(true);
-            winFinalOtherScore.text = myscore.text;
+            winFinalMyScore.text = myscore.text;
             winFinalOtherScore.text = otherscore.text;
         }else{
             losemenu.SetActive(true);
-            loseFinalOtherScore.text = myscore.text;
+            loseFinalMyScore.text = myscore.text;
             loseFinalOtherScore.text = otherscore.text;
         }
     }

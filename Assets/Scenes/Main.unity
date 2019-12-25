@@ -1222,8 +1222,8 @@ MonoBehaviour:
   lightkey: {fileID: 140214603}
   winmenu: {fileID: 1734560764}
   losemenu: {fileID: 716672199}
-  winFinalMyScore: {fileID: 106276898}
-  winFinalOtherScore: {fileID: 883245178}
+  winFinalMyScore: {fileID: 1898432574}
+  winFinalOtherScore: {fileID: 2017534593}
   loseFinalMyScore: {fileID: 974469564}
   loseFinalOtherScore: {fileID: 376405260}
 --- !u!1 &588046109
@@ -5730,7 +5730,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1734560765
 RectTransform:
   m_ObjectHideFlags: 0
