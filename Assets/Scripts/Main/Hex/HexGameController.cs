@@ -163,16 +163,11 @@ public class HexGameController : MonoBehaviour
         }
 
         ui.MyScore(myUnit.Score);
-        ui.Otherscore(otherUnit.Score);
+        ui.OtherScore(otherUnit.Score);
 
         if (myUnit.hasKey)
         {
             ui.GetKey();
-        }
-
-        if (myUnit.hasTreasure)
-        {
-            SendWin();
         }
 
         if (WinInfo.Synced)
@@ -192,8 +187,13 @@ public class HexGameController : MonoBehaviour
                 ui.isWin(false);
                 Log.Status(GetType(), "you lose");
             }
-
-            WinInfo.Synced = false;
+        }
+        else
+        {
+            if (myUnit.hasTreasure)
+            {
+                SendWin();
+            }
         }
     }
 
@@ -352,7 +352,7 @@ public class HexGameController : MonoBehaviour
         {
             HexItem item = Instantiate<HexItem>(HexItem.itemPrefab);
             item.itemType = (HexItemType)itemTypes[i];
-            item.Owned = item.itemType == HexItemType.Treasure;
+            // item.Owned = item.itemType == HexItemType.Treasure;
             grid.AddItem(item, grid.GetCell(itemIndex[i]));
         }
     }
