@@ -77,18 +77,6 @@ public class HexItem : MonoBehaviour
 
     public void Effect(HexUnit unit)
     {
-        if (item)
-        {
-            item.gameObject.SetActive(false);
-            Destroy(item.gameObject, 1);
-        }
-
-        if (effect)
-        {
-            effect.gameObject.SetActive(true);
-            Destroy(effect.gameObject, 1);
-        }
-
         switch (itemType)
         {
             case HexItemType.Treasure:
@@ -130,9 +118,21 @@ public class HexItem : MonoBehaviour
 
     public void RemoveFromMap()
     {
+        if (item)
+        {
+            item.gameObject.SetActive(false);
+            Destroy(item.gameObject, 2);
+        }
+
+        if (effect)
+        {
+            effect.gameObject.SetActive(true);
+            Destroy(effect.gameObject, 2);
+        }
+
         location.Item = null;
         location = null;
-        Destroy(gameObject);
+        Destroy(gameObject, 2);
     }
 
     public bool isWalkable(HexUnit unit)
