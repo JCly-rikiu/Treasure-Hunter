@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIController : MonoBehaviour
+public class UserInterface : MonoBehaviour
 {
     public RectTransform timebar;
     public Text timetext;
