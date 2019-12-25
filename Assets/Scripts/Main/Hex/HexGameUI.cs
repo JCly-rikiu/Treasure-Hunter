@@ -47,12 +47,8 @@ public class HexGameUI : MonoBehaviour
 
         if (Input.GetKeyDown("space"))
         {
-            if (HexGameController.myTurn)
-            {
-                myUnit.Jump();
-
-                photonView.RPC("SendJump", RpcTarget.Others, true);
-            }
+            myUnit.Jump();
+            photonView.RPC("SendJump", RpcTarget.Others, true);
         }
 
         // center camera to myUnit position
