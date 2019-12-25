@@ -6,7 +6,7 @@ using Photon.Pun;
 
 public class HexGameController : MonoBehaviour
 {
-    public static float turnTime = 20f;
+    public static float turnTime = 15f;
 
     PhotonView photonView;
 
@@ -82,7 +82,8 @@ public class HexGameController : MonoBehaviour
             RemoveAvailableCell(clientStart);
             RemoveAvailableCell(treasureCell);
 
-            SpreadItems(50);
+            SpreadKeys(10);
+            SpreadItems(70);
 
             SendStart();
         }
@@ -144,6 +145,27 @@ public class HexGameController : MonoBehaviour
         {
             timeBar.StartCounting(0f);
             energyBar.StartCounting(0f);
+        }
+
+        if (myUnit.hasTreasure)
+        {
+            SendWin();
+        }
+
+        if (WinInfo.Synced)
+        {
+            myTurn = false;
+
+            if (WinInfo.IsServerWin == isServer)
+            {
+                Log.Status(GetType(), "you win");
+            }
+            else
+            {
+                Log.Status(GetType(), "you lose");
+            }
+
+            WinInfo.Synced = false;
         }
     }
 
@@ -237,6 +259,19 @@ public class HexGameController : MonoBehaviour
         return true;
     }
 
+    void SpreadKeys(int count)
+    {
+        while (count-- > 0 && availableCells.Count >= 0)
+        {
+            int index = Random.Range(0, availableCells.Count);
+
+            itemTypes.Add((int)HexItemType.Key);
+            itemIndex.Add(availableCells[index].Index);
+
+            RemoveAvailableCell(index);
+        }
+    }
+
     void SpreadItems(int count)
     {
         HexItemType[] types = HexItemTypeCollection.GetMapRandom();
@@ -289,7 +324,7 @@ public class HexGameController : MonoBehaviour
         {
             HexItem item = Instantiate<HexItem>(HexItem.itemPrefab);
             item.itemType = (HexItemType)itemTypes[i];
-            item.Owned = false; //item.itemType == HexItemType.Treasure;
+            item.Owned = item.itemType == HexItemType.Treasure;
             grid.AddItem(item, grid.GetCell(itemIndex[i]));
         }
     }
@@ -313,6 +348,15 @@ public class HexGameController : MonoBehaviour
         photonView.RPC("SendTurn", RpcTarget.All, true, TurnInfo.Turn + 1);
     }
 
+    void SendWin()
+    {
+        grid.ClearPath();
+
+        Log.Status(GetType(), "server/client score: " + serverUnit.Score + " / " + clientUnit.Score);
+
+        photonView.RPC("SendWin", RpcTarget.All, true, serverUnit.Score > clientUnit.Score || serverUnit.hasTreasure);
+    }
+
     [PunRPC]
     void SendStart(bool synced, int serverIndex, int clientIndex, int[] itemTypes, int[] itemIndex)
     {
@@ -328,5 +372,12 @@ public class HexGameController : MonoBehaviour
     {
         TurnInfo.Synced = synced;
         TurnInfo.Turn = turn;
+    }
+
+    [PunRPC]
+    void SendWin(bool synced, bool isServerWin)
+    {
+        WinInfo.Synced = synced;
+        WinInfo.IsServerWin = isServerWin;
     }
 }
