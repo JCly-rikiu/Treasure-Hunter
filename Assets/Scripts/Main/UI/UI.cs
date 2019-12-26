@@ -19,6 +19,11 @@ public class UI : MonoBehaviour
         	ExitMenu.SetActive(true);
          	//SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex -1);
          }
+         if(PhotonNetwork.CurrentRoom.PlayerCount != 2){
+            PhotonNetwork.LeaveRoom(); 
+            PhotonNetwork.Disconnect();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        }
     }
 
 

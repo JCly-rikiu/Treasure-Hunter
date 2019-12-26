@@ -452,8 +452,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1608647604}
-        m_MethodName: endturn
+      - m_Target: {fileID: 537958171}
+        m_MethodName: Quit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1162,6 +1162,7 @@ GameObject:
   m_Component:
   - component: {fileID: 537958169}
   - component: {fileID: 537958170}
+  - component: {fileID: 537958171}
   m_Layer: 0
   m_Name: GUI
   m_TagString: Untagged
@@ -1230,6 +1231,19 @@ MonoBehaviour:
   WinCrown: {fileID: 942036084}
   LoseTitle: {fileID: 59202322}
   LoseCrown: {fileID: 1565043408}
+--- !u!114 &537958171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 537958168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e95d99fc4bd97e438d1690f537c3752, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Setmenu: {fileID: 2072221795}
 --- !u!1 &588046109
 GameObject:
   m_ObjectHideFlags: 0
@@ -2387,7 +2401,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1608647604}
+      - m_Target: {fileID: 537958171}
         m_MethodName: SetRes1600
         m_Mode: 1
         m_Arguments:
@@ -3252,7 +3266,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1608647604}
+      - m_Target: {fileID: 537958171}
         m_MethodName: SetRes1920
         m_Mode: 1
         m_Arguments:
@@ -3601,8 +3615,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1608647604}
-        m_MethodName: QuitMenu
+      - m_Target: {fileID: 537958171}
+        m_MethodName: Quit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4507,7 +4521,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1608647604}
+      - m_Target: {fileID: 0}
         m_MethodName: QuitMenu
         m_Mode: 1
         m_Arguments:
@@ -4790,7 +4804,6 @@ GameObject:
   - component: {fileID: 1608647602}
   - component: {fileID: 1608647601}
   - component: {fileID: 1608647603}
-  - component: {fileID: 1608647604}
   m_Layer: 0
   m_Name: Hex Game Controller
   m_TagString: Untagged
@@ -4851,18 +4864,6 @@ MonoBehaviour:
   viewIdField: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &1608647604
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1608647600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db3ba39a1c4701d40b21ee2eb29fe4ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1654863207
 GameObject:
   m_ObjectHideFlags: 0
@@ -4941,8 +4942,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1608647604}
-        m_MethodName: FullScreen
+      - m_Target: {fileID: 537958171}
+        m_MethodName: SetRes1280
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5598,7 +5599,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1608647604}
+      - m_Target: {fileID: 0}
         m_MethodName: QuitMenu
         m_Mode: 1
         m_Arguments:
@@ -6459,7 +6460,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1608647604}
+      - m_Target: {fileID: 0}
         m_MethodName: QuitMenu
         m_Mode: 1
         m_Arguments:
@@ -6754,7 +6755,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1608647604}
+      - m_Target: {fileID: 537958171}
         m_MethodName: SetRes1280
         m_Mode: 1
         m_Arguments:
