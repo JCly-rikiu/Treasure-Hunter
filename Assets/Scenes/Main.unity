@@ -1161,8 +1161,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 537958169}
-  - component: {fileID: 537958170}
   - component: {fileID: 537958171}
+  - component: {fileID: 537958170}
   m_Layer: 0
   m_Name: GUI
   m_TagString: Untagged
@@ -1214,7 +1214,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 537958168}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7333c5daaa7214458f83697a583a4a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 5aeed9d52137e2f44946916d32b722ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timebar: {fileID: 145302867}
@@ -4828,7 +4828,8 @@ MonoBehaviour:
   gameUI: {fileID: 475111608}
   mapCamera: {fileID: 1217588850}
   mapGenerator: {fileID: 1041324496}
-  ui: {fileID: 537958170}
+  inGame: 0
+  ui: {fileID: 0}
 --- !u!4 &1608647602
 Transform:
   m_ObjectHideFlags: 0
