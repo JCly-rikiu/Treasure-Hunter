@@ -453,7 +453,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 537958171}
-        m_MethodName: Quit
+        m_MethodName: endturn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1244,6 +1244,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Setmenu: {fileID: 2072221795}
+  EndMenu: {fileID: 2103424287}
 --- !u!1 &588046109
 GameObject:
   m_ObjectHideFlags: 0
@@ -4521,8 +4522,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: QuitMenu
+      - m_Target: {fileID: 537958171}
+        m_MethodName: Quit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

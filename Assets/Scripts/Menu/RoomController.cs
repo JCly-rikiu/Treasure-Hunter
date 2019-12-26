@@ -58,6 +58,8 @@ public class RoomController : MonoBehaviourPunCallbacks
     {
         MenuInfo.Seed = seed.text;
         PV.RPC("SendSeed", RpcTarget.AllBuffered, seed.text);
+        PhotonNetwork.CurrentRoom.IsVisible = false; 
+        PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.LoadLevel(multiplayerSceneIndex);
     }
     public void Update()

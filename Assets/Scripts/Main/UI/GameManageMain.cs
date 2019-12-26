@@ -5,15 +5,21 @@ public class GameManageMain : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject Setmenu;
+    public GameObject EndMenu;
     public void Update(){
         if (Input.GetKeyDown(KeyCode.Escape)){
             Setmenu.SetActive(true);
             //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex -1);
          }
         if(PhotonNetwork.CurrentRoom.PlayerCount != 2){
-            PhotonNetwork.LeaveRoom(); 
-            PhotonNetwork.Disconnect();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+            if(!EndMenu.activeSelf)
+            {
+                PhotonNetwork.LeaveRoom(); 
+                PhotonNetwork.Disconnect();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+            }else{
+                
+            }
         }
         
     }
@@ -32,6 +38,7 @@ public class GameManageMain : MonoBehaviour
     public void Quit(){
         PhotonNetwork.LeaveRoom(); 
         PhotonNetwork.Disconnect();
+        EndMenu.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
      public void endturn(){

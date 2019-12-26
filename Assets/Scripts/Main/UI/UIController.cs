@@ -40,7 +40,7 @@ public class UIController : MonoBehaviour
         currentheight = energyheight;
     }
     public void Start(){
-        
+        Endmenu.SetActive(false);
     }
     public void endturn(){
         HexGameController.endTurn = true;
@@ -83,6 +83,7 @@ public class UIController : MonoBehaviour
         lightkey.SetActive(true);
     }
     public void isWin(bool win){
+        Debug.Log("Gamesetiswin" + win);
         FinalMyScore.text = myscore.text;
         FinalOtherScore.text = otherscore.text;
         Endmenu.SetActive(true);
