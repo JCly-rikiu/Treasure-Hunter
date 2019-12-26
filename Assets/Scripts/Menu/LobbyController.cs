@@ -23,8 +23,30 @@ public class LobbyController : MonoBehaviourPunCallbacks
         Debug.Log("Try to join room");
     }
     public void LeaveRoom(){
-        PhotonNetwork.LeaveRoom ();
+        
+
+        if(PhotonNetwork.IsMasterClient){
+           PhotonNetwork.CurrentRoom.IsVisible = false; 
+           PhotonNetwork.CurrentRoom.IsOpen = false;
+        }else{
+            
+        }
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.Disconnect();
+        PhotonNetwork.ConnectUsingSettings();
     }
+    public override void OnJoinedLobby(){
+        Debug.Log("you now in a lobby");
+    }
+    public override void OnLeftRoom(){
+        Debug.LogWarning("you now leave a room");
+    }
+    //public override void OnLeaveRoom(short returnCode, string message){}
+    /*
+    public override void OnJoinedLobby(short returnCode, string message){
+
+    }
+    */
     public override void OnJoinRandomFailed(short returnCode, string message) //Callback function for if we fail to join a rooom
     {
         Debug.LogWarning("Failed to join a room");
@@ -32,11 +54,14 @@ public class LobbyController : MonoBehaviourPunCallbacks
 
     public void CreateRoom() //trying to create our own room
     {
-        Debug.Log("Creating a room");
-        int randomRoomNumber = Random.Range(0, 10000); //creating a random name for the room
-        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)roomSize };
-        PhotonNetwork.CreateRoom("Room" + randomRoomNumber, roomOps); //attempting to create a new room
-        Debug.Log(randomRoomNumber);
+        if(PhotonNetwork.IsConnectedAndReady)
+        {
+            Debug.Log("Creating a room");
+            int randomRoomNumber = Random.Range(0, 10000); //creating a random name for the room
+            RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)roomSize };
+            PhotonNetwork.CreateRoom("Room" + randomRoomNumber, roomOps); //attempting to create a new room
+        //Debug.Log(randomRoomNumber);
+        }
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message) //callback function for if we fail to create a room. Most likely fail because room name was taken.
@@ -45,12 +70,6 @@ public class LobbyController : MonoBehaviourPunCallbacks
         CreateRoom(); //Retrying to create a new room with a different name.
     }
 
-    public void QuickCancel() //Paired to the cancel button. Used to stop looking for a room to join.
-    {
-        //quickCancelButton.SetActive(false);
-        //quickStartButton.SetActive(true);
-        PhotonNetwork.LeaveRoom();
-    }
 }
 
 
