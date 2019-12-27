@@ -1,9 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using Photon.Pun;
 public class GameManage : MonoBehaviour
 {
     // Start is called before the first frame update
+    public void Update(){
+        /*
+        if(PhotonNetwork.CurrentRoom.PlayerCount != 2){
+            PhotonNetwork.LeaveRoom(); 
+            PhotonNetwork.Disconnect();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        }
+        */
+    }
     public void SetRes1920(){
     	Screen.SetResolution(1920,1080,false);
     }
@@ -15,13 +24,6 @@ public class GameManage : MonoBehaviour
     }
     public void FullScreen(){
     	 Screen.fullScreen = !Screen.fullScreen;
-    }
-    public void QuitMenu(){
-         Application.Quit();
-    }
-     public void endturn(){
-        HexGameController.endTurn = true;
-
-    }
+   }
 }
 

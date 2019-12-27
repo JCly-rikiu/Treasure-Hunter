@@ -8,11 +8,12 @@ public class RoomController : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     private int multiplayerSceneIndex = 1; //Number for the build index to the multiplay scene.
-    public GameObject Open;
-    public GameObject Close;
-    public GameObject Check;
+    public GameObject JoinGame;
+    public GameObject CreatingMenu;
+    public GameObject CreatingGame;
     public GameObject notEntered;
     public GameObject Entered;
+
     public Text seed;
 
     private PhotonView PV;
@@ -32,10 +33,10 @@ public class RoomController : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom() //Callback function for when we successfully create or join a room.
     {
-        if (Check.activeSelf == false)
+        if (CreatingGame.activeSelf == false)
         {
-            Open.SetActive(true);
-            Close.SetActive(false);
+            JoinGame.SetActive(true);
+            CreatingMenu.SetActive(false);
         }
     }
     public void IsReady()
@@ -57,37 +58,56 @@ public class RoomController : MonoBehaviourPunCallbacks
     {
         MenuInfo.Seed = seed.text;
         PV.RPC("SendSeed", RpcTarget.AllBuffered, seed.text);
+        PhotonNetwork.CurrentRoom.IsVisible = false; 
+        PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.LoadLevel(multiplayerSceneIndex);
     }
     public void Update()
     {
         if (PhotonNetwork.CurrentRoom != null)
         {
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
-            {
+        	if(CreatingGame.activeSelf)
+        	{
+            	if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+            	{
 
-            	Entered.SetActive(true);
-            	notEntered.SetActive(false);
-                if (MenuInfo.Ready == 1)
-                {	
-                	Entered.SetActive(false);
-                    lightgo.SetActive(true);
-                    darkgo.SetActive(false);
-                }
-                else if (MenuInfo.Ready == 0)
-                {
-                	Entered.SetActive(true);
-                    lightgo.SetActive(false);
-                    darkgo.SetActive(true);
-                }
-            }
-            else
-            {	
-            	notEntered.SetActive(true);
-            	Entered.SetActive(false);
-                lightgo.SetActive(false);
-                darkgo.SetActive(true);
-                MenuInfo.Ready = 0;
+            		Entered.SetActive(true);
+            		notEntered.SetActive(false);
+                	if (MenuInfo.Ready == 1)
+                	{	
+                		Entered.SetActive(false);
+                    	lightgo.SetActive(true);
+                    	darkgo.SetActive(false);
+                	}
+                	else if (MenuInfo.Ready == 0)
+                	{
+                		Entered.SetActive(true);
+                    	lightgo.SetActive(false);
+                    	darkgo.SetActive(true);
+                	}
+            	}
+            	else
+            	{	
+            		notEntered.SetActive(true);
+            		Entered.SetActive(false);
+                	lightgo.SetActive(false);
+                	darkgo.SetActive(true);
+                	MenuInfo.Ready = 0;
+            	}
+            }else if(JoinGame.activeSelf){
+
+            	//Debug.Log("count of PlayerCount  " + PhotonNetwork.CurrentRoom.PlayerCount);
+                //Debug.Log("is visible   " + PhotonNetwork.CurrentRoom.IsVisible);
+                //Debug.Log("is open   " + PhotonNetwork.CurrentRoom.IsOpen);
+            	if (PhotonNetwork.CurrentRoom.PlayerCount != 2){
+                    PhotonNetwork.LeaveRoom();
+                    PhotonNetwork.Disconnect();
+                    PhotonNetwork.ConnectUsingSettings();
+            		Debug.Log("LeaveROom");
+            		JoinGame.SetActive(false);
+            		CreatingMenu.SetActive(true);
+            	}
+                
             }
         }
     }

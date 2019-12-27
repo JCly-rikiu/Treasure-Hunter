@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UserInterface : MonoBehaviour
+public class UIController : MonoBehaviour
 {
+    
     public RectTransform timebar;
     public Text timetext;
     public RectTransform energybar;
@@ -12,12 +13,14 @@ public class UserInterface : MonoBehaviour
     public Text myscore;
     public Text otherscore;
     public GameObject lightkey;
-    public GameObject winmenu;
-    public GameObject losemenu;
-    public Text winFinalMyScore ;
-    public Text winFinalOtherScore;
-    public Text loseFinalMyScore ;
-    public Text loseFinalOtherScore;
+    public GameObject Endmenu;
+    public Text FinalMyScore;
+    public Text FinalOtherScore;
+    public GameObject WinTitle;
+    public GameObject WinCrown;
+    public GameObject LoseTitle;
+    public GameObject LoseCrown;
+    
     float timewidth = 0f;
     float timeheight = 0f;
     float currentwidth = 0;
@@ -37,7 +40,7 @@ public class UserInterface : MonoBehaviour
         currentheight = energyheight;
     }
     public void Start(){
-    	
+        Endmenu.SetActive(false);
     }
     public void endturn(){
         HexGameController.endTurn = true;
@@ -45,11 +48,11 @@ public class UserInterface : MonoBehaviour
     }
     public void exitGame()
     {
-    	Application.Quit();
+        Application.Quit();
     }
     public void StartCounting(float curtime){
         
-       	
+        
         currentwidth = Mathf.Lerp(0,timewidth, 1 - curtime );
         if(currentwidth < 0)
         {
@@ -57,39 +60,42 @@ public class UserInterface : MonoBehaviour
         }
         timebar.sizeDelta = new Vector2(currentwidth,timeheight);
         
-        curtime = curtime * 15;
+        curtime = 15 - curtime * 15;
         int inttime = Mathf.CeilToInt(curtime);
         timetext.text = inttime.ToString();
     }
     public void EnergyCounting(int curenergy){
         
         energytext.text = curenergy.ToString();
-        float floatenergy = curenergy / 30;
-        currentheight = Mathf.Lerp(0, energyheight, 1 - floatenergy );
+        float floatenergy = (float)curenergy / 30;
+        currentheight = Mathf.Lerp(0, energyheight,floatenergy );
         
         energybar.sizeDelta = new Vector2(energywidth, currentheight);
         
     }
     public void MyScore(int score){
-    	myscore.text = score.ToString();
+        myscore.text = score.ToString();
     }
-    public void Otherscore(int score){
-    	otherscore.text = score.ToString();;
+    public void OtherScore(int score){
+        otherscore.text = score.ToString();;
     }
     public void GetKey(){
-    	lightkey.SetActive(true);
+        lightkey.SetActive(true);
     }
     public void isWin(bool win){
-
+        Debug.Log("Gamesetiswin" + win);
+        FinalMyScore.text = myscore.text;
+        FinalOtherScore.text = otherscore.text;
+        Endmenu.SetActive(true);
         if(win){
-            winmenu.SetActive(true);
-            winFinalOtherScore.text = myscore.text;
-            winFinalOtherScore.text = otherscore.text;
+            WinTitle.SetActive(true);
+            WinCrown.SetActive(true);
+            
         }else{
-            losemenu.SetActive(true);
-            loseFinalOtherScore.text = myscore.text;
-            loseFinalOtherScore.text = otherscore.text;
+            LoseTitle.SetActive(true);
+            LoseCrown.SetActive(true);
+            
         }
     }
-
+    
 }
