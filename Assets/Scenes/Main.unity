@@ -1224,6 +1224,13 @@ MonoBehaviour:
   myscore: {fileID: 1576460389}
   otherscore: {fileID: 2119667905}
   lightkey: {fileID: 140214603}
+  Endmenu: {fileID: 2103424287}
+  FinalMyScore: {fileID: 333880383}
+  FinalOtherScore: {fileID: 715889847}
+  WinTitle: {fileID: 2124608236}
+  WinCrown: {fileID: 942036084}
+  LoseTitle: {fileID: 59202322}
+  LoseCrown: {fileID: 1565043408}
 --- !u!114 &537958171
 MonoBehaviour:
   m_ObjectHideFlags: 0
