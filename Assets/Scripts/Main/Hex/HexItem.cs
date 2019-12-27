@@ -83,7 +83,7 @@ public class HexItem : MonoBehaviour
                 unit.hasTreasure = true;
                 break;
             case HexItemType.Key:
-                unit.hasKey = true;
+                unit.getKey();
                 break;
             case HexItemType.Coin:
                 unit.Score += 50;
@@ -92,14 +92,10 @@ public class HexItem : MonoBehaviour
                 unit.SetZeroSpeed();
                 break;
             case HexItemType.Poison:
-                unit.speedMinus.Add(20);
-                unit.speedMinus.Add(20);
-                unit.speedMinus.Add(20);
+                unit.speedEffect(-20, 3);
                 break;
             case HexItemType.EnergyPlus:
-                unit.speedPlus.Add(20);
-                unit.speedPlus.Add(20);
-                unit.speedPlus.Add(20);
+                unit.speedEffect(20, 3);
                 break;
             case HexItemType.Bonus:
                 unit.Score += 100;

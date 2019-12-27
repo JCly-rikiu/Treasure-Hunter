@@ -33,6 +33,7 @@ public class HexGameController : MonoBehaviour
     public static bool myTurn = false;
     float second;
     public static bool endTurn = false;
+    public bool inGame;
 
     public UIController ui;
 
@@ -55,8 +56,10 @@ public class HexGameController : MonoBehaviour
 
         serverUnit = Instantiate<HexUnit>(HexUnit.serverPrefab);
         serverUnit.Owned = isServer;
+        serverUnit.ui = ui;
         clientUnit = Instantiate<HexUnit>(HexUnit.clientPrefab);
         clientUnit.Owned = !isServer;
+        clientUnit.ui = ui;
     }
 
     void Start()
@@ -87,121 +90,20 @@ public class HexGameController : MonoBehaviour
 
             SendStart();
         }
+
+        inGame = true;
     }
 
     void Update()
     {
-        if (StartInfo.Synced)
+        if (inGame)
         {
-            Log.Status(GetType(), "StartInfo synced.");
+            StartGame();
 
-            AddUnits();
-            AddItems();
+            SetTurn();
+            DoTurn();
 
-            grid.ResetVisibility();
-
-            if (!isServer)
-            {
-                SendTurn();
-            }
-            StartInfo.Synced = false;
-        }
-
-        if (TurnInfo.Synced)
-        {
-            Log.Status(GetType(), "turn " + TurnInfo.Turn);
-
-            if (isServer)
-            {
-                myTurn = TurnInfo.Turn % 2 == 1;
-            }
-            else
-            {
-                myTurn = TurnInfo.Turn % 2 == 0;
-            }
-
-            if (myTurn)
-            {
-                second = 0;
-                endTurn = false;
-                myUnit.SetSpeed();
-            }
-            else
-            {
-                ui.StartCounting(0f);
-                ui.EnergyCounting(30);
-            }
-
-            TurnInfo.Synced = false;
-        }
-
-        if (myTurn)
-        {
-            second += Time.deltaTime;
-
-            if (endTurn || second > turnTime)
-            {
-                myTurn = false;
-                SendTurn();
-            }
-            ui.StartCounting(second / turnTime);
-            ui.EnergyCounting(myUnit.Speed);
-
-            SendScore();
-        }
-
-        if (RemoveItemInfo.Synced)
-        {
-            grid.RemoveItem(RemoveItemInfo.CellIndex);
-            RemoveItemInfo.Synced = false;
-        }
-
-        if (ScoreInfo.Synced)
-        {
-            if (ScoreInfo.IsServer)
-            {
-                serverUnit.Score = ScoreInfo.Score;
-            }
-            else
-            {
-                clientUnit.Score = ScoreInfo.Score;
-            }
-
-            ScoreInfo.Synced = false;
-        }
-
-        ui.MyScore(myUnit.Score);
-        ui.OtherScore(otherUnit.Score);
-
-        if (myUnit.hasKey)
-        {
-            ui.GetKey();
-        }
-
-        if (WinInfo.Synced)
-        {
-            myTurn = false;
-
-            Log.Status(GetType(), "server/client score: " + serverUnit.Score + " / " + clientUnit.Score);
-            Log.Status(GetType(), "server/client has treasure: " + serverUnit.hasTreasure + " / " + clientUnit.hasTreasure);
-
-            if (WinInfo.IsServerWin == isServer)
-            {
-                ui.isWin(true);
-                Log.Status(GetType(), "you win");
-            }
-            else
-            {
-                ui.isWin(false);
-                Log.Status(GetType(), "you lose");
-            }
-        }
-        else
-        {
-            if (myUnit.hasTreasure)
-            {
-                SendWin();
-            }
+            CheckWin();
         }
     }
 
@@ -323,6 +225,127 @@ public class HexGameController : MonoBehaviour
         }
     }
 
+    void StartGame()
+    {
+        if (StartInfo.Synced)
+        {
+            Log.Status(GetType(), "Game start.");
+
+            AddUnits();
+            AddItems();
+
+            grid.ResetVisibility();
+
+            if (!isServer)
+            {
+                SendTurn();
+            }
+
+            StartInfo.Synced = false;
+        }
+    }
+
+    void SetTurn()
+    {
+        if (TurnInfo.Synced)
+        {
+            Log.Status(GetType(), "turn " + TurnInfo.Turn);
+
+            if (isServer)
+            {
+                myTurn = TurnInfo.Turn % 2 == 1;
+            }
+            else
+            {
+                myTurn = TurnInfo.Turn % 2 == 0;
+            }
+
+            if (myTurn)
+            {
+                second = 0;
+                endTurn = false;
+                myUnit.SetSpeed();
+            }
+            else
+            {
+                ui.StartCounting(0f);
+                ui.EnergyCounting(30);
+            }
+
+            TurnInfo.Synced = false;
+        }
+    }
+
+    void DoTurn()
+    {
+        if (myTurn)
+        {
+            second += Time.deltaTime;
+
+            if (endTurn || second > turnTime)
+            {
+                myTurn = false;
+                SendTurn();
+            }
+            ui.StartCounting(second / turnTime);
+            ui.EnergyCounting(myUnit.Speed);
+
+            SendScore();
+        }
+
+        if (RemoveItemInfo.Synced)
+        {
+            grid.RemoveItem(RemoveItemInfo.CellIndex);
+            RemoveItemInfo.Synced = false;
+        }
+
+        if (ScoreInfo.Synced)
+        {
+            if (ScoreInfo.IsServer)
+            {
+                serverUnit.Score = ScoreInfo.Score;
+            }
+            else
+            {
+                clientUnit.Score = ScoreInfo.Score;
+            }
+
+            ScoreInfo.Synced = false;
+        }
+
+        ui.MyScore(myUnit.Score);
+        ui.OtherScore(otherUnit.Score);
+    }
+
+    void CheckWin()
+    {
+        if (myUnit.hasTreasure)
+        {
+            SendWin();
+        }
+
+        if (WinInfo.Synced)
+        {
+            inGame = false;
+
+            Log.Status(GetType(), "server/client score: " + serverUnit.Score + " / " + clientUnit.Score);
+            Log.Status(GetType(), "server/client has treasure: " + serverUnit.hasTreasure + " / " + clientUnit.hasTreasure);
+
+            if (WinInfo.IsServerWin == isServer)
+            {
+                ui.isWin(true);
+                Log.Status(GetType(), "you win");
+            }
+            else
+            {
+                ui.isWin(false);
+                Log.Status(GetType(), "you lose");
+            }
+
+            WinInfo.Synced = false;
+        }
+    }
+
     void AddUnits()
     {
         if (isServer)
@@ -360,7 +383,6 @@ public class HexGameController : MonoBehaviour
         {
             HexItem item = Instantiate<HexItem>(HexItem.itemPrefab);
             item.itemType = (HexItemType)itemTypes[i];
-            // item.Owned = item.itemType == HexItemType.Treasure;
             grid.AddItem(item, grid.GetCell(itemIndex[i]));
         }
     }

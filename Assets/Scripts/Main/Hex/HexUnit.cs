@@ -83,6 +83,8 @@ public class HexUnit : MonoBehaviour
     public List<int> speedPlus = new List<int>();
     public List<int> speedMinus = new List<int>();
 
+    public UIController ui;
+
     void Awake()
     {
         unitRenderer = GetComponentInChildren<Renderer>();
@@ -299,5 +301,29 @@ public class HexUnit : MonoBehaviour
     public void SetZeroSpeed()
     {
         speed = -defaultSpeed;
+    }
+
+    public void getKey()
+    {
+        hasKey = true;
+        ui.GetKey();
+    }
+
+    public void speedEffect(int speed, int turns)
+    {
+        if (speed > 0)
+        {
+            for (int i = 0; i < turns; i++)
+            {
+                speedPlus.Add(speed);
+            }
+        }
+        else if (speed < 0)
+        {
+            for (int i = 0; i < turns; i++)
+            {
+                speedMinus.Add(-speed);
+            }
+        }
     }
 }
