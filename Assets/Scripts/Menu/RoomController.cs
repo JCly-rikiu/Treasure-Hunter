@@ -39,6 +39,11 @@ public class RoomController : MonoBehaviourPunCallbacks
             CreatingMenu.SetActive(false);
         }
     }
+    public override void OnCreatedRoom (){
+        Debug.Log("Create Room successfully");
+        CreatingMenu.SetActive(false);
+        CreatingGame.SetActive(true);
+    }
     public void IsReady()
     {
         MenuInfo.Ready = 1;
