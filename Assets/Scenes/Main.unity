@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.46796608, g: 0.55517966, b: 0.40930194, a: 1}
+  m_IndirectSpecularColor: {r: 0.4676774, g: 0.5551665, b: 0.40921256, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1161,8 +1161,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 537958169}
-  - component: {fileID: 537958171}
   - component: {fileID: 537958170}
+  - component: {fileID: 537958171}
   m_Layer: 0
   m_Name: GUI
   m_TagString: Untagged
@@ -1214,7 +1214,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 537958168}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aeed9d52137e2f44946916d32b722ce, type: 3}
+  m_Script: {fileID: 11500000, guid: a7333c5daaa7214458f83697a583a4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timebar: {fileID: 145302867}
@@ -1224,13 +1224,6 @@ MonoBehaviour:
   myscore: {fileID: 1576460389}
   otherscore: {fileID: 2119667905}
   lightkey: {fileID: 140214603}
-  Endmenu: {fileID: 2103424287}
-  FinalMyScore: {fileID: 333880383}
-  FinalOtherScore: {fileID: 715889847}
-  WinTitle: {fileID: 2124608236}
-  WinCrown: {fileID: 942036084}
-  LoseTitle: {fileID: 59202322}
-  LoseCrown: {fileID: 1565043408}
 --- !u!114 &537958171
 MonoBehaviour:
   m_ObjectHideFlags: 0
