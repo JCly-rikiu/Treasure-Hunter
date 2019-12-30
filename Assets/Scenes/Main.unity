@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.46796608, g: 0.55517966, b: 0.40930194, a: 1}
+  m_IndirectSpecularColor: {r: 0.46757632, g: 0.5555314, b: 0.40924194, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9491,7 +9491,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1709073207}
+      - m_Target: {fileID: 1048030004308341109, guid: 2aebc9f435bb0f64a9ccbc6d075afb7b,
+          type: 3}
         m_MethodName: SetVolume
         m_Mode: 0
         m_Arguments:
@@ -9538,7 +9539,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 3834660940819920133, guid: 2cf6c48cc6478d642a7e4fd8cb5bc0b4,
+      - m_Target: {fileID: 3451969453301317857, guid: 4aa9bb090cb088747b36cbc95e321a73,
           type: 3}
         m_MethodName: SetVolume
         m_Mode: 0
@@ -9550,7 +9551,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 4577641804507250707, guid: 6513250d9f94f604caf705faaa70ab45,
+          type: 3}
+        m_MethodName: SetVolume
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 114919800860368508, guid: 2cf6c48cc6478d642a7e4fd8cb5bc0b4,
+          type: 3}
         m_MethodName: SetVolume
         m_Mode: 0
         m_Arguments:
