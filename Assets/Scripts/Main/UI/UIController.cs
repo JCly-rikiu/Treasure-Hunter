@@ -90,12 +90,8 @@ public class UIController : MonoBehaviour
                 newitem.hexcontroller = hexcontroller;
             }
         }
-        if(Input.GetKeyDown(KeyCode.F10))
-        {
-            hexcontroller.clientUnit.getTreasure();
-        }
         if(Input.GetKeyDown(KeyCode.F9)){
-            hexcontroller.serverUnit.getTreasure();
+            hexcontroller.setTreasure();
         }
 
     }
@@ -198,20 +194,12 @@ public class UIController : MonoBehaviour
         }else{
             Invoke("showlose",5);
         }
-
-
-
     }
     void showwin(){
         Endmenu.SetActive(true);
 
         WinTitle.SetActive(true);
         WinCrown.SetActive(true);
-
-
-
-
-
     }
     void showlose(){
         Endmenu.SetActive(true);
