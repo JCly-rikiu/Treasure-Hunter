@@ -96,6 +96,7 @@ public class UIController : MonoBehaviour
             SlotLock.SetActive(true);
         }
         if(curtime >= 0){
+            SlotLock.SetActive(false);
             currentwidth = Mathf.Lerp(0,timewidth, 1 - curtime );
             if(currentwidth < 0)
             {
@@ -115,6 +116,7 @@ public class UIController : MonoBehaviour
         }else{
             SlotLock.SetActive(true);
             timetext.text = "";
+            timebartransform.sizeDelta = new Vector2(timewidth,timeheight);
             timebarimage.color = Color.grey;
         }
         
@@ -122,7 +124,7 @@ public class UIController : MonoBehaviour
     public void EnergyCounting(int curenergy){
         if ( curenergy > 0 ){
             if(curenergy > 30){
-                energybarimage.color = Color.yellow;
+                energybarimage.color = Color.red;
             }else{
                 energybarimage.color = Color.white;
             }
@@ -132,6 +134,7 @@ public class UIController : MonoBehaviour
             energybartransform.sizeDelta = new Vector2(energywidth, currentheight);
         }else{
             energytext.text = "";
+            energybartransform.sizeDelta = new Vector2(energywidth,energyheight );
             energybarimage.color = Color.grey;
         }
         

@@ -4,10 +4,12 @@ using UnityEngine.UI;
 public class Item : MonoBehaviour
 {
     // Start is called before the first frame update
-    public HexItemType name;
+    public HexItemType itemname;
     public HexGameController hexcontroller;
     public void del(){
-    	hexcontroller.useItem(name);
+    	Debug.Log("pushbutton");
+    	Debug.Log(name);
+    	hexcontroller.useItem(itemname);
         Destroy(gameObject);
         UIInfo.isFull = false;
     }
