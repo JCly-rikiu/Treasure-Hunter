@@ -538,15 +538,6 @@ public class HexGrid : MonoBehaviour
                 IncreaseVisibility(unit.Location, unit.VisionRange);
             }
         }
-
-        for (int i = 0; i < items.Count; i++)
-        {
-            HexItem item = items[i];
-            if (item.Owned)
-            {
-                IncreaseVisibility(item.Location, item.VisionRange);
-            }
-        }
     }
 
     public void AddItem(HexItem item, HexCell location)
@@ -572,11 +563,12 @@ public class HexGrid : MonoBehaviour
 
     public void changeUnits()
     {
-        HexCell temp = units[0].Location;
-        units[0].Location = units[1].Location;
-        units[1].Location = temp;
-
-        HexMapCamera.SetPosition(units[0].Location);
+        HexCell temp1 = units[0].Location;
+        HexCell temp2 = units[1].Location;
+        units[0].Location = null;
+        units[1].Location = null;
+        units[0].Location = temp2;
+        units[1].Location = temp1;
     }
 
     public void SendRemoveItem(HexItem item)

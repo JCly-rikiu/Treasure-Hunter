@@ -37,16 +37,22 @@ public class HexUnit : MonoBehaviour
         {
             if (location)
             {
-                Grid.DecreaseVisibility(location, VisionRange);
+                if (Owned)
+                {
+                    Grid.DecreaseVisibility(location, VisionRange);
+                }
                 location.Unit = null;
             }
             location = value;
-            value.Unit = this;
-            if (Owned)
+            if (value)
             {
-                Grid.IncreaseVisibility(value, VisionRange);
+                value.Unit = this;
+                if (Owned)
+                {
+                    Grid.IncreaseVisibility(value, VisionRange);
+                }
+                transform.localPosition = value.Position;
             }
-            transform.localPosition = value.Position;
         }
     }
     HexCell location, currentTravelLocation;
