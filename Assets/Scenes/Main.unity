@@ -1219,7 +1219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timebar: {fileID: 145302864}
   timetext: {fileID: 1224738915}
-  energybar: {fileID: 1892323768}
+  energybar: {fileID: 1892323767}
   energytext: {fileID: 1250728484}
   myscore: {fileID: 1576460389}
   otherscore: {fileID: 2119667905}
