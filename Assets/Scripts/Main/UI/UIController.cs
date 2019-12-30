@@ -19,6 +19,12 @@ public class UIController : MonoBehaviour
     public GameObject WinCrown;
     public GameObject LoseTitle;
     public GameObject LoseCrown;
+    public GameObject SlotLock;
+
+    public GameObject slot;
+    public GameObject[] items;
+
+
     RectTransform energybartransform;
     Image energybarimage;
     RectTransform timebartransform;
@@ -33,6 +39,7 @@ public class UIController : MonoBehaviour
 
     void Awake(){
         //gameObject.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.5f);
+        UIInfo.isFull = false;
         energybartransform = energybar.GetComponent<RectTransform>();
         energybarimage = energybar.GetComponent<Image>();
         timebartransform = timebar.GetComponent<RectTransform>();
@@ -44,6 +51,33 @@ public class UIController : MonoBehaviour
         energywidth = energybartransform.sizeDelta.x;
         energyheight = energybartransform.sizeDelta.y;
         currentheight = energyheight;
+    }
+    void Update(){
+        if(Input.GetKeyDown(KeyCode.F1))
+        {
+            if(UIInfo.isFull == false)
+            {
+                UIInfo.isFull = true;
+                Instantiate(items[0], slot.transform, false);
+            }   
+        }
+        if(Input.GetKeyDown(KeyCode.F2))
+        {
+            if(UIInfo.isFull == false)
+            {
+                UIInfo.isFull = true;
+                Instantiate(items[1], slot.transform, false);
+                
+            }   
+        }
+        if(Input.GetKeyDown(KeyCode.F10))
+        {
+            if(UIInfo.isFull)
+            {
+                UIInfo.isFull = false;
+                Destroy(slot.transform.GetChild(0).gameObject);
+            }   
+        }
     }
     public void Start(){
         Endmenu.SetActive(false);
@@ -57,6 +91,9 @@ public class UIController : MonoBehaviour
         Application.Quit();
     }
     public void StartCounting(float curtime){
+        if(curtime == 1){
+            SlotLock.SetActive(true);
+        }
         if(curtime >= 0){
             currentwidth = Mathf.Lerp(0,timewidth, 1 - curtime );
             if(currentwidth < 0)
@@ -75,6 +112,7 @@ public class UIController : MonoBehaviour
                 timebarimage.color = Color.white;
             }
         }else{
+            SlotLock.SetActive(true);
             timetext.text = "";
             timebarimage.color = Color.grey;
         }
@@ -125,5 +163,8 @@ public class UIController : MonoBehaviour
             
         }
     }
-    
+    public void Destroyitem(){
+        Debug.Log("destroyitem");
+        Destroy(slot.transform.GetChild(0).gameObject);
+    }
 }
