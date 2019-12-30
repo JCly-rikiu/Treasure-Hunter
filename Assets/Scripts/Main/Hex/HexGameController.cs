@@ -22,8 +22,7 @@ public class HexGameController : MonoBehaviour
 
     HexCell treasureCell;
 
-    public HexUnit serverUnit, clientUnit;
-    HexUnit myUnit, otherUnit;
+    HexUnit serverUnit, clientUnit, myUnit, otherUnit;
     HexCell serverStart, clientStart;
 
     List<int> itemTypes = new List<int>();
@@ -451,12 +450,14 @@ public class HexGameController : MonoBehaviour
     public void SetTreasure()
     {
         myUnit.GetTreasure();
+        SendWin();
     }
 
     public void Surrender()
     {
         myUnit.Score = 0;
         otherUnit.GetTreasure();
+        SendWin();
     }
 
     void SendStart()

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.46757632, g: 0.5555314, b: 0.40924194, a: 1}
+  m_IndirectSpecularColor: {r: 0.46796608, g: 0.55517966, b: 0.40930194, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6486,8 +6486,6 @@ MonoBehaviour:
   grid: {fileID: 603571756}
   gameUI: {fileID: 475111608}
   mapGenerator: {fileID: 1041324496}
-  serverUnit: {fileID: 0}
-  clientUnit: {fileID: 0}
   inGame: 0
   ui: {fileID: 537958170}
 --- !u!4 &1608647602
