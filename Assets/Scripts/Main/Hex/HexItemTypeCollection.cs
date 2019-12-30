@@ -7,6 +7,6 @@ public static class HexItemTypeCollection
 
     public static float[] GetMapRandomValue()
     {
-        return new float[] { 0.25f, 0.5f, 0.75f, 0.825f, 0.9f, 0.9375f, 1f };
+        return new float[] { 0.2f, 0.4f, 0.65f, 0.725f, 0.8f, 0.8875f, 1f };
     }
 }
