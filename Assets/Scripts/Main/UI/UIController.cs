@@ -62,7 +62,9 @@ public class UIController : MonoBehaviour
             if(UIInfo.boxisFull == false)
             {
                 UIInfo.boxisFull = true;
-                Instantiate(items[0], slots[0].transform, false);
+
+                Item newitem = Instantiate(items[0], slots[0].transform, false);
+                newitem.hexcontroller = hexcontroller;
             }   
         }
         if(Input.GetKeyDown(KeyCode.F2))
@@ -70,8 +72,8 @@ public class UIController : MonoBehaviour
             if(UIInfo.changeisFull == false)
             {
                 UIInfo.changeisFull = true;
-                Instantiate(items[1], slots[1].transform, false);
-                
+                Item newitem = Instantiate(items[1], slots[1].transform, false);
+                newitem.hexcontroller = hexcontroller;
             }   
         }
         if(Input.GetKeyDown(KeyCode.F3))
@@ -79,8 +81,8 @@ public class UIController : MonoBehaviour
             if(UIInfo.poisonisFull == false)
             {
                 UIInfo.changeisFull = true;
-                Instantiate(items[2], slots[2].transform, false);
-                
+                Item newitem = Instantiate(items[2], slots[2].transform, false);
+                newitem.hexcontroller = hexcontroller;
             }   
         }
         if(Input.GetKeyDown(KeyCode.F10))
