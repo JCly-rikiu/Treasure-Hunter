@@ -91,7 +91,7 @@ public class UIController : MonoBehaviour
             }
         }
         if(Input.GetKeyDown(KeyCode.F9)){
-            hexcontroller.setTreasure();
+            hexcontroller.SetTreasure();
         }
 
     }

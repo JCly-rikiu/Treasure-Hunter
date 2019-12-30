@@ -321,7 +321,7 @@ public class HexUnit : MonoBehaviour
         speed = -defaultSpeed;
     }
 
-    public void setKey(bool key)
+    public void SetKey(bool key)
     {
         hasKey = key;
         if (key)
@@ -334,12 +334,12 @@ public class HexUnit : MonoBehaviour
         }
     }
 
-    public void getTreasure()
+    public void GetTreasure()
     {
         hasTreasure = true;
     }
 
-    public void speedEffect(int speed, int turns)
+    public void SpeedEffect(int speed, int turns)
     {
         if (speed > 0)
         {
@@ -357,7 +357,7 @@ public class HexUnit : MonoBehaviour
         }
     }
 
-    public void getItem(HexItemType type)
+    public void GetItem(HexItemType type)
     {
         ui.GetItem(type);
     }

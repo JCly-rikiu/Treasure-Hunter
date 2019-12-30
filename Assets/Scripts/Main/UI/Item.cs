@@ -7,7 +7,7 @@ public class Item : MonoBehaviour
     public HexItemType itemname;
     public HexGameController hexcontroller;
     public void del(){
-    	hexcontroller.useItem(itemname);
+    	hexcontroller.UseItem(itemname);
         Destroy(gameObject);
         if(itemname == HexItemType.Change)
         {

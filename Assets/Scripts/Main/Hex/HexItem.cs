@@ -67,10 +67,10 @@ public class HexItem : MonoBehaviour
         {
             case HexItemType.Treasure:
                 unit.Score += 300;
-                unit.getTreasure();
+                unit.GetTreasure();
                 break;
             case HexItemType.Key:
-                unit.setKey(true);
+                unit.SetKey(true);
                 break;
             case HexItemType.Coin:
                 unit.Score += 50;
@@ -82,19 +82,19 @@ public class HexItem : MonoBehaviour
                 unit.SetZeroSpeed();
                 break;
             case HexItemType.Poison:
-                unit.getItem(itemType);
+                unit.GetItem(itemType);
                 break;
             case HexItemType.Energy:
-                unit.speedEffect(20, 3);
+                unit.SpeedEffect(20, 3);
                 break;
             case HexItemType.FakeTreasureItem:
-                unit.getItem(itemType);
+                unit.GetItem(itemType);
                 break;
             case HexItemType.Change:
-                unit.getItem(itemType);
+                unit.GetItem(itemType);
                 break;
             case HexItemType.FakeTreasure:
-                unit.setKey(false);
+                unit.SetKey(false);
                 break;
         }
     }

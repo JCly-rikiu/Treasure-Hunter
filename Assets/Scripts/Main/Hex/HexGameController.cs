@@ -300,7 +300,7 @@ public class HexGameController : MonoBehaviour
 
         if (ItemInfo.Synced)
         {
-            addItem((HexItemType)ItemInfo.ItemType, grid.GetCell(ItemInfo.CellIndex));
+            AddItem((HexItemType)ItemInfo.ItemType, grid.GetCell(ItemInfo.CellIndex));
 
             ItemInfo.Synced = false;
         }
@@ -318,7 +318,7 @@ public class HexGameController : MonoBehaviour
             switch ((HexItemType)EffectInfo.ItemIype)
             {
                 case HexItemType.Poison:
-                    myUnit.speedEffect(-20, 3);
+                    myUnit.SpeedEffect(-20, 3);
                     break;
                 case HexItemType.Change:
                     grid.changeUnits();
@@ -421,31 +421,42 @@ public class HexGameController : MonoBehaviour
         }
     }
 
-    void addItem(HexItemType type, HexCell cell)
+    void AddItem(HexItemType type, HexCell cell)
     {
         HexItem item = Instantiate<HexItem>(HexItem.itemPrefab);
         item.itemType = type;
         grid.AddItem(item, cell);
     }
 
-    public void useItem(HexItemType type)
+    public void UseItem(HexItemType type)
     {
         switch (type)
         {
             case HexItemType.Poison:
-                otherUnit.speedEffect(-20, 3);
-                sendEffect(HexItemType.Poison);
+                otherUnit.SpeedEffect(-20, 3);
+                SendEffect(HexItemType.Poison);
                 break;
             case HexItemType.FakeTreasureItem:
-                addItem(HexItemType.FakeTreasure, myUnit.Location);
-                sendItem(HexItemType.FakeTreasure, myUnit);
+                AddItem(HexItemType.FakeTreasure, myUnit.Location);
+                SendItem(HexItemType.FakeTreasure, myUnit);
                 break;
             case HexItemType.Change:
                 grid.changeUnits();
                 HexMapCamera.SetPosition(myUnit.Location);
-                sendEffect(HexItemType.Change);
+                SendEffect(HexItemType.Change);
                 break;
         }
+    }
+
+    public void SetTreasure()
+    {
+        myUnit.GetTreasure();
+    }
+
+    public void Surrender()
+    {
+        myUnit.Score = 0;
+        otherUnit.GetTreasure();
     }
 
     void SendStart()
@@ -472,12 +483,12 @@ public class HexGameController : MonoBehaviour
         photonView.RPC("GetScore", RpcTarget.Others, isServer, myUnit.Score);
     }
 
-    void sendItem(HexItemType type, HexUnit unit)
+    void SendItem(HexItemType type, HexUnit unit)
     {
         photonView.RPC("GetItem", RpcTarget.Others, (int)type, (int)unit.Location.Index);
     }
 
-    void sendEffect(HexItemType type)
+    void SendEffect(HexItemType type)
     {
         photonView.RPC("GetEffect", RpcTarget.Others, (int)type);
     }
