@@ -321,6 +321,7 @@ public class HexGameController : MonoBehaviour
                     break;
                 case HexItemType.Change:
                     grid.changeUnits();
+                    HexMapCamera.SetPosition(myUnit.Location);
                     break;
             }
 
@@ -436,6 +437,7 @@ public class HexGameController : MonoBehaviour
                 break;
             case HexItemType.Change:
                 grid.changeUnits();
+                HexMapCamera.SetPosition(myUnit.Location);
                 sendEffect(HexItemType.Change);
                 break;
         }

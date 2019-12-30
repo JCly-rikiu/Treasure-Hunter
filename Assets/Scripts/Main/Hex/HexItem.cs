@@ -9,17 +9,7 @@ public class HexItem : MonoBehaviour
     public Transform[] itemTPrefabs;
     Transform item, showEffect, effect;
 
-    public bool Owned { get; set; }
-
     public HexGrid Grid { get; set; }
-
-    public int VisionRange
-    {
-        get
-        {
-            return 2;
-        }
-    }
 
     public HexCell Location
     {

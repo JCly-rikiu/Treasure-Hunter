@@ -137,5 +137,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6277f5e114a77e64d8f251a89ddb5f96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemname: 0
+  itemname: 8
   hexcontroller: {fileID: 0}
