@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4676774, g: 0.5551665, b: 0.40921256, a: 1}
+  m_IndirectSpecularColor: {r: 0.46757632, g: 0.5555314, b: 0.40924194, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1217,7 +1217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7333c5daaa7214458f83697a583a4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timebar: {fileID: 145302867}
+  timebar: {fileID: 145302864}
   timetext: {fileID: 1224738915}
   energybar: {fileID: 1892323768}
   energytext: {fileID: 1250728484}

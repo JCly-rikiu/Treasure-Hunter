@@ -1,14 +1,13 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
-    
-    public RectTransform timebar;
+    public GameObject timebar;
     public Text timetext;
-    public RectTransform energybar;
+    public GameObject energybar;
     public Text energytext;
     public Text myscore;
     public Text otherscore;
@@ -20,7 +19,10 @@ public class UIController : MonoBehaviour
     public GameObject WinCrown;
     public GameObject LoseTitle;
     public GameObject LoseCrown;
-    
+    RectTransform energybartransform;
+    Image energybarimage;
+    RectTransform timebartransform;
+    Image timebarimage;
     float timewidth = 0f;
     float timeheight = 0f;
     float currentwidth = 0;
@@ -30,13 +32,17 @@ public class UIController : MonoBehaviour
     float currentheight = 0f;
 
     void Awake(){
-
-        timewidth = timebar.sizeDelta.x;
-        timeheight = timebar.sizeDelta.y;
+        //gameObject.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.5f);
+        energybartransform = energybar.GetComponent<RectTransform>();
+        energybarimage = energybar.GetComponent<Image>();
+        timebartransform = timebar.GetComponent<RectTransform>();
+        timebarimage = timebar.GetComponent<Image>();
+        timewidth = timebartransform.sizeDelta.x;
+        timeheight = timebartransform.sizeDelta.y;
         currentwidth = timewidth;
 
-        energywidth = energybar.sizeDelta.x;
-        energyheight = energybar.sizeDelta.y;
+        energywidth = energybartransform.sizeDelta.x;
+        energyheight = energybartransform.sizeDelta.y;
         currentheight = energyheight;
     }
     public void Start(){
@@ -51,26 +57,45 @@ public class UIController : MonoBehaviour
         Application.Quit();
     }
     public void StartCounting(float curtime){
-        
-        
-        currentwidth = Mathf.Lerp(0,timewidth, 1 - curtime );
-        if(currentwidth < 0)
-        {
-            currentwidth = 0;
+        if(curtime >= 0){
+            currentwidth = Mathf.Lerp(0,timewidth, 1 - curtime );
+            if(currentwidth < 0)
+            {
+                currentwidth = 0;
+            }
+            timebartransform.sizeDelta = new Vector2(currentwidth,timeheight);
+
+            curtime = 15 - curtime * 15;
+            int inttime = Mathf.CeilToInt(curtime);
+            timetext.text = inttime.ToString();
+
+            if (curtime < 5){
+                timebarimage.color = Color.red;
+            }else{
+                timebarimage.color = Color.white;
+            }
+        }else{
+            timetext.text = "";
+            timebarimage.color = Color.grey;
         }
-        timebar.sizeDelta = new Vector2(currentwidth,timeheight);
         
-        curtime = 15 - curtime * 15;
-        int inttime = Mathf.CeilToInt(curtime);
-        timetext.text = inttime.ToString();
     }
     public void EnergyCounting(int curenergy){
+        if ( curenergy > 0 ){
+            if(curenergy > 30){
+                energybarimage.color = Color.yellow;
+            }else{
+                energybarimage.color = Color.white;
+            }
+            energytext.text = curenergy.ToString();
+            float floatenergy = (float)curenergy / 30;
+            currentheight = Mathf.Lerp(0, energyheight,floatenergy );
+            energybartransform.sizeDelta = new Vector2(energywidth, currentheight);
+        }else{
+            energytext.text = "";
+            energybarimage.color = Color.grey;
+        }
         
-        energytext.text = curenergy.ToString();
-        float floatenergy = (float)curenergy / 30;
-        currentheight = Mathf.Lerp(0, energyheight,floatenergy );
-        
-        energybar.sizeDelta = new Vector2(energywidth, currentheight);
         
     }
     public void MyScore(int score){
@@ -81,6 +106,9 @@ public class UIController : MonoBehaviour
     }
     public void GetKey(){
         lightkey.SetActive(true);
+    }
+    public void LoseKey(){
+        lightkey.SetActive(false);
     }
     public void isWin(bool win){
         Debug.Log("Gamesetiswin" + win);
