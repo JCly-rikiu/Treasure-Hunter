@@ -23,7 +23,7 @@ public class UIController : MonoBehaviour
     public GameObject LoseCrown;
     public GameObject SlotLock;
 
-    public GameObject slot;
+    public GameObject [] slots;
     public Item[] items;
 
     RectTransform energybartransform;
@@ -40,7 +40,9 @@ public class UIController : MonoBehaviour
 
     void Awake(){
         //gameObject.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.5f);
-        UIInfo.isFull = false;
+        UIInfo.boxisFull = false;
+        UIInfo.changeisFull = false;
+        UIInfo.poisonisFull = false;
         energybartransform = energybar.GetComponent<RectTransform>();
         energybarimage = energybar.GetComponent<Image>();
         timebartransform = timebar.GetComponent<RectTransform>();
@@ -54,31 +56,38 @@ public class UIController : MonoBehaviour
         currentheight = energyheight;
     }
     void Update(){
+
         if(Input.GetKeyDown(KeyCode.F1))
         {
-            if(UIInfo.isFull == false)
+            if(UIInfo.boxisFull == false)
             {
-                UIInfo.isFull = true;
-                Instantiate(items[0], slot.transform, false);
+                UIInfo.boxisFull = true;
+                Instantiate(items[0], slots[0].transform, false);
             }   
         }
         if(Input.GetKeyDown(KeyCode.F2))
         {
-            if(UIInfo.isFull == false)
+            if(UIInfo.changeisFull == false)
             {
-                UIInfo.isFull = true;
-                Instantiate(items[1], slot.transform, false);
+                UIInfo.changeisFull = true;
+                Instantiate(items[1], slots[1].transform, false);
+                
+            }   
+        }
+        if(Input.GetKeyDown(KeyCode.F3))
+        {
+            if(UIInfo.poisonisFull == false)
+            {
+                UIInfo.changeisFull = true;
+                Instantiate(items[2], slots[2].transform, false);
                 
             }   
         }
         if(Input.GetKeyDown(KeyCode.F10))
         {
-            if(UIInfo.isFull)
-            {
-                UIInfo.isFull = false;
-                Destroy(slot.transform.GetChild(0).gameObject);
-            }   
+              
         }
+
     }
     public void Start(){
         Endmenu.SetActive(false);
@@ -169,17 +178,24 @@ public class UIController : MonoBehaviour
     }
     public void GetItem(HexItemType type){
         if(type == HexItemType.FakeTreasureItem){
-            if(UIInfo.isFull == false)
+            if(UIInfo.boxisFull == false)
             {
-                UIInfo.isFull = true;
-                Item newitem = Instantiate(items[0], slot.transform, false);
+                UIInfo.boxisFull = true;
+                Item newitem = Instantiate(items[0], slots[0].transform, false);
                 newitem.hexcontroller = hexcontroller;
             }
         }else if (type == HexItemType.Change){
-            if(UIInfo.isFull == false)
+            if(UIInfo.changeisFull == false)
             {
-                UIInfo.isFull = true;
-                Item newitem = Instantiate(items[1], slot.transform, false);
+                UIInfo.changeisFull = true;
+                Item newitem = Instantiate(items[1], slots[1].transform, false);
+                newitem.hexcontroller = hexcontroller;
+            }
+        }else if (type == HexItemType.Poison){
+            if(UIInfo.poisonisFull == false)
+            {
+                UIInfo.poisonisFull = true;
+                Item newitem = Instantiate(items[2], slots[2].transform, false);
                 newitem.hexcontroller = hexcontroller;
             }
         }

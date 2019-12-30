@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7961028507278530448}
   - component: {fileID: 3834660940819920133}
   - component: {fileID: 2295770353862567011}
+  - component: {fileID: 114520557072938924}
   m_Layer: 0
   m_Name: PoisonT
   m_TagString: Untagged
@@ -143,6 +144,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &114520557072938924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2564538965560287998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d356cc8db676844d81875c7579d894a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AudioSrc: {fileID: 2295770353862567011}
+  AudioVolume: 0.5
 --- !u!1001 &2179406268924309913
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -253,7 +268,7 @@ PrefabInstance:
     - target: {fileID: 3364450574295486105, guid: 047dd29339a55224f971a4e2dccb1886,
         type: 3}
       propertyPath: lengthInSec
-      value: 1.4
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 3364450574295486105, guid: 047dd29339a55224f971a4e2dccb1886,
         type: 3}
