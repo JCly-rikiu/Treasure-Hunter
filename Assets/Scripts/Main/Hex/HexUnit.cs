@@ -308,7 +308,14 @@ public class HexUnit : MonoBehaviour
     public void setKey(bool key)
     {
         hasKey = key;
-        ui.GetKey();
+        if (key)
+        {
+            ui.GetKey();
+        }
+        else
+        {
+            ui.LoseKey();
+        }
     }
 
     public void getTreasure()

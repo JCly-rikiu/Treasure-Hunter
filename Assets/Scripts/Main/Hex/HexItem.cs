@@ -92,7 +92,6 @@ public class HexItem : MonoBehaviour
                 unit.SetZeroSpeed();
                 break;
             case HexItemType.Poison:
-                // unit.speedEffect(-20, 3);
                 unit.getItem(itemType);
                 break;
             case HexItemType.Energy:
@@ -132,6 +131,10 @@ public class HexItem : MonoBehaviour
     public bool isWalkable(HexUnit unit)
     {
         if (itemType == HexItemType.Treasure && !unit.HasKey)
+        {
+            return false;
+        }
+        if (itemType == HexItemType.FakeTreasure && !unit.HasKey)
         {
             return false;
         }
