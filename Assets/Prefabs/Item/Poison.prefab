@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 996703291805637506}
   - component: {fileID: 347591655703252582}
   - component: {fileID: 5217178795215745917}
-  - component: {fileID: 7021073527898675545}
+  - component: {fileID: 5531948188082561868}
   m_Layer: 0
   m_Name: Poison
   m_TagString: Untagged
@@ -114,8 +114,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7021073527898675545}
-        m_MethodName: Select
+      - m_Target: {fileID: 5531948188082561868}
+        m_MethodName: del
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -125,7 +125,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &7021073527898675545
+--- !u!114 &5531948188082561868
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -134,9 +134,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 6258703655626470745}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50271fada7a515943a0b01226f2b6f02, type: 3}
+  m_Script: {fileID: 11500000, guid: 6277f5e114a77e64d8f251a89ddb5f96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isSelected: 0
-  isUsed: 0
-  type: 0
+  itemname: 5
+  hexcontroller: {fileID: 0}

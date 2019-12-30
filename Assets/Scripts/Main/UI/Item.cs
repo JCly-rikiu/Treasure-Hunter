@@ -7,11 +7,18 @@ public class Item : MonoBehaviour
     public HexItemType itemname;
     public HexGameController hexcontroller;
     public void del(){
-    	Debug.Log("pushbutton");
-    	Debug.Log(name);
     	hexcontroller.useItem(itemname);
         Destroy(gameObject);
-        UIInfo.isFull = false;
+        if(itemname == HexItemType.Change)
+        {
+            UIInfo.changeisFull = false;
+        }else if (itemname == HexItemType.FakeTreasureItem)
+        {
+            UIInfo.boxisFull = false;
+        }else if (itemname == HexItemType.Poison)
+        {
+            UIInfo.poisonisFull = false;
+        }
     }
 
 }
