@@ -295,13 +295,23 @@ public class HexUnit : MonoBehaviour
         int delta = 0;
         if (speedPlus.Count > 0)
         {
+            ui.Buff(speedPlus.Count);
             delta += speedPlus[0];
             speedPlus.RemoveAt(0);
         }
+        else
+        {
+            ui.Buff(0);
+        }
         if (speedMinus.Count > 0)
         {
+            ui.Debuff(speedMinus.Count);
             delta -= speedMinus[0];
             speedMinus.RemoveAt(0);
+        }
+        else
+        {
+            ui.Debuff(0);
         }
         speed = delta;
     }
