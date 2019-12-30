@@ -1,10 +1,12 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
+
+    public HexGameController hexcontroller;
     public GameObject timebar;
     public Text timetext;
     public GameObject energybar;
@@ -22,8 +24,7 @@ public class UIController : MonoBehaviour
     public GameObject SlotLock;
 
     public GameObject slot;
-    public GameObject[] items;
-
+    public Item[] items;
 
     RectTransform energybartransform;
     Image energybarimage;
@@ -83,7 +84,7 @@ public class UIController : MonoBehaviour
         Endmenu.SetActive(false);
     }
     public void endturn(){
-        HexGameController.endTurn = true;
+        //hexcontroller.endTurn = true;
 
     }
     public void exitGame()
@@ -163,8 +164,21 @@ public class UIController : MonoBehaviour
             
         }
     }
-    public void Destroyitem(){
-        Debug.Log("destroyitem");
-        Destroy(slot.transform.GetChild(0).gameObject);
+    public void GetItem(HexItemType type){
+        if(type == HexItemType.FakeTreasureItem){
+            if(UIInfo.isFull == false)
+            {
+                UIInfo.isFull = true;
+                Item newitem = Instantiate(items[0], slot.transform, false);
+                newitem.hexcontroller = hexcontroller;
+            }
+        }else if (type == HexItemType.Change){
+            if(UIInfo.isFull == false)
+            {
+                UIInfo.isFull = true;
+                Item newitem = Instantiate(items[1], slot.transform, false);
+                newitem.hexcontroller = hexcontroller;
+            }
+        }
     }
 }

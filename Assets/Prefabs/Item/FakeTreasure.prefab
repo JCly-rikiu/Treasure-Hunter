@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8613105146242158396}
   - component: {fileID: 3274112966139579214}
   - component: {fileID: 406647249542299555}
-  - component: {fileID: 114066729140583288}
+  - component: {fileID: 114166251134120028}
   m_Layer: 0
   m_Name: FakeTreasure
   m_TagString: Untagged
@@ -114,7 +114,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114066729140583288}
+      - m_Target: {fileID: 0}
         m_MethodName: del
         m_Mode: 1
         m_Arguments:
@@ -136,7 +136,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &114066729140583288
+--- !u!114 &114166251134120028
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -145,7 +145,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 6835152892012599347}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50271fada7a515943a0b01226f2b6f02, type: 3}
+  m_Script: {fileID: 11500000, guid: 6277f5e114a77e64d8f251a89ddb5f96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slot: {fileID: 0}
+  name: 7
+  hexcontroller: {fileID: 0}

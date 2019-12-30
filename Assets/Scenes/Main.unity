@@ -868,7 +868,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &326911363
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1401,7 +1401,6 @@ MonoBehaviour:
   grid: {fileID: 603571756}
   myUnit: {fileID: 0}
   otherUnit: {fileID: 0}
-  mapCamera: {fileID: 0}
 --- !u!114 &475111609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1703,6 +1702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7333c5daaa7214458f83697a583a4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hexcontroller: {fileID: 1608647601}
   timebar: {fileID: 145302864}
   timetext: {fileID: 1224738915}
   energybar: {fileID: 1892323767}
@@ -1720,8 +1720,8 @@ MonoBehaviour:
   SlotLock: {fileID: 559342319}
   slot: {fileID: 980221173}
   items:
-  - {fileID: 6835152892012599347, guid: e9757015017beaa4aa20e7a7da3d4ed0, type: 3}
-  - {fileID: 8453942435766150292, guid: fbf36cef8a264384c8963d1984bdcfed, type: 3}
+  - {fileID: 114166251134120028, guid: e9757015017beaa4aa20e7a7da3d4ed0, type: 3}
+  - {fileID: 114226803751009202, guid: fbf36cef8a264384c8963d1984bdcfed, type: 3}
 --- !u!114 &537958171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1940,7 +1940,6 @@ MonoBehaviour:
     type: 3}
   itemPrefab: {fileID: 7299639442276942594, guid: 482bb8ac7789a114095d1fdbf14bf487,
     type: 3}
-  mapCamera: {fileID: 1217588850}
   mesh: {fileID: 1904875660}
   noiseSource: {fileID: 2800000, guid: 4506dfa11e97c9d49ab49d3a186c7e3e, type: 3}
   seed: 1234
@@ -6025,7 +6024,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 603571756}
   gameUI: {fileID: 475111608}
-  mapCamera: {fileID: 1217588850}
   mapGenerator: {fileID: 1041324496}
   inGame: 0
   ui: {fileID: 537958170}

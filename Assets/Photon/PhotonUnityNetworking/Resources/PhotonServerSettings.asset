@@ -41,5 +41,14 @@ MonoBehaviour:
   - SendWin
   - SendScore
   - SendRemoveItem
+  - GetEffect
+  - GetItem
+  - GetJump
+  - GetPath
+  - GetRemoveItem
+  - GetScore
+  - GetStart
+  - GetTurn
+  - GetWin
   DisableAutoOpenWizard: 1
   ShowSettings: 1

@@ -343,6 +343,6 @@ public class HexUnit : MonoBehaviour
 
     public void getItem(HexItemType type)
     {
-        // ui.
+        ui.GetItem(type);
     }
 }
