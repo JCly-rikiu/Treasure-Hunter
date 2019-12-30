@@ -14,6 +14,11 @@ public class UIController : MonoBehaviour
     public Text myscore;
     public Text otherscore;
     public GameObject lightkey;
+
+    public GameObject buff;
+    public Text bufftext;
+    public GameObject debuff;
+    public Text debufftext;
     public GameObject Endmenu;
     public Text FinalMyScore;
     public Text FinalOtherScore;
@@ -87,20 +92,40 @@ public class UIController : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.F10))
         {
-              
+            hexcontroller.clientUnit.HasTreasure = true;
+        }
+        if(Input.GetKeyDown(KeyCode.F9)){
+            hexcontroller.serverUnit.HasTreasure = true;
         }
 
     }
     public void Start(){
         Endmenu.SetActive(false);
     }
-    public void endturn(){
-        //hexcontroller.endTurn = true;
 
-    }
     public void exitGame()
     {
         Application.Quit();
+    }
+    public void Buff(int round){
+        if(round >= 1){
+            bufftext.text = round.ToString();
+            buff.SetActive(true);
+        }else{
+            bufftext.text = "";
+            buff.SetActive(false);
+        }
+        
+    }
+    public void Debuff(int round){
+        if(round >= 1){
+            debufftext.text = round.ToString();
+            debuff.SetActive(true);
+        }else
+        {   
+            debufftext.text = "";
+            debuff.SetActive(false);
+        }
     }
     public void StartCounting(float curtime){
         if(curtime == 1){
@@ -164,19 +189,34 @@ public class UIController : MonoBehaviour
         lightkey.SetActive(false);
     }
     public void isWin(bool win){
+
         Debug.Log("Gamesetiswin" + win);
         FinalMyScore.text = myscore.text;
         FinalOtherScore.text = otherscore.text;
-        Endmenu.SetActive(true);
         if(win){
-            WinTitle.SetActive(true);
-            WinCrown.SetActive(true);
-            
+            Invoke("showwin",5);
         }else{
-            LoseTitle.SetActive(true);
-            LoseCrown.SetActive(true);
-            
+            Invoke("showlose",5);
         }
+        
+        
+
+    }
+    void showwin(){
+        Endmenu.SetActive(true);
+
+        WinTitle.SetActive(true);
+        WinCrown.SetActive(true);
+            
+        
+           
+            
+        
+    }
+    void showlose(){
+        Endmenu.SetActive(true);
+        LoseTitle.SetActive(true);
+        LoseCrown.SetActive(true);
     }
     public void GetItem(HexItemType type){
         if(type == HexItemType.FakeTreasureItem){
