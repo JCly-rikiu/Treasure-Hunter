@@ -13,7 +13,6 @@ public class HexGameUI : MonoBehaviour
     public HexUnit myUnit;
     public HexUnit otherUnit;
 
-    public HexMapCamera mapCamera;
     bool following, switchToFollowing;
     HexCell followedLastCell;
 
@@ -48,13 +47,13 @@ public class HexGameUI : MonoBehaviour
         if (Input.GetKeyDown("space"))
         {
             myUnit.Jump();
-            photonView.RPC("SendJump", RpcTarget.Others, true);
+            photonView.RPC("GetJump", RpcTarget.Others, true);
         }
 
         // center camera to myUnit position
         if (Input.GetKeyDown(KeyCode.C))
         {
-            mapCamera.SetPosition(myUnit.Location);
+            HexMapCamera.SetPosition(myUnit.Location);
         }
 
         // toggle camera following
@@ -63,24 +62,26 @@ public class HexGameUI : MonoBehaviour
             following = !following;
             if (following)
             {
-                mapCamera.SetPosition(myUnit.Location);
+                HexMapCamera.SetPosition(myUnit.Location);
                 switchToFollowing = true;
             }
         }
+
+        // move camera
         if (switchToFollowing)
         {
-            if (mapCamera.transform.localPosition == myUnit.transform.localPosition)
+            if (HexMapCamera.GetLocalPosition() == myUnit.transform.localPosition)
             {
                 switchToFollowing = false;
             }
         }
         else if (following)
         {
-            mapCamera.SetPosition(myUnit.transform.localPosition, true);
+            HexMapCamera.SetPosition(myUnit.transform.localPosition, true);
         }
         else
         {
-            mapCamera.Move();
+            HexMapCamera.Move();
         }
 
         // networking
@@ -158,19 +159,19 @@ public class HexGameUI : MonoBehaviour
             path[i] = p[i].Index;
         }
 
-        photonView.RPC("SendPath", RpcTarget.Others, true, path);
+        photonView.RPC("GetPath", RpcTarget.Others, path);
     }
 
 
     [PunRPC]
-    void SendPath(bool synced, int[] path)
+    void GetPath(int[] path)
     {
-        UnitInfo.newPath = synced;
+        UnitInfo.newPath = true;
         UnitInfo.Path = path;
     }
 
     [PunRPC]
-    void SendJump(bool jump)
+    void GetJump(bool jump)
     {
         UnitInfo.Jump = jump;
     }

@@ -78,8 +78,10 @@ public class HexUnit : MonoBehaviour
     public Renderer unitRenderer;
 
     public int Score { get; set; }
-    public bool hasKey { get; set; }
-    public bool hasTreasure { get; set; }
+    public bool HasKey { get { return hasKey; } }
+    bool hasKey;
+    public bool HasTreasure { get { return hasTreasure; } }
+    bool hasTreasure;
     public List<int> speedPlus = new List<int>();
     public List<int> speedMinus = new List<int>();
 
@@ -160,7 +162,7 @@ public class HexUnit : MonoBehaviour
                 if (currentTravelLocation.Item)
                 {
                     currentTravelLocation.Item.Effect(this);
-                    Grid.RemoveItem(currentTravelLocation.Item);
+                    Grid.SendRemoveItem(currentTravelLocation.Item);
                 }
             }
             else
@@ -303,10 +305,22 @@ public class HexUnit : MonoBehaviour
         speed = -defaultSpeed;
     }
 
-    public void getKey()
+    public void setKey(bool key)
     {
-        hasKey = true;
-        ui.GetKey();
+        hasKey = key;
+        if (key)
+        {
+            ui.GetKey();
+        }
+        else
+        {
+            ui.LoseKey();
+        }
+    }
+
+    public void getTreasure()
+    {
+        hasTreasure = true;
     }
 
     public void speedEffect(int speed, int turns)
@@ -325,5 +339,10 @@ public class HexUnit : MonoBehaviour
                 speedMinus.Add(-speed);
             }
         }
+    }
+
+    public void getItem(HexItemType type)
+    {
+        // ui.
     }
 }

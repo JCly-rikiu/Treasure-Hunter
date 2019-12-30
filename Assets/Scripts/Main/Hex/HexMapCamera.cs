@@ -85,13 +85,13 @@ public class HexMapCamera : MonoBehaviour
         }
     }
 
-    public void Move()
+    public static void Move()
     {
         float xDelta = Input.GetAxis("Horizontal");
         float zDelta = Input.GetAxis("Vertical");
         if (xDelta != 0f || zDelta != 0f)
         {
-            AdjustPosition(xDelta, zDelta);
+            instance.AdjustPosition(xDelta, zDelta);
         }
     }
 
@@ -144,52 +144,57 @@ public class HexMapCamera : MonoBehaviour
         return position;
     }
 
-    public void CenterPosition()
+    public static void CenterPosition()
     {
-        transform.localPosition = new Vector3((grid.cellCountX - 0.5f) * (2f * HexMetrics.innerRadius) / 2, 0f, (grid.cellCountZ - 1f) * (1.5f * HexMetrics.outerRadius) / 2);
-        zoom = 0f;
+        instance.transform.localPosition = new Vector3((instance.grid.cellCountX - 0.5f) * (2f * HexMetrics.innerRadius) / 2, 0f, (instance.grid.cellCountZ - 1f) * (1.5f * HexMetrics.outerRadius) / 2);
+        instance.zoom = 0f;
 
-        ValidatePosition();
+        instance.ValidatePosition();
     }
 
-    public static void ValidatePosition()
+    public void ValidatePosition()
     {
-        instance.AdjustZoom(0f);
-        instance.AdjustRotation(0f);
-        instance.AdjustPosition(0f, 0f);
+        AdjustZoom(0f);
+        AdjustRotation(0f);
+        AdjustPosition(0f, 0f);
     }
 
-    public void SetPosition(HexCell cell)
+    public static void SetPosition(HexCell cell)
     {
         SetPosition(cell.Position, false, true);
     }
 
-    public void SetPosition(Vector3 position, bool raw = false, bool zoomUp = true)
+    public static void SetPosition(Vector3 position, bool raw = false, bool zoomUp = true)
     {
         if (raw)
         {
-            transform.localPosition = position;
+            instance.transform.localPosition = position;
         }
         else
         {
-            stillUpdating = true;
-            update = 0f;
-            originalPosition = transform.localPosition;
-            targetPosition = position;
+            instance.stillUpdating = true;
+            instance.update = 0f;
+            instance.originalPosition = instance.transform.localPosition;
+            instance.targetPosition = position;
 
             if (zoomUp)
             {
-                stillZooming = true;
-                zoomUpdate = 0f;
-                originalZoom = zoom;
-                targetZoom = 0f;
+                instance.stillZooming = true;
+                instance.zoomUpdate = 0f;
+                instance.originalZoom = instance.zoom;
+                instance.targetZoom = 0f;
             }
         }
 
     }
 
-    public float GetRotationAngle()
+    public static float GetRotationAngle()
     {
         return instance.rotationAngle;
+    }
+
+    public static Vector3 GetLocalPosition()
+    {
+        return instance.transform.localPosition;
     }
 }

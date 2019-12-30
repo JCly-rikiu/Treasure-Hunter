@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7961028507278530448
 Transform:
   m_ObjectHideFlags: 0
@@ -217,16 +217,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3364450574276086745, guid: 047dd29339a55224f971a4e2dccb1886,
         type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.28
-      objectReference: {fileID: 0}
-    - target: {fileID: 3364450574276086745, guid: 047dd29339a55224f971a4e2dccb1886,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3364450574276086745, guid: 047dd29339a55224f971a4e2dccb1886,
-        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -237,18 +227,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3364450574276086745, guid: 047dd29339a55224f971a4e2dccb1886,
         type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
+      propertyPath: m_LocalPosition.y
+      value: 1.28
       objectReference: {fileID: 0}
     - target: {fileID: 3364450574276086745, guid: 047dd29339a55224f971a4e2dccb1886,
         type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
+      propertyPath: m_LocalPosition.z
+      value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 3364450574276086745, guid: 047dd29339a55224f971a4e2dccb1886,
+    - target: {fileID: 3364450574295486105, guid: 047dd29339a55224f971a4e2dccb1886,
         type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
+      propertyPath: lengthInSec
+      value: 1.4
       objectReference: {fileID: 0}
     - target: {fileID: 3364450574295486105, guid: 047dd29339a55224f971a4e2dccb1886,
         type: 3}
@@ -257,28 +247,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3364450574295486105, guid: 047dd29339a55224f971a4e2dccb1886,
         type: 3}
-      propertyPath: InitialModule.startSpeed.minScalar
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3364450574295486105, guid: 047dd29339a55224f971a4e2dccb1886,
-        type: 3}
-      propertyPath: InitialModule.startSpeed.scalar
+      propertyPath: InitialModule.startSize.scalar
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3364450574295486105, guid: 047dd29339a55224f971a4e2dccb1886,
         type: 3}
       propertyPath: InitialModule.startSize.minScalar
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3364450574295486105, guid: 047dd29339a55224f971a4e2dccb1886,
-        type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3364450574295486105, guid: 047dd29339a55224f971a4e2dccb1886,
-        type: 3}
-      propertyPath: lengthInSec
-      value: 1.4
       objectReference: {fileID: 0}
     - target: {fileID: 3364450574295486105, guid: 047dd29339a55224f971a4e2dccb1886,
         type: 3}

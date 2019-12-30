@@ -9,8 +9,6 @@ public class HexItem : MonoBehaviour
     public Transform[] itemTPrefabs;
     Transform item, showEffect, effect;
 
-    public int Index { get; set; }
-
     public bool Owned { get; set; }
 
     public HexGrid Grid { get; set; }
@@ -40,8 +38,7 @@ public class HexItem : MonoBehaviour
 
     public void InstantiateItem()
     {
-        HexItemType type = itemType.isMagicBox() ? HexItemType.MagicBox : itemType;
-        Transform itemP = itemPrefabs[(int)type];
+        Transform itemP = itemPrefabs[(int)itemType];
         if (itemP)
         {
             item = Instantiate<Transform>(itemP);
@@ -49,7 +46,7 @@ public class HexItem : MonoBehaviour
             item.SetParent(transform, false);
         }
 
-        Transform itemEP = itemEPrefabs[(int)type];
+        Transform itemEP = itemEPrefabs[(int)itemType];
         if (itemEP)
         {
             showEffect = Instantiate<Transform>(itemEP);
@@ -80,33 +77,34 @@ public class HexItem : MonoBehaviour
         {
             case HexItemType.Treasure:
                 unit.Score += 300;
-                unit.hasTreasure = true;
+                unit.getTreasure();
                 break;
             case HexItemType.Key:
-                unit.getKey();
+                unit.setKey(true);
                 break;
             case HexItemType.Coin:
                 unit.Score += 50;
+                break;
+            case HexItemType.Bonus:
+                unit.Score += 100;
                 break;
             case HexItemType.Bomb:
                 unit.SetZeroSpeed();
                 break;
             case HexItemType.Poison:
-                unit.speedEffect(-20, 3);
+                unit.getItem(itemType);
                 break;
-            case HexItemType.EnergyPlus:
+            case HexItemType.Energy:
                 unit.speedEffect(20, 3);
                 break;
-            case HexItemType.Bonus:
-                unit.Score += 100;
+            case HexItemType.FakeTreasureItem:
+                unit.getItem(itemType);
                 break;
-            case HexItemType.Stop:
+            case HexItemType.Change:
+                unit.getItem(itemType);
                 break;
-            case HexItemType.Ward:
-                break;
-            case HexItemType.Shovel:
-                break;
-            case HexItemType.MagicBox:
+            case HexItemType.FakeTreasure:
+                unit.setKey(false);
                 break;
         }
     }
@@ -132,16 +130,14 @@ public class HexItem : MonoBehaviour
 
     public bool isWalkable(HexUnit unit)
     {
-        if (itemType == HexItemType.Treasure && !unit.hasKey)
+        if (itemType == HexItemType.Treasure && !unit.HasKey)
         {
             return false;
         }
-
-        if (itemType == HexItemType.Stop)
+        if (itemType == HexItemType.FakeTreasure && !unit.HasKey)
         {
             return false;
         }
-
         return true;
     }
 }
