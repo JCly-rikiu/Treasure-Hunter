@@ -70,7 +70,7 @@ public class UIController : MonoBehaviour
 
                 Item newitem = Instantiate(items[0], slots[0].transform, false);
                 newitem.hexcontroller = hexcontroller;
-            }   
+            }
         }
         if(Input.GetKeyDown(KeyCode.F2))
         {
@@ -79,7 +79,7 @@ public class UIController : MonoBehaviour
                 UIInfo.changeisFull = true;
                 Item newitem = Instantiate(items[1], slots[1].transform, false);
                 newitem.hexcontroller = hexcontroller;
-            }   
+            }
         }
         if(Input.GetKeyDown(KeyCode.F3))
         {
@@ -88,14 +88,14 @@ public class UIController : MonoBehaviour
                 UIInfo.changeisFull = true;
                 Item newitem = Instantiate(items[2], slots[2].transform, false);
                 newitem.hexcontroller = hexcontroller;
-            }   
+            }
         }
         if(Input.GetKeyDown(KeyCode.F10))
         {
-            hexcontroller.clientUnit.HasTreasure = true;
+            hexcontroller.clientUnit.getTreasure();
         }
         if(Input.GetKeyDown(KeyCode.F9)){
-            hexcontroller.serverUnit.HasTreasure = true;
+            hexcontroller.serverUnit.getTreasure();
         }
 
     }
@@ -115,14 +115,14 @@ public class UIController : MonoBehaviour
             bufftext.text = "";
             buff.SetActive(false);
         }
-        
+
     }
     public void Debuff(int round){
         if(round >= 1){
             debufftext.text = round.ToString();
             debuff.SetActive(true);
         }else
-        {   
+        {
             debufftext.text = "";
             debuff.SetActive(false);
         }
@@ -155,7 +155,7 @@ public class UIController : MonoBehaviour
             timebartransform.sizeDelta = new Vector2(timewidth,timeheight);
             timebarimage.color = Color.white;
         }
-        
+
     }
     public void EnergyCounting(int curenergy){
         if ( curenergy >= 0 ){
@@ -173,8 +173,8 @@ public class UIController : MonoBehaviour
             energybartransform.sizeDelta = new Vector2(energywidth,energyheight );
             energybarimage.color = Color.white;
         }
-        
-        
+
+
     }
     public void MyScore(int score){
         myscore.text = score.ToString();
@@ -198,8 +198,8 @@ public class UIController : MonoBehaviour
         }else{
             Invoke("showlose",5);
         }
-        
-        
+
+
 
     }
     void showwin(){
@@ -207,11 +207,11 @@ public class UIController : MonoBehaviour
 
         WinTitle.SetActive(true);
         WinCrown.SetActive(true);
-            
-        
-           
-            
-        
+
+
+
+
+
     }
     void showlose(){
         Endmenu.SetActive(true);

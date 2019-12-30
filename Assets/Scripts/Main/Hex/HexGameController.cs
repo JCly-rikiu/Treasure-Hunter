@@ -22,7 +22,8 @@ public class HexGameController : MonoBehaviour
 
     HexCell treasureCell;
 
-    HexUnit serverUnit, clientUnit, myUnit, otherUnit;
+    public HexUnit serverUnit, clientUnit;
+    HexUnit myUnit, otherUnit;
     HexCell serverStart, clientStart;
 
     List<int> itemTypes = new List<int>();
@@ -362,7 +363,6 @@ public class HexGameController : MonoBehaviour
 
             if (WinInfo.IsServerWin == isServer)
             {
-                HexMapCamera.SetPosition(serverUnit.Location);
                 serverUnit.anim.SetBool("Victory", true);
                 clientUnit.anim.SetBool("Lost", true);
                 ui.isWin(true);
@@ -370,7 +370,6 @@ public class HexGameController : MonoBehaviour
             }
             else
             {
-                HexMapCamera.SetPosition(clientUnit.Location);
                 clientUnit.anim.SetBool("Victory", true);
                 serverUnit.anim.SetBool("Lost", true);
                 ui.isWin(false);
