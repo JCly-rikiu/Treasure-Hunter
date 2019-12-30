@@ -117,14 +117,14 @@ public class UIController : MonoBehaviour
             SlotLock.SetActive(true);
             timetext.text = "";
             timebartransform.sizeDelta = new Vector2(timewidth,timeheight);
-            timebarimage.color = Color.grey;
+            timebarimage.color = Color.white;
         }
         
     }
     public void EnergyCounting(int curenergy){
         if ( curenergy > 0 ){
             if(curenergy > 30){
-                energybarimage.color = Color.red;
+                energybarimage.color = new Color(255,88,99,255);
             }else{
                 energybarimage.color = Color.white;
             }
@@ -135,7 +135,7 @@ public class UIController : MonoBehaviour
         }else{
             energytext.text = "";
             energybartransform.sizeDelta = new Vector2(energywidth,energyheight );
-            energybarimage.color = Color.grey;
+            energybarimage.color = Color.white;
         }
         
         
