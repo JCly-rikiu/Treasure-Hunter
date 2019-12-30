@@ -4993,8 +4993,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 537958171}
-        m_MethodName: Quit
+      - m_Target: {fileID: 1608647601}
+        m_MethodName: Surrender
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
