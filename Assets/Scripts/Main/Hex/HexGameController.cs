@@ -362,15 +362,15 @@ public class HexGameController : MonoBehaviour
 
             if (WinInfo.IsServerWin == isServer)
             {
-                serverUnit.anim.SetBool("Victory", true);
-                clientUnit.anim.SetBool("Lost", true);
+                myUnit.anim.SetBool("Victory", true);
+                otherUnit.anim.SetBool("Lost", true);
                 ui.isWin(true);
                 Log.Status(GetType(), "you win");
             }
             else
             {
-                clientUnit.anim.SetBool("Victory", true);
-                serverUnit.anim.SetBool("Lost", true);
+                myUnit.anim.SetBool("Lost", true);
+                otherUnit.anim.SetBool("Victory", true);
                 ui.isWin(false);
                 Log.Status(GetType(), "you lose");
             }
