@@ -6,7 +6,7 @@ using Photon.Pun;
 
 public class HexGameController : MonoBehaviour
 {
-    public static float turnTime = 15f;
+    public float turnTime = 15f;
 
     PhotonView photonView;
 
@@ -362,11 +362,17 @@ public class HexGameController : MonoBehaviour
 
             if (WinInfo.IsServerWin == isServer)
             {
+                HexMapCamera.SetPosition(serverUnit.Location);
+                serverUnit.anim.SetBool("Victory", true);
+                clientUnit.anim.SetBool("Lost", true);
                 ui.isWin(true);
                 Log.Status(GetType(), "you win");
             }
             else
             {
+                HexMapCamera.SetPosition(clientUnit.Location);
+                clientUnit.anim.SetBool("Victory", true);
+                serverUnit.anim.SetBool("Lost", true);
                 ui.isWin(false);
                 Log.Status(GetType(), "you lose");
             }
