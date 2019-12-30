@@ -14,7 +14,6 @@ public class HexGameController : MonoBehaviour
 
     public HexGrid grid;
     public HexGameUI gameUI;
-    public HexMapCamera mapCamera;
     public HexMapGenerator mapGenerator;
     int seed;
 
@@ -27,7 +26,7 @@ public class HexGameController : MonoBehaviour
     HexCell serverStart, clientStart;
 
     List<int> itemTypes = new List<int>();
-    List<int> itemIndex = new List<int>();
+    List<int> itemCellIndex = new List<int>();
 
     bool serverTurn;
     public static bool myTurn = false;
@@ -49,8 +48,6 @@ public class HexGameController : MonoBehaviour
         HexMetrics.InitializeHashGrid(System.BitConverter.ToInt32(hashValue, 0));
         seed = System.BitConverter.ToInt32(hashValue, 4);
 
-        gameUI.mapCamera = mapCamera;
-
         photonView = PhotonView.Get(this);
         isServer = PhotonNetwork.IsMasterClient;
 
@@ -67,7 +64,7 @@ public class HexGameController : MonoBehaviour
         mapGenerator.GenerateMap(70, 60, seed);
         cellCount = 70 * 60;
 
-        mapCamera.CenterPosition();
+        HexMapCamera.CenterPosition();
 
         if (isServer)
         {
@@ -79,14 +76,14 @@ public class HexGameController : MonoBehaviour
             } while (!FindStartCell(40, 20));
 
             itemTypes.Add((int)HexItemType.Treasure);
-            itemIndex.Add(treasureCell.Index);
+            itemCellIndex.Add(treasureCell.Index);
 
             RemoveAvailableCell(serverStart);
             RemoveAvailableCell(clientStart);
             RemoveAvailableCell(treasureCell);
 
             SpreadKeys(10);
-            SpreadItems(70);
+            SpreadItems(100);
 
             SendStart();
         }
@@ -120,7 +117,7 @@ public class HexGameController : MonoBehaviour
             }
         }
 
-        Log.Status(GetType(), "available cells: " + availableCells.Count.ToString());
+        Log.Dev(GetType(), "available cells: " + availableCells.Count.ToString());
     }
 
     void RemoveAvailableCell(HexCell cell)
@@ -204,7 +201,7 @@ public class HexGameController : MonoBehaviour
             int index = Random.Range(0, availableCells.Count);
 
             itemTypes.Add((int)HexItemType.Key);
-            itemIndex.Add(availableCells[index].Index);
+            itemCellIndex.Add(availableCells[index].Index);
 
             RemoveAvailableCell(index);
         }
@@ -212,14 +209,18 @@ public class HexGameController : MonoBehaviour
 
     void SpreadItems(int count)
     {
-        HexItemType[] types = HexItemTypeCollection.GetMapRandom();
+        HexItemType[] types = HexItemTypeCollection.GetMapRandomType();
+        float[] probabilities = HexItemTypeCollection.GetMapRandomValue();
 
         while (count-- > 0 && availableCells.Count >= 0)
         {
-            int index = Random.Range(0, availableCells.Count);
+            float p = Random.value;
+            int i = 0;
+            for (; p > probabilities[i]; i++) ;
+            itemTypes.Add((int)types[i]);
 
-            itemTypes.Add((int)types[Random.Range(0, types.Length)]);
-            itemIndex.Add(availableCells[index].Index);
+            int index = Random.Range(0, availableCells.Count);
+            itemCellIndex.Add(availableCells[index].Index);
 
             RemoveAvailableCell(index);
         }
@@ -265,11 +266,14 @@ public class HexGameController : MonoBehaviour
                 second = 0;
                 endTurn = false;
                 myUnit.SetSpeed();
+
+                ui.StartCounting(0f);
+                ui.EnergyCounting(30);
             }
             else
             {
-                ui.StartCounting(0f);
-                ui.EnergyCounting(30);
+                ui.StartCounting(-1f);
+                ui.EnergyCounting(-1);
             }
 
             TurnInfo.Synced = false;
@@ -293,10 +297,34 @@ public class HexGameController : MonoBehaviour
             SendScore();
         }
 
+        if (ItemInfo.Synced)
+        {
+            addItem((HexItemType)ItemInfo.ItemType, grid.GetCell(ItemInfo.CellIndex));
+
+            ItemInfo.Synced = false;
+        }
+
         if (RemoveItemInfo.Synced)
         {
+            Log.Dev(GetType(), "remove item at cell index: " + RemoveItemInfo.CellIndex.ToString());
+
             grid.RemoveItem(RemoveItemInfo.CellIndex);
             RemoveItemInfo.Synced = false;
+        }
+
+        if (EffectInfo.Synced)
+        {
+            switch ((HexItemType)EffectInfo.ItemIype)
+            {
+                case HexItemType.Poison:
+                    myUnit.speedEffect(-20, 3);
+                    break;
+                case HexItemType.Change:
+                    grid.changeUnits();
+                    break;
+            }
+
+            EffectInfo.Synced = false;
         }
 
         if (ScoreInfo.Synced)
@@ -319,7 +347,7 @@ public class HexGameController : MonoBehaviour
 
     void CheckWin()
     {
-        if (myUnit.hasTreasure)
+        if (myUnit.HasTreasure)
         {
             SendWin();
         }
@@ -328,8 +356,8 @@ public class HexGameController : MonoBehaviour
         {
             inGame = false;
 
+            Log.Status(GetType(), "server/client has treasure: " + serverUnit.HasTreasure + " / " + clientUnit.HasTreasure);
             Log.Status(GetType(), "server/client score: " + serverUnit.Score + " / " + clientUnit.Score);
-            Log.Status(GetType(), "server/client has treasure: " + serverUnit.hasTreasure + " / " + clientUnit.hasTreasure);
 
             if (WinInfo.IsServerWin == isServer)
             {
@@ -362,7 +390,7 @@ public class HexGameController : MonoBehaviour
             gameUI.otherUnit = otherUnit = serverUnit;
         }
 
-        Log.Status(GetType(), "server starts at " + serverStart.coordinates.ToString() + " client starts at " + clientStart.coordinates.ToString());
+        Log.Dev(GetType(), "server starts at " + serverStart.coordinates.ToString() + " client starts at " + clientStart.coordinates.ToString());
 
         grid.AddUnit(serverUnit, serverStart);
         grid.AddUnit(clientUnit, clientStart);
@@ -375,7 +403,7 @@ public class HexGameController : MonoBehaviour
             for (int i = 0; i < StartInfo.ItemTypes.Length; i++)
             {
                 itemTypes.Add(StartInfo.ItemTypes[i]);
-                itemIndex.Add(StartInfo.ItemIndex[i]);
+                itemCellIndex.Add(StartInfo.ItemCellIndex[i]);
             }
         }
 
@@ -383,69 +411,120 @@ public class HexGameController : MonoBehaviour
         {
             HexItem item = Instantiate<HexItem>(HexItem.itemPrefab);
             item.itemType = (HexItemType)itemTypes[i];
-            grid.AddItem(item, grid.GetCell(itemIndex[i]));
+            grid.AddItem(item, grid.GetCell(itemCellIndex[i]));
+        }
+    }
+
+    void addItem(HexItemType type, HexCell cell)
+    {
+        HexItem item = Instantiate<HexItem>(HexItem.itemPrefab);
+        item.itemType = type;
+        grid.AddItem(item, cell);
+    }
+
+    public void useItem(HexItemType type)
+    {
+        switch (type)
+        {
+            case HexItemType.Poison:
+                otherUnit.speedEffect(-20, 3);
+                sendEffect(HexItemType.Poison);
+                break;
+            case HexItemType.FakeTreasureItem:
+                addItem(HexItemType.FakeTreasure, myUnit.Location);
+                sendItem(HexItemType.FakeTreasure, myUnit);
+                break;
+            case HexItemType.Change:
+                grid.changeUnits();
+                sendEffect(HexItemType.Change);
+                break;
         }
     }
 
     void SendStart()
     {
         int[] tempItemTypes = new int[itemTypes.Count];
-        int[] tempItemIndex = new int[itemIndex.Count];
+        int[] tempItemCellIndex = new int[itemCellIndex.Count];
         for (int i = 0; i < itemTypes.Count; i++)
         {
             tempItemTypes[i] = itemTypes[i];
-            tempItemIndex[i] = itemIndex[i];
+            tempItemCellIndex[i] = itemCellIndex[i];
         }
 
-        photonView.RPC("SendStart", RpcTarget.All, true, serverStart.Index, clientStart.Index, tempItemTypes, tempItemIndex);
+        photonView.RPC("GetStart", RpcTarget.All, serverStart.Index, clientStart.Index, tempItemTypes, tempItemCellIndex);
     }
 
     void SendTurn()
     {
         grid.ClearPath();
-        photonView.RPC("SendTurn", RpcTarget.All, true, TurnInfo.Turn + 1);
+        photonView.RPC("GetTurn", RpcTarget.All, TurnInfo.Turn + 1);
     }
 
     void SendScore()
     {
-        photonView.RPC("SendScore", RpcTarget.Others, true, isServer, myUnit.Score);
+        photonView.RPC("GetScore", RpcTarget.Others, isServer, myUnit.Score);
+    }
+
+    void sendItem(HexItemType type, HexUnit unit)
+    {
+        photonView.RPC("GetItem", RpcTarget.Others, (int)type, (int)unit.Location.Index);
+    }
+
+    void sendEffect(HexItemType type)
+    {
+        photonView.RPC("GetEffect", RpcTarget.Others, (int)type);
     }
 
     void SendWin()
     {
         grid.ClearPath();
-        photonView.RPC("SendWin", RpcTarget.All, true, serverUnit.Score > clientUnit.Score || serverUnit.hasTreasure);
+        photonView.RPC("GetWin", RpcTarget.All, serverUnit.Score > clientUnit.Score || serverUnit.HasTreasure);
     }
 
     [PunRPC]
-    void SendStart(bool synced, int serverIndex, int clientIndex, int[] itemTypes, int[] itemIndex)
+    void GetStart(int serverIndex, int clientIndex, int[] itemTypes, int[] itemCellIndex)
     {
-        StartInfo.Synced = synced;
+        StartInfo.Synced = true;
         StartInfo.ServerIndex = serverIndex;
         StartInfo.ClientIndex = clientIndex;
         StartInfo.ItemTypes = itemTypes;
-        StartInfo.ItemIndex = itemIndex;
+        StartInfo.ItemCellIndex = itemCellIndex;
     }
 
     [PunRPC]
-    void SendTurn(bool synced, int turn)
+    void GetTurn(int turn)
     {
-        TurnInfo.Synced = synced;
+        TurnInfo.Synced = true;
         TurnInfo.Turn = turn;
     }
 
     [PunRPC]
-    void SendScore(bool synced, bool isServer, int score)
+    void GetScore(bool isServer, int score)
     {
-        ScoreInfo.Synced = synced;
+        ScoreInfo.Synced = true;
         ScoreInfo.IsServer = isServer;
         ScoreInfo.Score = score;
     }
 
     [PunRPC]
-    void SendWin(bool synced, bool isServerWin)
+    void GetItem(int itemType, int itemCellIndex)
     {
-        WinInfo.Synced = synced;
+        ItemInfo.Synced = true;
+        ItemInfo.ItemType = itemType;
+        ItemInfo.CellIndex = itemCellIndex;
+    }
+
+    [PunRPC]
+    void GetEffect(int itemType)
+    {
+        EffectInfo.Synced = true;
+        EffectInfo.ItemIype = itemType;
+    }
+
+    [PunRPC]
+    void GetWin(bool isServerWin)
+    {
+        WinInfo.Synced = true;
         WinInfo.IsServerWin = isServerWin;
     }
 }

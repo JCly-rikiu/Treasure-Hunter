@@ -1,12 +1,12 @@
 public static class HexItemTypeCollection
 {
-    public static HexItemType[] GetMapRandom()
+    public static HexItemType[] GetMapRandomType()
     {
-        return new HexItemType[] { HexItemType.Coin, HexItemType.Bomb, HexItemType.Poison, HexItemType.EnergyPlus, HexItemType.Bonus };
+        return new HexItemType[] { HexItemType.Energy, HexItemType.Poison, HexItemType.Coin, HexItemType.Bonus, HexItemType.Bomb, HexItemType.FakeTreasureItem, HexItemType.Change };
     }
 
-    public static HexItemType[] GetInventoryRandom()
+    public static float[] GetMapRandomValue()
     {
-        return new HexItemType[] { HexItemType.Bomb, HexItemType.Poison, HexItemType.Stop, HexItemType.Ward, HexItemType.Shovel, HexItemType.EnergyPlus };
+        return new float[] { 0.25f, 0.5f, 0.75f, 0.825f, 0.9f, 0.9375f, 1f };
     }
 }

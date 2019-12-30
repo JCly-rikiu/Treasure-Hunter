@@ -23,8 +23,6 @@ public class HexGrid : MonoBehaviour
     List<HexUnit> units = new List<HexUnit>();
     List<HexItem> items = new List<HexItem>();
 
-    public HexMapCamera mapCamera;
-
     HexCellShaderData cellShaderData;
 
     public HexMesh mesh;
@@ -143,7 +141,6 @@ public class HexGrid : MonoBehaviour
         cell.coordinates = HexCoordinates.FromOffsetCorrdinates(x, z);
         cell.Index = i;
         cell.ShaderData = cellShaderData;
-        cell.mapCamera = mapCamera;
 
         cell.Explorable = x > border && z > border && x < cellCountX - border && z < cellCountZ - border;
 
@@ -433,7 +430,7 @@ public class HexGrid : MonoBehaviour
 
         if (unit.Owned)
         {
-            mapCamera.SetPosition(unit.Location);
+            HexMapCamera.SetPosition(unit.Location);
         }
     }
 
@@ -554,40 +551,45 @@ public class HexGrid : MonoBehaviour
 
     public void AddItem(HexItem item, HexCell location)
     {
-        item.Index = items.Count;
         items.Add(item);
         item.Grid = this;
         item.transform.SetParent(transform, false);
         item.Location = location;
         item.InstantiateItem();
-        // item.Orientation = Random.Range(0f, 360f);
 
         if (item.itemType == HexItemType.Treasure)
         {
-            Log.Status(GetType(), "treasure at " + location.coordinates.ToString());
+            Log.Dev(GetType(), "treasure at " + location.coordinates.ToString());
         }
     }
 
     public void RemoveItem(int cellIndex)
     {
-
         HexItem item = cells[cellIndex].Item;
         items.Remove(item);
         item.RemoveFromMap();
     }
 
-    public void RemoveItem(HexItem item)
+    public void changeUnits()
     {
-        photonView.RPC("SendRemoveItem", RpcTarget.Others, true, item.Location.Index);
+        HexCell temp = units[0].Location;
+        units[0].Location = units[1].Location;
+        units[1].Location = temp;
 
-        items.Remove(item);
-        item.RemoveFromMap();
+        HexMapCamera.SetPosition(units[0].Location);
+    }
+
+    public void SendRemoveItem(HexItem item)
+    {
+        photonView.RPC("GetRemoveItem", RpcTarget.Others, item.Location.Index);
+
+        RemoveItem(item.Location.Index);
     }
 
     [PunRPC]
-    void SendRemoveItem(bool synced, int cellIndex)
+    void GetRemoveItem(int cellIndex)
     {
-        RemoveItemInfo.Synced = synced;
+        RemoveItemInfo.Synced = true;
         RemoveItemInfo.CellIndex = cellIndex;
     }
 }
