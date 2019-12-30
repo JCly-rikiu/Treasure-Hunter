@@ -158,7 +158,7 @@ public class UIController : MonoBehaviour
         
     }
     public void EnergyCounting(int curenergy){
-        if ( curenergy > 0 ){
+        if ( curenergy >= 0 ){
             if(curenergy > 30){
                 energybarimage.color = new Color(255,88,99,255);
             }else{
@@ -168,7 +168,7 @@ public class UIController : MonoBehaviour
             float floatenergy = (float)curenergy / 30;
             currentheight = Mathf.Lerp(0, energyheight,floatenergy );
             energybartransform.sizeDelta = new Vector2(energywidth, currentheight);
-        }else{
+        }else {
             energytext.text = "";
             energybartransform.sizeDelta = new Vector2(energywidth,energyheight );
             energybarimage.color = Color.white;
