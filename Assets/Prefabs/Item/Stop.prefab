@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4422103021230438556}
   - component: {fileID: 1939747553467840186}
   - component: {fileID: 2938749825586695992}
-  - component: {fileID: 3246461170196782022}
   m_Layer: 0
   m_Name: Stop
   m_TagString: Untagged
@@ -114,7 +113,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3246461170196782022}
+      - m_Target: {fileID: 0}
         m_MethodName: Select
         m_Mode: 1
         m_Arguments:
@@ -125,18 +124,3 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &3246461170196782022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2445081718261530859}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50271fada7a515943a0b01226f2b6f02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isSelected: 0
-  isUsed: 0
-  type: 4

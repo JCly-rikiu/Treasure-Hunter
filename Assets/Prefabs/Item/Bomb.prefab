@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7615495837252956905}
   - component: {fileID: 7707925010135795152}
   - component: {fileID: 5489268401677096209}
-  - component: {fileID: 903088922705456659}
   m_Layer: 0
   m_Name: Bomb
   m_TagString: Untagged
@@ -114,7 +113,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 903088922705456659}
+      - m_Target: {fileID: 0}
         m_MethodName: Select
         m_Mode: 1
         m_Arguments:
@@ -125,18 +124,3 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &903088922705456659
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6507844654495127279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50271fada7a515943a0b01226f2b6f02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isSelected: 0
-  isUsed: 0
-  type: 1
