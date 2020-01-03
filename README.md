@@ -12,5 +12,7 @@ This is the final project for the course, [NTU Game Programming Design](https://
 
 **Report:** [Treasure Hunter.pdf](https://github.com/JCly-rikiu/Treasure-Hunter/raw/master/Treasure%20Hunter.pdf)
 
+**Release:** [Latest release](https://github.com/JCly-rikiu/Treasure-Hunter/releases)
+
 **Credit:** Our project is based on the tutorial by Jasper Flick ([catlikecoding.com](https://catlikecoding.com/)).
 
